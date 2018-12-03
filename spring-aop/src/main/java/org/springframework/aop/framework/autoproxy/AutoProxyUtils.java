@@ -32,6 +32,10 @@ import org.springframework.lang.Nullable;
 public abstract class AutoProxyUtils {
 
 	/**
+	 * Bean定义属性，该属性可能指示是否应该用目标类代理给定的Bean(在首先代理它的情况下)。
+	 * 值是{@code Boolean。TRUE}或{@code Boolean.FALSE}。代理工厂可以设置这个属性，
+	 * 如果它们为特定的bean构建了一个目标类代理，
+	 * 并且希望强制将该bean始终转换为它的目标类(即使AOP建议是通过自动代理应用的)。
 	 * Bean definition attribute that may indicate whether a given bean is supposed
 	 * to be proxied with its target class (in case of it getting proxied in the first
 	 * place). The value is {@code Boolean.TRUE} or {@code Boolean.FALSE}.

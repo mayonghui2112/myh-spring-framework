@@ -316,6 +316,10 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 	}
 
 	/**
+	 * 获取存储在指定{@code attributeName}下的值，确保该值为{@code expectedType}。
+	 * 如果{@code expectedType}是一个数组，并且存储在指定的{@code attributeName}下的值
+	 * 是期望数组类型的组件类型的单个元素，
+	 * 那么在返回该元素之前，该元素将被包装在适当类型的单个元素数组中。
 	 * Get the value stored under the specified {@code attributeName},
 	 * ensuring that the value is of the {@code expectedType}.
 	 * <p>If the {@code expectedType} is an array and the value stored

@@ -76,7 +76,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	private boolean includeAnnotationConfig = true;
 
 
-	/**
+	/**加载扫描器需要用的bean，registry environment resourceLoader
 	 * Create a new {@code ClassPathBeanDefinitionScanner} for the given bean factory.
 	 * @param registry the {@code BeanFactory} to load bean definitions into, in the form
 	 * of a {@code BeanDefinitionRegistry}
@@ -270,24 +270,37 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 */
 	protected Set<BeanDefinitionHolder> doScan(String... basePackages) {
 		Assert.notEmpty(basePackages, "At least one base package must be specified");
+		//bdh集合Set
 		Set<BeanDefinitionHolder> beanDefinitions = new LinkedHashSet<>();
+		//遍历路径
 		for (String basePackage : basePackages) {
+			//扫描一个路径下的所有类，过滤掉config类和不交给spring管理的类后，返回其他类的bd的set集合
 			Set<BeanDefinition> candidates = findCandidateComponents(basePackage);
+			//遍历每一个BeanDefinition，设置相应属性后，添加到beanDefinitions，注册进入bdMap
 			for (BeanDefinition candidate : candidates) {
+				//设置Scope
 				ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate);
 				candidate.setScope(scopeMetadata.getScopeName());
+				//根据名称生成策略生成bdName
 				String beanName = this.beanNameGenerator.generateBeanName(candidate, this.registry);
+
+				//如果是AbstractBeanDefinition，设置扫描器的默认db属性，比如lazy，autowireMode，initMethodName。。。
 				if (candidate instanceof AbstractBeanDefinition) {
 					postProcessBeanDefinition((AbstractBeanDefinition) candidate, beanName);
 				}
+				//如果是AnnotatedBeanDefinition，把配置在appconfig上面的bd属性注解值设置进bd
 				if (candidate instanceof AnnotatedBeanDefinition) {
 					AnnotationConfigUtils.processCommonDefinitionAnnotations((AnnotatedBeanDefinition) candidate);
 				}
+				//检查给定候选bean的名称，确定是否需要注册相应的bean定义，或者是否与现有定义冲突。
 				if (checkCandidate(beanName, candidate)) {
+					//条件为true，根据beanName和bd建立一个BeanDefinitionHolder
 					BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName);
 					definitionHolder =
 							AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
+					//添加进beanDefinitions
 					beanDefinitions.add(definitionHolder);
+					//把definitionHolder注册进bdMap
 					registerBeanDefinition(definitionHolder, this.registry);
 				}
 			}

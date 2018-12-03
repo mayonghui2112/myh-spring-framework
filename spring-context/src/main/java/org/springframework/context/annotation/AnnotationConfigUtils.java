@@ -127,6 +127,7 @@ public class AnnotationConfigUtils {
 
 
 	/**
+	 *
 	 * Register all relevant annotation post processors in the given registry.
 	 * @param registry the registry to operate on
 	 */
@@ -135,6 +136,10 @@ public class AnnotationConfigUtils {
 	}
 
 	/**
+	 *
+	 * 1、向beanfactory设置AnnotationAwareOrderComparator  order和Priority注解处理器
+	 * 2、向beanfactory设置ContextAnnotationAutowireCandidateResolver qualifier和lazy注解处理器
+	 * 3、向beanfactory注册所有的注解配置处理器bd（处理注解）（6个）
 	 * Register all relevant annotation post processors in the given registry.
 	 * @param registry the registry to operate on
 	 * @param source the configuration source element (already extracted)
@@ -144,25 +149,31 @@ public class AnnotationConfigUtils {
 	 */
 	public static Set<BeanDefinitionHolder> registerAnnotationConfigProcessors(
 			BeanDefinitionRegistry registry, @Nullable Object source) {
-
+		//从registry（即AnnotationConfigApplicationContext/GenericApplicationContext）中获取一个beanfactory
 		DefaultListableBeanFactory beanFactory = unwrapDefaultListableBeanFactory(registry);
 		if (beanFactory != null) {
+			// 单利模式，order和Priority注解处理器
 			if (!(beanFactory.getDependencyComparator() instanceof AnnotationAwareOrderComparator)) {
 				beanFactory.setDependencyComparator(AnnotationAwareOrderComparator.INSTANCE);
 			}
+			//qualifier和lazy注解处理器
 			if (!(beanFactory.getAutowireCandidateResolver() instanceof ContextAnnotationAutowireCandidateResolver)) {
 				beanFactory.setAutowireCandidateResolver(new ContextAnnotationAutowireCandidateResolver());
 			}
 		}
-
+		//定义一个BeanDefinitionHolder的set集合，BeanDefinitionHolder为了方便存储和传参
 		Set<BeanDefinitionHolder> beanDefs = new LinkedHashSet<>(8);
 
+		/*如果不包含internalConfigurationAnnotationProcessor的bd，则初始化一个ConfigurationClassPostProcessor对象的bd
+		并以<internalConfigurationAnnotationProcessor，ConfigurationClassPostProcessor对象bd>的形式存储进registry的bdmap中
+		ConfigurationClassPostProcessor的作用*/
 		if (!registry.containsBeanDefinition(CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(ConfigurationClassPostProcessor.class);
 			def.setSource(source);
+			//
 			beanDefs.add(registerPostProcessor(registry, def, CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME));
 		}
-
+		/*同上，AutowiredAnnotationBeanPostProcessor作用*/
 		if (!registry.containsBeanDefinition(AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(AutowiredAnnotationBeanPostProcessor.class);
 			def.setSource(source);

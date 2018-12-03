@@ -71,6 +71,7 @@ abstract class ConfigurationClassUtils {
 
 
 	/**
+	 * 是否加了@Configuration/@Bean/@Component/@ComponentScan/@Import/@ImportResource注解或其子注解
 	 * Check whether the given bean definition is a candidate for a configuration class
 	 * (or a nested component class declared within a configuration/component class,
 	 * to be auto-registered as well), and mark it accordingly.
@@ -79,11 +80,12 @@ abstract class ConfigurationClassUtils {
 	 * @return whether the candidate qualifies as (any kind of) configuration class
 	 */
 	public static boolean checkConfigurationClassCandidate(BeanDefinition beanDef, MetadataReaderFactory metadataReaderFactory) {
+		//根据bd获取className
 		String className = beanDef.getBeanClassName();
 		if (className == null || beanDef.getFactoryMethodName() != null) {
 			return false;
 		}
-
+		//根据bd的类型（AnnotatedBeanDefinition/RootBeanDefinition/。。。）获取它的metadata
 		AnnotationMetadata metadata;
 		if (beanDef instanceof AnnotatedBeanDefinition &&
 				className.equals(((AnnotatedBeanDefinition) beanDef).getMetadata().getClassName())) {
@@ -108,18 +110,23 @@ abstract class ConfigurationClassUtils {
 				return false;
 			}
 		}
-
+		// bd是否有Configuration注解,
+		// 是则在org.springframework.context.annotation.ConfigurationClassPostProcessor.configurationClass属性上设置只为full
 		if (isFullConfigurationCandidate(metadata)) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_FULL);
 		}
+		//是否加了@Bean/@Component/@ComponentScan/@Import/@ImportResource注解
+		// 是则在org.springframework.context.annotation.ConfigurationClassPostProcessor.configurationClass属性上设置只为lite
 		else if (isLiteConfigurationCandidate(metadata)) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_LITE);
 		}
+		//都不是返回false
 		else {
 			return false;
 		}
 
 		// It's a full or lite configuration candidate... Let's determine the order value, if any.
+		//如果它是一个完整的或精简的配置bd，我们来确定顺序值，如果有的话。
 		Integer order = getOrder(metadata);
 		if (order != null) {
 			beanDef.setAttribute(ORDER_ATTRIBUTE, order);

@@ -309,10 +309,12 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	 * @return a corresponding Set of autodetected bean definitions
 	 */
 	public Set<BeanDefinition> findCandidateComponents(String basePackage) {
+		//根据使不使用索引，分别调用两种扫描方法
 		if (this.componentsIndex != null && indexSupportsIncludeFilters()) {
 			return addCandidateComponentsFromIndex(this.componentsIndex, basePackage);
 		}
 		else {
+			//非索引扫描
 			return scanCandidateComponents(basePackage);
 		}
 	}
@@ -427,7 +429,10 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 				}
 				if (resource.isReadable()) {
 					try {
+						//根据resource获取metadataReader
 						MetadataReader metadataReader = getMetadataReaderFactory().getMetadataReader(resource);
+						//isCandidateComponent(metadataReader)遍历excludeFilters和includeFilters，
+						// 根据过滤器过滤掉configuration类和不是Spring管理的类
 						if (isCandidateComponent(metadataReader)) {
 							ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
 							sbd.setResource(resource);
@@ -516,6 +521,8 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	}
 
 	/**
+	 * 确定给定bean定义是否符合候选条件。
+	 * 默认实现检查类是否不是接口，是否不依赖于封闭的类。
 	 * Determine whether the given bean definition qualifies as candidate.
 	 * <p>The default implementation checks whether the class is not an interface
 	 * and not dependent on an enclosing class.
@@ -525,8 +532,17 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	 */
 	protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
 		AnnotationMetadata metadata = beanDefinition.getMetadata();
-		return (metadata.isIndependent() && (metadata.isConcrete() ||
-				(metadata.isAbstract() && metadata.hasAnnotatedMethods(Lookup.class.getName()))));
+//		metadata.isIndependent()是否是独立类
+//		metadata.isConcrete()底层类是否表示具体类，
+//		metadata.isAbstract()基础类是否标记为抽象类
+//		metadata.hasAnnotatedMethods(Lookup.class.getName()确定基础类是否具有使用给定注释类型进行注释(或元注释)的方法。
+		return (metadata.isIndependent() &&
+					(metadata.isConcrete() ||
+							(metadata.isAbstract() &&
+									metadata.hasAnnotatedMethods(Lookup.class.getName())
+							)
+					)
+				);
 	}
 
 

@@ -36,6 +36,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 /**
+ * 表示用户定义的{@link配置@Configuration}类。包含一组{@link Bean}方法，包括在类的祖先中以“扁平化”的方式定义的所有此类方法。
  * Represents a user-defined {@link Configuration @Configuration} class.
  * Includes a set of {@link Bean} methods, including all such methods
  * defined in the ancestry of the class, in a 'flattened-out' manner.
@@ -159,6 +160,7 @@ final class ConfigurationClass {
 	}
 
 	/**
+	 * 返回这个配置类是通过@{@link Import}注册的，还是由于嵌套在另一个配置类中而自动注册的。
 	 * Return whether this configuration class was registered via @{@link Import} or
 	 * automatically registered due to being nested within another configuration class.
 	 * @since 3.1.1
@@ -169,6 +171,7 @@ final class ConfigurationClass {
 	}
 
 	/**
+	 * 将从给定配置类导入的声明合并到此声明中。
 	 * Merge the imported-by declarations from the given configuration class into this one.
 	 * @since 4.0.5
 	 */

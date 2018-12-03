@@ -58,11 +58,17 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 
 
 	/**
+	 * 1、先调用GenericApplicationContext的无参构造函数
+	 * 2、初始化一个AnnotatedBeanDefinitionReader，根据class生成bd，并注册进beanfactory
+	 * 3、初始化一个ClassPathBeanDefinitionScanner 用来扫描相应路径下的所有class，生成bd，并注册进beanfactory
 	 * Create a new AnnotationConfigApplicationContext that needs to be populated
 	 * through {@link #register} calls and then manually {@linkplain #refresh refreshed}.
 	 */
 	public AnnotationConfigApplicationContext() {
 		this.reader = new AnnotatedBeanDefinitionReader(this);
+		//该类是共外部调用的一个扫描类，共外部使用,扫描额外需要扫描的包，转化为BD
+		//在spring内部初始化的时候扫描工作是在reader初始化过程中完成的，
+		//reader初始化的时候会初始化要给自己的ClassPathBeanDefinitionScanner来扫描@component需要扫描的包
 		this.scanner = new ClassPathBeanDefinitionScanner(this);
 	}
 
@@ -77,6 +83,10 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	}
 
 	/**
+	 * 实例化AnnotationConfigApplicationContext对象
+	 * 根据类图,他需要实例话三个类GenericApplicationContext/DefaultResourceLoader/AbstractApplicationContext
+	 * 实例完所有父类，根据annotatedClasses生成bd，并注册进入beanfactory的bdmap中
+	 * 刷新容器
 	 * Create a new AnnotationConfigApplicationContext, deriving bean definitions
 	 * from the given annotated classes and automatically refreshing the context.
 	 * @param annotatedClasses one or more annotated classes,

@@ -56,7 +56,7 @@ public class AnnotatedBeanDefinitionReader {
 	private ConditionEvaluator conditionEvaluator;
 
 
-	/**
+	/**从BeanDefinitionRegistry即AnnotationConfigApplicationContext中获取环境类Environment
 	 * Create a new {@code AnnotatedBeanDefinitionReader} for the given registry.
 	 * If the registry is {@link EnvironmentCapable}, e.g. is an {@code ApplicationContext},
 	 * the {@link Environment} will be inherited, otherwise a new
@@ -71,6 +71,9 @@ public class AnnotatedBeanDefinitionReader {
 	}
 
 	/**
+	 * 维护一个注册器BeanDefinitionRegistry即AnnotationConfigApplicationContext
+	 * 维护一个ConditionEvaluator对象，用于评估注解
+	 * 注册
 	 * Create a new {@code AnnotatedBeanDefinitionReader} for the given registry and using
 	 * the given {@link Environment}.
 	 * @param registry the {@code BeanFactory} to load bean definitions into,
@@ -82,8 +85,9 @@ public class AnnotatedBeanDefinitionReader {
 	public AnnotatedBeanDefinitionReader(BeanDefinitionRegistry registry, Environment environment) {
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
 		Assert.notNull(environment, "Environment must not be null");
-		this.registry = registry;
+			this.registry = registry;
 		this.conditionEvaluator = new ConditionEvaluator(registry, environment, null);
+		//注册所有的注解配置处理器（处理各种注解）
 		AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry);
 	}
 
@@ -247,7 +251,8 @@ public class AnnotatedBeanDefinitionReader {
 	}
 
 
-	/**
+	/**如果BeanDefinitionRegistry中没有Environment，就初始化一个StandardEnvironment
+	 * 如果有，就返回BeanDefinitionRegistry中的Environment
 	 * Get the Environment from the given registry if possible, otherwise return a new
 	 * StandardEnvironment.
 	 */

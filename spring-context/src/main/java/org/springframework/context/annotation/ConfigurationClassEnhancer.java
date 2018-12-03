@@ -22,6 +22,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 
+import bsh.This;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -96,6 +97,7 @@ class ConfigurationClassEnhancer {
 	 * @return the enhanced subclass
 	 */
 	public Class<?> enhance(Class<?> configClass, @Nullable ClassLoader classLoader) {
+		//判断configClass是否已经被增强代理
 		if (EnhancedConfiguration.class.isAssignableFrom(configClass)) {
 			if (logger.isDebugEnabled()) {
 				logger.debug(String.format("Ignoring request to enhance %s as it has " +
@@ -107,7 +109,9 @@ class ConfigurationClassEnhancer {
 			}
 			return configClass;
 		}
+		//创建cglib的增强类
 		Class<?> enhancedClass = createClass(newEnhancer(configClass, classLoader));
+
 		if (logger.isDebugEnabled()) {
 			logger.debug(String.format("Successfully enhanced %s; enhanced class name is: %s",
 					configClass.getName(), enhancedClass.getName()));
@@ -119,12 +123,22 @@ class ConfigurationClassEnhancer {
 	 * Creates a new CGLIB {@link Enhancer} instance.
 	 */
 	private Enhancer newEnhancer(Class<?> configSuperClass, @Nullable ClassLoader classLoader) {
+		//创建一个cglib代理类
 		Enhancer enhancer = new Enhancer();
+		//设置被代理类作为父类
 		enhancer.setSuperclass(configSuperClass);
+		//设置增强接口EnhancedConfiguration，该接口继承了BeanFactoryAware
+		//BeanFactoryAware作用是使目标对象得到当前上下文的beanFactory对象
 		enhancer.setInterfaces(new Class<?>[] {EnhancedConfiguration.class});
+
 		enhancer.setUseFactory(false);
 		enhancer.setNamingPolicy(SpringNamingPolicy.INSTANCE);
+		//设置策略,BeanFactoryAwareGeneratorStrategy,该策略有两个作用，
+		//1、自定义的策略中为代理对象增加了一个$$beanFactory的属性，用来接收EnhancedConfiguration即BeanFactoryAware设置的beanFactory对象
+		//2、实现EnhancedConfiguration即BeanFactoryAware的接口方法setBeanFactory
+		//beanFactory的作用是把全配置类中的@bean注解方法返回的bean缓存到BeanFactory中，当调用的时候，直接从BeanFactory中获得，不再调用注解方法
 		enhancer.setStrategy(new BeanFactoryAwareGeneratorStrategy(classLoader));
+		//设置方法拦截器，相当于jdk动态代理的handler
 		enhancer.setCallbackFilter(CALLBACK_FILTER);
 		enhancer.setCallbackTypes(CALLBACK_FILTER.getCallbackTypes());
 		return enhancer;
@@ -311,12 +325,17 @@ class ConfigurationClassEnhancer {
 		 * existence of this bean object.
 		 * @throws Throwable as a catch-all for any exception that may be thrown when invoking the
 		 * super implementation of the proxied method i.e., the actual {@code @Bean} method
-		 */
+		 * @param  enhancedConfigInstanced 被增强对象
+		 * @param  beanMethod 被增强方法
+		 * @param  beanMethodArgs 参数
+		 * @param  enhancedConfigInstanced 代理对象
+		 * @param  cglibMethodProxy 代理方法
+ 		 */
 		@Override
 		@Nullable
 		public Object intercept(Object enhancedConfigInstance, Method beanMethod, Object[] beanMethodArgs,
 					MethodProxy cglibMethodProxy) throws Throwable {
-
+			//
 			ConfigurableBeanFactory beanFactory = getBeanFactory(enhancedConfigInstance);
 			String beanName = BeanAnnotationHelper.determineBeanNameFor(beanMethod);
 
@@ -332,10 +351,14 @@ class ConfigurationClassEnhancer {
 			// To handle the case of an inter-bean method reference, we must explicitly check the
 			// container for already cached instances.
 
-			// First, check to see if the requested bean is a FactoryBean. If so, create a subclass
-			// proxy that intercepts calls to getObject() and returns any cached bean instance.
-			// This ensures that the semantics of calling a FactoryBean from within @Bean methods
-			// is the same as that of referring to a FactoryBean within XML. See SPR-6602.
+			/* First, check to see if the requested bean is a FactoryBean. If so, create a subclass
+			 proxy that intercepts calls to getObject() and returns any cached bean instance.
+			 This ensures that the semantics of calling a FactoryBean from within @Bean methods
+			 is the same as that of referring to a FactoryBean within XML. See SPR-6602.
+			 首先，检查请求的bean是否是FactoryBean。如果是，创建一个子类代理，
+			 它拦截对getObject()的调用并返回任何缓存的bean实例。
+			 这确保从@Bean方法中调用FactoryBean的语义与在XML中引用FactoryBean的语义相同。
+			 @See SPR-6602.*/
 			if (factoryContainsBean(beanFactory, BeanFactory.FACTORY_BEAN_PREFIX + beanName) &&
 					factoryContainsBean(beanFactory, beanName)) {
 				Object factoryBean = beanFactory.getBean(BeanFactory.FACTORY_BEAN_PREFIX + beanName);
