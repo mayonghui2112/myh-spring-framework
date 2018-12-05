@@ -345,7 +345,9 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			//清空已经解析过的所有配置类
 			configClasses.removeAll(alreadyParsed);
 
-			//读取模型并基于其内容创建bean定义
+			//创建一个读取器，
+			// 维护registry，
+			// 把解析器的importStack对象作为importRegistry维护，用去操作import导入的对象
 			// Read the model and create bean definitions based on its content
 			if (this.reader == null) {
 				this.reader = new ConfigurationClassBeanDefinitionReader(

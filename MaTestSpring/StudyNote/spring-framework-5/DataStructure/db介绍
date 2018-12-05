@@ -1,0 +1,19 @@
+1、父接口及其作用
+AttributeAccessor 属性访问器，对属性增删改查
+BeanMetadataElement 配置源相关
+BeanMetadataAttribute 维护一个object对象作为source，维护一个name，一个value
+AttributeAccessorSupport 维护一个Map<String, Object 存储属性
+BeanMetadataAttributeAccessor 维护一个objec 作为配置源
+beandifinition bd的基础定义接口，定义db的基础属性
+AbstractBeanDefinition bd的抽象实现类，维护了bd的基本属性以及resource，比如自动装配，依赖检查，lazyInit，scope，abstractFlag，依赖类数组，factoryBeanName。。。。
+RootBeanDefinition: spring内部bean定义
+GenericBeanDefinition：用户用register方法注册bd的时候，初始化的bd实现类
+AnnotatedGenericBeanDefinition：用户用注解的方式，用register方法注册bd的时候，初始化的bd实现类，维护了AnnotationMetadata对象metaData和MethodMetadata对象factoryMethodMetadata
+
+
+inputStream
+resource
+AbstractResource
+BeanDefinitionResource
+这些是输入流的继承接口或实现类，上是下的父接口或父类
+

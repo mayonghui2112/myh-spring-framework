@@ -1,12 +1,10 @@
-package com.ma.testAnnotation;
+package com.ma.springFramworkTest.testAnnotation;
 
-import com.ma.config.AppConfig;
-import com.ma.dao.IndexDao;
-import com.ma.postProcessors.MyBeanDefinitionRegistryPostProcessor;
-import com.ma.postProcessors.MyBeanDefinitionRegistryPostProcessor1;
+import com.ma.springFramworkTest.config.AppConfig;
+import com.ma.springFramworkTest.dao.IndexDao;
+import com.ma.springFramworkTest.postProcessors.MyBeanDefinitionRegistryPostProcessor;
+import com.ma.springFramworkTest.postProcessors.MyBeanDefinitionRegistryPostProcessor1;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.core.annotation.AnnotatedElementUtils;
-import org.springframework.stereotype.Component;
 
 public class TestAnnotation {
 	public static void main(String[] args) {

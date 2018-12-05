@@ -19,6 +19,7 @@ package org.springframework.core.type;
 import org.springframework.lang.Nullable;
 
 /**
+ * 接口，该接口定义特定类的抽象元数据，其形式不需要加载该类。
  * Interface that defines abstract metadata of a specific class,
  * in a form that does not require that class to be loaded yet.
  *
@@ -30,17 +31,17 @@ import org.springframework.lang.Nullable;
  */
 public interface ClassMetadata {
 
-	/**
+	/**返回基础类的名字
 	 * Return the name of the underlying class.
 	 */
 	String getClassName();
 
-	/**
+	/**返回基础类是不是接口
 	 * Return whether the underlying class represents an interface.
 	 */
 	boolean isInterface();
 
-	/**
+	/**返回基础类是否表示注解
 	 * Return whether the underlying class represents an annotation.
 	 * @since 4.1
 	 */
@@ -51,13 +52,13 @@ public interface ClassMetadata {
 	 */
 	boolean isAbstract();
 
-	/**
+	/**基础类是即不是接口又不是抽象类的具体类吗？
 	 * Return whether the underlying class represents a concrete class,
 	 * i.e. neither an interface nor an abstract class.
 	 */
 	boolean isConcrete();
 
-	/**
+	/**是final基础类吗
 	 * Return whether the underlying class is marked as 'final'.
 	 */
 	boolean isFinal();
@@ -71,6 +72,7 @@ public interface ClassMetadata {
 	boolean isIndependent();
 
 	/**
+	 *返回基础类是不是在封闭类中声明的(即基础类是内部/嵌套类还是方法中的本地类)。
 	 * Return whether the underlying class is declared within an enclosing
 	 * class (i.e. the underlying class is an inner/nested class or a
 	 * local class within a method).
@@ -80,6 +82,7 @@ public interface ClassMetadata {
 	boolean hasEnclosingClass();
 
 	/**
+	 * 返回基础类的封闭类的名称，如果基本类是一个顶层类
 	 * Return the name of the enclosing class of the underlying class,
 	 * or {@code null} if the underlying class is a top-level class.
 	 */
@@ -87,24 +90,28 @@ public interface ClassMetadata {
 	String getEnclosingClassName();
 
 	/**
+	 * 是否有父类
 	 * Return whether the underlying class has a super class.
 	 */
 	boolean hasSuperClass();
 
 	/**
+	 * 返回父类的className，如果没有父类返回null
 	 * Return the name of the super class of the underlying class,
 	 * or {@code null} if there is no super class defined.
 	 */
 	@Nullable
 	String getSuperClassName();
 
-	/**
+	/**返回实现的接口数组，没有接口返回空数组
 	 * Return the names of all interfaces that the underlying class
 	 * implements, or an empty array if there are none.
 	 */
 	String[] getInterfaceNames();
 
 	/**
+	 * 返回由类元数据对象表示的作为类成员声明的所有类的名称。这包括公共、受保护、默认(包)访问，
+	 * 以及类声明的私有类和接口，但不包括继承的类和接口。如果不存在成员类或接口，则返回空数组。
 	 * Return the names of all classes declared as members of the class represented by
 	 * this ClassMetadata object. This includes public, protected, default (package)
 	 * access, and private classes and interfaces declared by the class, but excludes

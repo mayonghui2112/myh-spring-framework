@@ -22,6 +22,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.MultiValueMap;
 
 /**
+ * 定义对特定类型({@link AnnotationMetadata class}或{@link MethodMetadata method})的注释的访问，其形式不一定需要类加载。
  * Defines access to the annotations of a specific type ({@link AnnotationMetadata class}
  * or {@link MethodMetadata method}), in a form that does not necessarily require the
  * class-loading.
@@ -39,17 +40,18 @@ import org.springframework.util.MultiValueMap;
 public interface AnnotatedTypeMetadata {
 
 	/**
+	 * 确定基础元素是否定义了给定类型的注释或元注释。
 	 * Determine whether the underlying element has an annotation or meta-annotation
 	 * of the given type defined.
 	 * <p>If this method returns {@code true}, then
 	 * {@link #getAnnotationAttributes} will return a non-null Map.
 	 * @param annotationName the fully qualified class name of the annotation
-	 * type to look for
+	 * type to look for 要查找的注释类型的完全限定类名
 	 * @return whether a matching annotation is defined
 	 */
 	boolean isAnnotated(String annotationName);
 
-	/**
+	/**：检索给定类型的注释的属性(如在基础元素上定义为直接注释或元注释)，同时考虑组合注释上的属性重写。
 	 * Retrieve the attributes of the annotation of the given type, if any (i.e. if
 	 * defined on the underlying element, as direct annotation or meta-annotation),
 	 * also taking attribute overrides on composed annotations into account.
@@ -74,6 +76,7 @@ public interface AnnotatedTypeMetadata {
 	 * @return a Map of attributes, with the attribute name as key (e.g. "value")
 	 * and the defined attribute value as Map value. This return value will be
 	 * {@code null} if no matching annotation is defined.
+	 * 是否将类引用转换为字符串类名作为返回映射中的值，而不是可能必须首先加载@return属性映射的类引用，属性名作为键
 	 */
 	@Nullable
 	Map<String, Object> getAnnotationAttributes(String annotationName, boolean classValuesAsString);
@@ -92,7 +95,7 @@ public interface AnnotatedTypeMetadata {
 	@Nullable
 	MultiValueMap<String, Object> getAllAnnotationAttributes(String annotationName);
 
-	/**
+	/**不考虑属性重写
 	 * Retrieve all attributes of all annotations of the given type, if any (i.e. if
 	 * defined on the underlying element, as direct annotation or meta-annotation).
 	 * Note that this variant does <i>not</i> take attribute overrides into account.

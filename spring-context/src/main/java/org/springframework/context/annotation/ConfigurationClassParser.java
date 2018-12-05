@@ -682,7 +682,7 @@ class ConfigurationClassParser {
 		}
 		else {
 			//没有处理过configClass类上的注解，进行处理
-			//先把configClass类添加到importStack队列中，表示configClass已经被处理过@import
+			//先把configClass类添加到importStack队列中，表示configClass已经被处理过@import，防止循环解析
 			this.importStack.push(configClass);
 			try {
 				//循环处理configClass上的每一个@import
@@ -742,7 +742,7 @@ class ConfigurationClassParser {
 					else {
 						// Candidate class not an ImportSelector or ImportBeanDefinitionRegistrar ->
 						// process it as an @Configuration class
-						//将import导入的所有普通类注册进静态类importStack的MultiValueMap<String, AnnotationMetadata>中
+						//将import导入的所有普通类注册进静态类importStack中的imports集合MultiValueMap<String, AnnotationMetadata>中
 						//在后面进行注册和实例化
 						this.importStack.registerImport(
 								currentSourceClass.getMetadata(), candidate.getMetadata().getClassName());
@@ -850,6 +850,7 @@ class ConfigurationClassParser {
 
 
 	@SuppressWarnings("serial")
+	//import解析器，同时也是一个数组对列，用于解析维护import的类
 	private static class ImportStack extends ArrayDeque<ConfigurationClass> implements ImportRegistry {
 
 		private final MultiValueMap<String, AnnotationMetadata> imports = new LinkedMultiValueMap<>();
@@ -1012,7 +1013,7 @@ class ConfigurationClassParser {
 			}
 			return new AssignableTypeFilter(clazz).match((MetadataReader) this.source, metadataReaderFactory);
 		}
-
+		//将被导入的配置类转化为
 		public ConfigurationClass asConfigClass(ConfigurationClass importedBy) throws IOException {
 			if (this.source instanceof Class) {
 				return new ConfigurationClass((Class<?>) this.source, importedBy);

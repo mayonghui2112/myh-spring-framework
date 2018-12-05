@@ -1,0 +1,4 @@
+1、介绍
+    configClass是spring用来扫描解析spring维护类的。所有以register方法注册的，
+带@component/@bean/@import/@importResource/@componentScan以及@configuration注解且被扫描的类都会被转换为配置类来解析。
+    configClass的属性

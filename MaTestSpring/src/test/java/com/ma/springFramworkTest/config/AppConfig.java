@@ -1,7 +1,6 @@
-package com.ma.config;
+package com.ma.springFramworkTest.config;
 
-import com.ma.dao.IndexDao;
-import org.springframework.context.annotation.Bean;
+import com.ma.springFramworkTest.dao.IndexDao;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

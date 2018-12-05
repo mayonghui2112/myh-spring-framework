@@ -75,7 +75,7 @@ class ConditionEvaluator {
 	 * 根据条件Condition注解判断是否跳过
 	 * Determine if an item should be skipped based on {@code @Conditional} annotations.
 	 * @param metadata the meta data
-	 * @param phase the phase of the call
+	 * @param phase the phase of the call 调用阶段
 	 * @return if the item should be skipped
 	 */
 	public boolean shouldSkip(@Nullable AnnotatedTypeMetadata metadata, @Nullable ConfigurationPhase phase) {
@@ -84,6 +84,7 @@ class ConditionEvaluator {
 			return false;
 		}
 
+		//phase为null，则为Phase根据条件赋予不同的值，重调该方法
 		if (phase == null) {
 			//如果metadata为注解类，判断他是不是configuration注解类
 			if (metadata instanceof AnnotationMetadata &&

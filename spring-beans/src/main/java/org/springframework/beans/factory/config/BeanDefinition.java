@@ -39,7 +39,7 @@ import org.springframework.lang.Nullable;
  */
 public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
-	/**
+	/**单列表示符号
 	 * Scope identifier for the standard singleton scope: "singleton".
 	 * <p>Note that extended bean factories might support further scopes.
 	 * @see #setScope
@@ -54,7 +54,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	String SCOPE_PROTOTYPE = ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 
-	/**
+	/** 角色提示，表示{@code BeanDefinition}是应用程序的主要部分。通常对应于用户定义的bean。
 	 * Role hint indicating that a {@code BeanDefinition} is a major part
 	 * of the application. Typically corresponds to a user-defined bean.
 	 */
@@ -82,7 +82,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	// Modifiable attributes
 
-	/**
+	/** 设置该bean定义的父定义的名称，父类吗？
 	 * Set the name of the parent definition of this bean definition, if any.
 	 */
 	void setParentName(@Nullable String parentName);
@@ -94,9 +94,11 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	String getParentName();
 
 	/**
+	 * 类名可以在bean工厂的后处理过程中修改，通常用经过解析的类名变体替换原来的类名。
 	 * Specify the bean class name of this bean definition.
 	 * <p>The class name can be modified during bean factory post-processing,
 	 * typically replacing the original class name with a parsed variant of it.
+	 *
 	 * @see #setParentName
 	 * @see #setFactoryBeanName
 	 * @see #setFactoryMethodName
@@ -119,6 +121,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	String getBeanClassName();
 
 	/**
+	 * 重设scope
 	 * Override the target scope of this bean, specifying a new scope name.
 	 * @see #SCOPE_SINGLETON
 	 * @see #SCOPE_PROTOTYPE
@@ -126,13 +129,14 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	void setScope(@Nullable String scope);
 
 	/**
+	 * 获取bd scope
 	 * Return the name of the current target scope for this bean,
 	 * or {@code null} if not known yet.
 	 */
 	@Nullable
 	String getScope();
 
-	/**
+	/** 重设lazy
 	 * Set whether this bean should be lazily initialized.
 	 * <p>If {@code false}, the bean will get instantiated on startup by bean
 	 * factories that perform eager initialization of singletons.
@@ -145,7 +149,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 */
 	boolean isLazyInit();
 
-	/**
+	/**设置此bean依赖于初始化的bean的名称。bean工厂将保证首先初始化这些bean。
 	 * Set the names of the beans that this bean depends on being initialized.
 	 * The bean factory will guarantee that these beans get initialized first.
 	 */
@@ -158,6 +162,9 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	String[] getDependsOn();
 
 	/**
+	 * 设置此bean是否是自动连接到其他bean的候选bean
+	 * 注意，此标志仅用于影响基于类型的自动连接。它不影响按名称显式引用，
+	 * 即使指定的bean没有标记为自动连接候选，也会解析该引用。因此，如果名称匹配，则按名称自动连接将注入bean。
 	 * Set whether this bean is a candidate for getting autowired into some other bean.
 	 * <p>Note that this flag is designed to only affect type-based autowiring.
 	 * It does not affect explicit references by name, which will get resolved even
@@ -172,6 +179,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	boolean isAutowireCandidate();
 
 	/**
+	 * 设置此bean是否为主要自动连接候选。
 	 * Set whether this bean is a primary autowire candidate.
 	 * <p>If this value is {@code true} for exactly one bean among multiple
 	 * matching candidates, it will serve as a tie-breaker.
@@ -183,7 +191,8 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 */
 	boolean isPrimary();
 
-	/**
+	/** 指定要使用的工厂bean(如果有的话)。
+	 * 这是调用指定工厂方法的bean的名称。
 	 * Specify the factory bean to use, if any.
 	 * This the name of the bean to call the specified factory method on.
 	 * @see #setFactoryMethodName
@@ -197,6 +206,8 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	String getFactoryBeanName();
 
 	/**
+	 * 指定工厂方法(如果有的话)。将使用构造函数参数调用此方法，如果没有指定参数，
+	 * 则不使用参数。该方法将在指定的工厂bean上调用(如果有的话)，否则将作为本地bean类上的静态方法调用。
 	 * Specify a factory method, if any. This method will be invoked with
 	 * constructor arguments, or with no arguments if none are specified.
 	 * The method will be invoked on the specified factory bean, if any,
@@ -212,8 +223,9 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	@Nullable
 	String getFactoryMethodName();
 
-	/**
+	/** 返回此bean的构造函数参数值。
 	 * Return the constructor argument values for this bean.
+	 * 返回的实例可以在bean工厂后处理期间修改。
 	 * <p>The returned instance can be modified during bean factory post-processing.
 	 * @return the ConstructorArgumentValues object (never {@code null})
 	 */

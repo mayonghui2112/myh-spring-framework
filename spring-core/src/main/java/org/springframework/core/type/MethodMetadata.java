@@ -36,7 +36,7 @@ public interface MethodMetadata extends AnnotatedTypeMetadata {
 	 */
 	String getMethodName();
 
-	/**
+	/**声明此方法的类的完全限定名。
 	 * Return the fully-qualified name of the class that declares this method.
 	 */
 	String getDeclaringClassName();

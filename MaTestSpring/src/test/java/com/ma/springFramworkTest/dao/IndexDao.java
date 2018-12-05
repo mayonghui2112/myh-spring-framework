@@ -1,11 +1,9 @@
-package com.ma.dao;
+package com.ma.springFramworkTest.dao;
 
-import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Repository;
-
-@Repository("IndexDao1")
-public class IndexDao1 {
-	public IndexDao1(){
+@Repository("IndexDao")
+public class IndexDao {
+	public IndexDao(){
 		System.out.println("IndexDao");
 	}
 	public void test() {

@@ -33,7 +33,7 @@ import java.util.Set;
  */
 public interface AnnotationMetadata extends ClassMetadata, AnnotatedTypeMetadata {
 
-	/**
+	/**获取基础类上所有注释类型的完全限定类名。
 	 * Get the fully qualified class names of all annotation types that
 	 * are <em>present</em> on the underlying class.
 	 * @return the annotation type names
@@ -41,15 +41,16 @@ public interface AnnotationMetadata extends ClassMetadata, AnnotatedTypeMetadata
 	Set<String> getAnnotationTypes();
 
 	/**
+	 * 获取基础类上给定注释类型上的所有元注释类型的完全限定类名。
 	 * Get the fully qualified class names of all meta-annotation types that
 	 * are <em>present</em> on the given annotation type on the underlying class.
 	 * @param annotationName the fully qualified class name of the meta-annotation
-	 * type to look for
+	 * type to look for完全限定名
 	 * @return the meta-annotation type names, or an empty set if none found
 	 */
 	Set<String> getMetaAnnotationTypes(String annotationName);
 
-	/**
+	/**类上有注解吗
 	 * Determine whether an annotation of the given type is <em>present</em> on
 	 * the underlying class.
 	 * @param annotationName the fully qualified class name of the annotation
@@ -58,7 +59,8 @@ public interface AnnotationMetadata extends ClassMetadata, AnnotatedTypeMetadata
 	 */
 	boolean hasAnnotation(String annotationName);
 
-	/**
+	/**类上有元注解吗
+	 * 原注解，注解的注解，有四个
 	 * Determine whether the underlying class has an annotation that is itself
 	 * annotated with the meta-annotation of the given type.
 	 * @param metaAnnotationName the fully qualified class name of the
@@ -76,6 +78,7 @@ public interface AnnotationMetadata extends ClassMetadata, AnnotatedTypeMetadata
 	boolean hasAnnotatedMethods(String annotationName);
 
 	/**
+	 * 如果注解类中的方法含有元注解，将返回这些被注解方法的元数据
 	 * Retrieve the method metadata for all methods that are annotated
 	 * (or meta-annotated) with the given annotation type.
 	 * <p>For any returned method, {@link MethodMetadata#isAnnotated} will

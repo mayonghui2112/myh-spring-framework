@@ -125,16 +125,20 @@ class ConfigurationClassBeanDefinitionReader {
 	 */
 	private void loadBeanDefinitionsForConfigurationClass(
 			ConfigurationClass configClass, TrackedConditionEvaluator trackedConditionEvaluator) {
-
+		//判断是否跳过 myh-question？
 		if (trackedConditionEvaluator.shouldSkip(configClass)) {
+			//获取bd名字
 			String beanName = configClass.getBeanName();
+			//beanName已经被注册了
 			if (StringUtils.hasLength(beanName) && this.registry.containsBeanDefinition(beanName)) {
+				//则从注册器移除bd
 				this.registry.removeBeanDefinition(beanName);
 			}
+			//从importStack中移除导入的类
 			this.importRegistry.removeImportingClass(configClass.getMetadata().getClassName());
 			return;
 		}
-
+		//检测配置类是否是被导入的
 		if (configClass.isImported()) {
 			registerBeanDefinitionForImportedConfigurationClass(configClass);
 		}
