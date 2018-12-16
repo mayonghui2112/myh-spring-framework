@@ -248,7 +248,13 @@ public class AnnotationConfigUtils {
 		processCommonDefinitionAnnotations(abd, abd.getMetadata());
 	}
 
+	/**
+	 * 处理lazy/Primary/DependsOn/Role/Description等注解，把相应注解值设置进abd中
+	 * @param abd
+	 * @param metadata
+	 */
 	static void processCommonDefinitionAnnotations(AnnotatedBeanDefinition abd, AnnotatedTypeMetadata metadata) {
+		//懒加载注解
 		AnnotationAttributes lazy = attributesFor(metadata, Lazy.class);
 		if (lazy != null) {
 			abd.setLazyInit(lazy.getBoolean("value"));
@@ -259,10 +265,11 @@ public class AnnotationConfigUtils {
 				abd.setLazyInit(lazy.getBoolean("value"));
 			}
 		}
-
+		//promary注解
 		if (metadata.isAnnotated(Primary.class.getName())) {
 			abd.setPrimary(true);
 		}
+		//DependsOn注解处理，并把DependsOn的value数组值设置进abd
 		AnnotationAttributes dependsOn = attributesFor(metadata, DependsOn.class);
 		if (dependsOn != null) {
 			abd.setDependsOn(dependsOn.getStringArray("value"));
@@ -289,6 +296,7 @@ public class AnnotationConfigUtils {
 			return definition;
 		}
 		boolean proxyTargetClass = scopedProxyMode.equals(ScopedProxyMode.TARGET_CLASS);
+		//根据scopedProxyMode生成一个代理db，NO：原bd，interface：jdkProxy,targetClass:cglib
 		return ScopedProxyCreator.createScopedProxy(definition, registry, proxyTargetClass);
 	}
 

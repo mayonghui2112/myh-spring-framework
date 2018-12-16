@@ -217,19 +217,22 @@ public class AnnotatedBeanDefinitionReader {
 	 */
 	<T> void doRegisterBean(Class<T> annotatedClass, @Nullable Supplier<T> instanceSupplier, @Nullable String name,
 			@Nullable Class<? extends Annotation>[] qualifiers, BeanDefinitionCustomizer... definitionCustomizers) {
-
+		//生成一个标准的注解bd
 		AnnotatedGenericBeanDefinition abd = new AnnotatedGenericBeanDefinition(annotatedClass);
+		//是否应该跳过注册该bean
 		if (this.conditionEvaluator.shouldSkip(abd.getMetadata())) {
 			return;
 		}
-
+		//处理scope注解，并设置进abd中
 		abd.setInstanceSupplier(instanceSupplier);
 		ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(abd);
 		abd.setScope(scopeMetadata.getScopeName());
 		String beanName = (name != null ? name : this.beanNameGenerator.generateBeanName(abd, this.registry));
-
+		//处理基本类上的普通注解，lazy/Primary/DependsOn/Role/Description
 		AnnotationConfigUtils.processCommonDefinitionAnnotations(abd);
+		//处理传入的限定符注解，
 		if (qualifiers != null) {
+			//遍历传入的限定符注解，如果注解是Primary和Lazy，设置进abd，其他类型添加进abd的名叫Qualifier的Map<String, AutowireCandidateQualifier>中
 			for (Class<? extends Annotation> qualifier : qualifiers) {
 				if (Primary.class == qualifier) {
 					abd.setPrimary(true);
@@ -248,6 +251,7 @@ public class AnnotatedBeanDefinitionReader {
 
 		BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(abd, beanName);
 		definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
+		//把db设置进dbMap
 		BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, this.registry);
 	}
 

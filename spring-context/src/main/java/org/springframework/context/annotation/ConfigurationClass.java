@@ -50,20 +50,23 @@ import org.springframework.util.ClassUtils;
  */
 final class ConfigurationClass {
 
-	private final AnnotationMetadata metadata;
+	private final AnnotationMetadata metadata;//注解类元数据
 
-	private final Resource resource;
+	private final Resource resource;//根据注解类元数据的className生成的DescriptiveResource对象
 
 	@Nullable
-	private String beanName;
+	private String beanName;//注解类的beanName
 
+	//一个数组，表明该类是由那些类通过@import注解导入的
 	private final Set<ConfigurationClass> importedBy = new LinkedHashSet<>(1);
 
+	//存储配置类中方法的元数据对象（@bean注解的和所有接口的非抽象方法）
 	private final Set<BeanMethod> beanMethods = new LinkedHashSet<>();
 
+	//用imortResourced导入的资源类
 	private final Map<String, Class<? extends BeanDefinitionReader>> importedResources =
 			new LinkedHashMap<>();
-
+	//用import导入的ImportBeanDefinitionRegistrar类
 	private final Map<ImportBeanDefinitionRegistrar, AnnotationMetadata> importBeanDefinitionRegistrars =
 			new LinkedHashMap<>();
 
@@ -111,6 +114,7 @@ final class ConfigurationClass {
 	}
 
 	/**
+	 * 被import注解导入的普通类，在转化为config时会传入@import注解的类，即imoortby，表明时由那个类导入的
 	 * Create a new {@link ConfigurationClass} representing a class that was imported
 	 * using the {@link Import} annotation or automatically processed as a nested
 	 * configuration class (if imported is {@code true}).
@@ -215,6 +219,7 @@ final class ConfigurationClass {
 
 	public void validate(ProblemReporter problemReporter) {
 		// A configuration class may not be final (CGLIB limitation)
+		//cglib限制配置类不能是final的
 		if (getMetadata().isAnnotated(Configuration.class.getName())) {
 			if (getMetadata().isFinal()) {
 				problemReporter.error(new FinalConfigurationProblem());

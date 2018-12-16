@@ -31,6 +31,7 @@ import org.springframework.core.type.AnnotationMetadata;
 public interface ImportAware extends Aware {
 
 	/**
+	 * 对configuration类上的注解进行操作
 	 * Set the annotation metadata of the importing @{@code Configuration} class.
 	 */
 	void setImportMetadata(AnnotationMetadata importMetadata);

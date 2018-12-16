@@ -54,7 +54,8 @@ public class AnnotatedGenericBeanDefinition extends GenericBeanDefinition implem
 	 * @param beanClass the loaded bean class
 	 */
 	public AnnotatedGenericBeanDefinition(Class<?> beanClass) {
-		setBeanClass(beanClass);
+		setBeanClass(beanClass);//beanClass结尾class对象
+		//根据class创建一个标准注解的元数据
 		this.metadata = new StandardAnnotationMetadata(beanClass, true);
 	}
 

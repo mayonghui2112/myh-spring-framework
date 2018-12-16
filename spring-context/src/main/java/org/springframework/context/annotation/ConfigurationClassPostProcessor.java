@@ -354,7 +354,9 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 						registry, this.sourceExtractor, this.resourceLoader, this.environment,
 						this.importBeanNameGenerator, parser.getImportRegistry());
 			}
-			//把所有配置类注册进bd
+			//处理configClasses中imports注解导入的类，处理@bean，@importResource
+			//为什么不处理@component类，因为在此类执行之前能注册类的入口：register/注解/addBeanFactoryPostProcessor中，
+			//register入口直接放入bdmap中，其他都不会作为配置类处理，都是在处理配置类之前注册进入bdMap中的，
 			this.reader.loadBeanDefinitions(configClasses);
 			//把所有刚解析的配置类加入alreadyParsed集合
 			alreadyParsed.addAll(configClasses);
@@ -368,9 +370,9 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 				String[] newCandidateNames = registry.getBeanDefinitionNames();
 				//对处理配置类之前的bdName进行去重
 				Set<String> oldCandidateNames = new HashSet<>(Arrays.asList(candidateNames));
-				//存储已经解析过的bd数量
+				//存储已经解析过的bd
 				Set<String> alreadyParsedClasses = new HashSet<>();
-				//把已经解析过的配置类集合alreadyParsed，加入configurationClass中
+				//把已经解析过的配置类集合alreadyParsed的beanName加入configurationClass中
 				for (ConfigurationClass configurationClass : alreadyParsed) {
 					alreadyParsedClasses.add(configurationClass.getMetadata().getClassName());
 				}
@@ -401,6 +403,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		if (this.metadataReaderFactory instanceof CachingMetadataReaderFactory) {
 			// Clear cache in externally provided MetadataReaderFactory; this is a no-op
 			// for a shared cache since it'll be cleared by the ApplicationContext.
+			//清除外部提供的MetadataReaderFactory中的缓存;这对于共享缓存是一个no-op，因为它将被ApplicationContext清除。
 			((CachingMetadataReaderFactory) this.metadataReaderFactory).clearCache();
 		}
 	}
@@ -462,6 +465,8 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 
 				if (configClass != null) {
 					//根据beanClass创建confingClass的cglib代理类
+					//可以通过下面这个工具找到内存中的类
+					//java -classpath "C:\Program Files\Java\jdk1.8.0_60\lib\sa-jdi.jar" sun.jvm.hotspot.HSDB
 					Class<?> enhancedClass = enhancer.enhance(configClass, this.beanClassLoader);
 					if (configClass != enhancedClass) {
 						if (logger.isDebugEnabled()) {

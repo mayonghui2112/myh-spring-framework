@@ -265,6 +265,7 @@ public class AnnotatedElementUtils {
 	}
 
 	/**
+	 * 确定指定annotationName的注释是出现在提供的AnnotatedElement上，还是在指定元素之上的注释层次结构中。
 	 * Determine if an annotation of the specified {@code annotationName} is
 	 * <em>present</em> on the supplied {@link AnnotatedElement} or within the
 	 * annotation hierarchy <em>above</em> the specified element.

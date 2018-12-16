@@ -134,19 +134,23 @@ class ConfigurationClassBeanDefinitionReader {
 				//则从注册器移除bd
 				this.registry.removeBeanDefinition(beanName);
 			}
-			//从importStack中移除导入的类
+			//从importStack中的imports移除导入的类
 			this.importRegistry.removeImportingClass(configClass.getMetadata().getClassName());
 			return;
 		}
-		//检测配置类是否是被导入的
+		//检测配置类是不是被其他配置类导入的
 		if (configClass.isImported()) {
+			//将configclass转化为bd，注册进入bdMap
 			registerBeanDefinitionForImportedConfigurationClass(configClass);
 		}
+		//处理存储在配置类中方法的元数据对象（@bean注解的和所有接口的非抽象方法）
 		for (BeanMethod beanMethod : configClass.getBeanMethods()) {
+			//将beanMethod转化为一个ConfigurationClassBeanDefinition类型的bd注册进bdmap
 			loadBeanDefinitionsForBeanMethod(beanMethod);
 		}
-
+		//处理用imortResourced导入的资源类
 		loadBeanDefinitionsFromImportedResources(configClass.getImportedResources());
+		//处理用import导入的ImportBeanDefinitionRegistrar类，即用map的foreach调用map中的所有ImportBeanDefinitionRegistrar的registerBeanDefinitions方法
 		loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars());
 	}
 
@@ -189,7 +193,7 @@ class ConfigurationClassBeanDefinitionReader {
 		if (configClass.skippedBeanMethods.contains(methodName)) {
 			return;
 		}
-
+		//返回方法上所有的bean注解信息
 		AnnotationAttributes bean = AnnotationConfigUtils.attributesFor(metadata, Bean.class);
 		Assert.state(bean != null, "No @Bean annotation attributes");
 
@@ -211,7 +215,7 @@ class ConfigurationClassBeanDefinitionReader {
 			}
 			return;
 		}
-
+		//内部类
 		ConfigurationClassBeanDefinition beanDef = new ConfigurationClassBeanDefinition(configClass, metadata);
 		beanDef.setResource(configClass.getResource());
 		beanDef.setSource(this.sourceExtractor.extractSource(metadata, configClass.getResource()));

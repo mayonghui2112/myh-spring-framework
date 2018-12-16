@@ -34,7 +34,7 @@ import org.springframework.lang.Nullable;
  */
 public class DescriptiveResource extends AbstractResource {
 
-	private final String description;
+	private final String description;//注解类元数据的beanName
 
 
 	/**

@@ -235,8 +235,11 @@ class ConfigurationClassParser {
 		//从configurationClasses获取配置类，不为空表示该类已经被处理过
 		ConfigurationClass existingClass = this.configurationClasses.get(configClass);
 		if (existingClass != null) {
+			//configClass是不是被@import导入的
 			if (configClass.isImported()) {
+				//existingClass是不是被@import导入的
 				if (existingClass.isImported()) {
+					//将配置类加入到已经存在的配置类对象的importBy集合set中
 					existingClass.mergeImportedBy(configClass);
 				}
 				// Otherwise ignore new imported config class; existing non-imported class overrides it.
@@ -355,19 +358,22 @@ class ConfigurationClassParser {
 			Class<? extends BeanDefinitionReader> readerClass = importResource.getClass("reader");
 			for (String resource : resources) {
 				String resolvedResource = this.environment.resolveRequiredPlaceholders(resource);
+				//把reader配置的class添加进configurationClass的importedResources
 				configClass.addImportedResource(resolvedResource, readerClass);
 			}
 		}
 
 		// Process individual @Bean methods
 		//处理 单个@Bean 注解方法
+		//根据注解类的sourceClass（标准注解处理对象）对象获取配置类中所有的@bean注解方法元数据
 		Set<MethodMetadata> beanMethods = retrieveBeanMethodMetadata(sourceClass);
 		for (MethodMetadata methodMetadata : beanMethods) {
+			//将所有的注解方法元数据转换为beanMethod对象，设置进配置类中
 			configClass.addBeanMethod(new BeanMethod(methodMetadata, configClass));
 		}
 
 		// Process default methods on interfaces
-		//处理默认的方法和接口
+		//把configClass基本类直接和间接继承的所有接口的方法注册进入configclass的 beanMethods集合set中
 		processInterfaces(configClass, sourceClass);
 
 		// Process superclass, if any
@@ -375,9 +381,12 @@ class ConfigurationClassParser {
 		if (sourceClass.getMetadata().hasSuperClass()) {
 			String superclass = sourceClass.getMetadata().getSuperClassName();
 			if (superclass != null && !superclass.startsWith("java") &&
-					!this.knownSuperclasses.containsKey(superclass)) {
+					!this.knownSuperclasses.containsKey(superclass))
+			{
+				//将配置类的父类按照《父类Class，配置类》存储在解析器中
 				this.knownSuperclasses.put(superclass, configClass);
 				// Superclass found, return its annotation metadata and recurse
+				//如果配置类有父类，则循环处理父类
 				return sourceClass.getSuperClass();
 			}
 		}
@@ -419,6 +428,7 @@ class ConfigurationClassParser {
 
 	/**
 	 * Register default methods on interfaces implemented by the configuration class.
+	 * 在配置类实现的接口上注册默认方法。
 	 */
 	private void processInterfaces(ConfigurationClass configClass, SourceClass sourceClass) throws IOException {
 		for (SourceClass ifc : sourceClass.getInterfaces()) {
@@ -434,15 +444,20 @@ class ConfigurationClassParser {
 	}
 
 	/**
+	 * 获取所有@bean注解的方法元素据
 	 * Retrieve the metadata for all <code>@Bean</code> methods.
 	 */
 	private Set<MethodMetadata> retrieveBeanMethodMetadata(SourceClass sourceClass) {
+		//获取配置类的注解元数据
 		AnnotationMetadata original = sourceClass.getMetadata();
+		//获取配置类中带有@bean的注解方法
 		Set<MethodMetadata> beanMethods = original.getAnnotatedMethods(Bean.class.getName());
 		if (beanMethods.size() > 1 && original instanceof StandardAnnotationMetadata) {
 			// Try reading the class file via ASM for deterministic declaration order...
 			// Unfortunately, the JVM's standard reflection returns methods in arbitrary
 			// order, even between different runs of the same application on the same JVM.
+			////尝试通过ASM读取类文件，以确定声明顺序…不幸的是，
+			// JVM的标准反射以任意顺序返回方法，甚至在相同JVM上相同应用程序的不同运行之间也是如此。
 			try {
 				AnnotationMetadata asm =
 						this.metadataReaderFactory.getMetadataReader(original.getClassName()).getAnnotationMetadata();
@@ -735,7 +750,7 @@ class ConfigurationClassParser {
 								BeanUtils.instantiateClass(candidateClass, ImportBeanDefinitionRegistrar.class);
 						ParserStrategyUtils.invokeAwareMethods(
 								registrar, this.environment, this.resourceLoader, this.registry);
-						//把registrar加入到配置类configClass类的importBeanDefinitionRegistrars变量中，稍后处理
+						//把ImportBeanDefinitionRegistrar加入到配置类configClass的importBeanDefinitionRegistrars变量map中，稍后处理
 						configClass.addImportBeanDefinitionRegistrar(registrar, currentSourceClass.getMetadata());
 					}
 					//处理其他类，import导入的其他类都会被当成配置类进行扫描，处理
@@ -748,6 +763,8 @@ class ConfigurationClassParser {
 								currentSourceClass.getMetadata(), candidate.getMetadata().getClassName());
 						//为了防止import导入的所有普通类也是配置类，将所有导入的类当成配置类处理一遍，此处也是递归操作，
 						//同时为了防止循环导入，会检查importStack上是不是有了candidate转换的configClass类
+						//candidate.asConfigClass(configClass)将candidate转化为一个配置类，并将configClass设置进入candidate配置类的importBy集合set中，
+						//表明candidate配置类是由configClass通过import注解导入的
 						processConfigurationClass(candidate.asConfigClass(configClass));
 					}
 				}
@@ -1013,7 +1030,7 @@ class ConfigurationClassParser {
 			}
 			return new AssignableTypeFilter(clazz).match((MetadataReader) this.source, metadataReaderFactory);
 		}
-		//将被导入的配置类转化为
+		//将被导入的类转化为配置类，并表明是由importedBy配置类通过imort注解导入的，并将importby类传入该新配置类的importby集合set中
 		public ConfigurationClass asConfigClass(ConfigurationClass importedBy) throws IOException {
 			if (this.source instanceof Class) {
 				return new ConfigurationClass((Class<?>) this.source, importedBy);

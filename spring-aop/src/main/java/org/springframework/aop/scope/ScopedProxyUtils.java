@@ -39,6 +39,7 @@ public abstract class ScopedProxyUtils {
 
 
 	/**
+	 * 为提供的目标bean生成一个作用域代理，用内部名称注册目标bean，并在作用域代理上设置“targetBeanName”。
 	 * Generate a scoped proxy for the supplied target bean, registering the target
 	 * bean with an internal name and setting 'targetBeanName' on the scoped proxy.
 	 * @param definition the original bean definition

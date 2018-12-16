@@ -4,6 +4,7 @@ import com.ma.springFramworkTest.config.AppConfig;
 import com.ma.springFramworkTest.dao.IndexDao;
 import com.ma.springFramworkTest.postProcessors.MyBeanDefinitionRegistryPostProcessor;
 import com.ma.springFramworkTest.postProcessors.MyBeanDefinitionRegistryPostProcessor1;
+import com.ma.springFramworkTest.postProcessors.myImportSelected;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class TestAnnotation {
@@ -17,6 +18,9 @@ public class TestAnnotation {
 		annotationConfigApplicationContext.refresh();
 		IndexDao indexDao = (IndexDao)annotationConfigApplicationContext.getBean("IndexDao");
 		indexDao.test();
+		myImportSelected myImportSelected = (myImportSelected)annotationConfigApplicationContext.getBean("myImportSelected");
+		myImportSelected.test();
+
 		System.out.println(indexDao.getClass());
 
 	}

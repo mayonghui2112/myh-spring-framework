@@ -354,6 +354,7 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	boolean isCurrentlyInCreation(String beanName);
 
 	/**
+	 * 为给定的bean注册一个依赖bean，
 	 * Register a dependent bean for the given bean,
 	 * to be destroyed before the given bean is destroyed.
 	 * @param beanName the name of the bean

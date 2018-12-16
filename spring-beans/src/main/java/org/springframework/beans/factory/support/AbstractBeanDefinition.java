@@ -180,6 +180,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	private MutablePropertyValues propertyValues;
 
 	@Nullable
+	//重写方法对象,对象中存储Set<MethodOverride>集合
 	private MethodOverrides methodOverrides;
 
 	@Nullable
@@ -952,6 +953,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Return whether this bean definition is 'synthetic', that is,
 	 * not defined by the application itself.
+	 * 返回这个bean定义是否是“合成的”，即不是由应用程序本身定义的。
 	 */
 	public boolean isSynthetic() {
 		return this.synthetic;
@@ -1059,15 +1061,19 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	}
 
 	/**
+	 * 验证并准备为此bean定义的方法重写。检查具有指定名称的方法是否存在。
 	 * Validate and prepare the method overrides defined for this bean.
 	 * Checks for existence of a method with the specified name.
 	 * @throws BeanDefinitionValidationException in case of validation failure
 	 */
 	public void prepareMethodOverrides() throws BeanDefinitionValidationException {
 		// Check that lookup methods exists.
+		//检查lookup注解方法是否存在。
 		if (hasMethodOverrides()) {
+			//返回该对象包含的所有重写的方法。
 			Set<MethodOverride> overrides = getMethodOverrides().getOverrides();
 			synchronized (overrides) {
+				//遍历重写方法
 				for (MethodOverride mo : overrides) {
 					prepareMethodOverride(mo);
 				}
@@ -1083,6 +1089,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * @throws BeanDefinitionValidationException in case of validation failure
 	 */
 	protected void prepareMethodOverride(MethodOverride mo) throws BeanDefinitionValidationException {
+		//根据方法名获取本bean方法数量，数量=0说明不存在此方法，唯一把重载标志设为false，避免参数检查花销，>1正常处理
 		int count = ClassUtils.getMethodCountForName(getBeanClass(), mo.getMethodName());
 		if (count == 0) {
 			throw new BeanDefinitionValidationException(
@@ -1090,6 +1097,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 					"' on class [" + getBeanClassName() + "]");
 		}
 		else if (count == 1) {
+			//将重写标记为未重载，以避免arg类型检查的开销。
 			// Mark override as not overloaded, to avoid the overhead of arg type checking.
 			mo.setOverloaded(false);
 		}

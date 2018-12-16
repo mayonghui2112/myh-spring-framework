@@ -93,7 +93,7 @@ class ConditionEvaluator {
 			}
 			return shouldSkip(metadata, ConfigurationPhase.REGISTER_BEAN);
 		}
-		//处理Condition注解
+		//获取所有的Condition注解，添加到ArrayList集合
 		List<Condition> conditions = new ArrayList<>();
 		for (String[] conditionClasses : getConditionClasses(metadata)) {
 			for (String conditionClass : conditionClasses) {
@@ -102,8 +102,10 @@ class ConditionEvaluator {
 			}
 		}
 
+		//为注解排序
 		AnnotationAwareOrderComparator.sort(conditions);
 
+		//处理condition注解，根据注解处理结果判断是否跳过
 		for (Condition condition : conditions) {
 			ConfigurationPhase requiredPhase = null;
 			if (condition instanceof ConfigurationCondition) {

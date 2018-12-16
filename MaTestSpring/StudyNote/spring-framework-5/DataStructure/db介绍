@@ -1,15 +1,17 @@
 1、父接口及其作用
 AttributeAccessor 属性访问器，对属性增删改查
 BeanMetadataElement 配置源相关
+AnnotationMetadata 是注解元素据，用于操作注解
 BeanMetadataAttribute 维护一个object对象作为source，维护一个name，一个value
 AttributeAccessorSupport 维护一个Map<String, Object 存储属性
 BeanMetadataAttributeAccessor 维护一个objec 作为配置源
 beandifinition bd的基础定义接口，定义db的基础属性
-AbstractBeanDefinition bd的抽象实现类，维护了bd的基本属性以及resource，比如自动装配，依赖检查，lazyInit，scope，abstractFlag，依赖类数组，factoryBeanName。。。。
+AbstractBeanDefinition bd的抽象实现类，维护了bd的基本属性以及resource，
+        比如自动装配，依赖检查，lazyInit，scope，abstractFlag，依赖类数组，factoryBeanName。。。。
+        还有class对象beanClass，bd扮演角色role，默认为application，spring初始化6个类为ROLE_INFRASTRUCTURE，
 RootBeanDefinition: spring内部bean定义
 GenericBeanDefinition：用户用register方法注册bd的时候，初始化的bd实现类
 AnnotatedGenericBeanDefinition：用户用注解的方式，用register方法注册bd的时候，初始化的bd实现类，维护了AnnotationMetadata对象metaData和MethodMetadata对象factoryMethodMetadata
-
 
 inputStream
 resource
@@ -17,3 +19,13 @@ AbstractResource
 BeanDefinitionResource
 这些是输入流的继承接口或实现类，上是下的父接口或父类
 
+ScopeMetadata ,scope的元素据类型，维护了一个名字，一个scopedProxyMode代理模式，默认no
+sourceClass 以同一的方式处理bd，内部维护一个class和 StandardAnnotationMetadata
+
+StandardAnnotationMetadata 维护一个注解对象数组和是否以map形式返回所有注解的元数据的boolean
+
+ConfigurationClass spring的配置类，非常重要的一个类，所有拥有@configuration/@Bean/@Component/@ComponentScan/@Import/@ImportResource注解的类都会转化为配置类，进行解析
+
+StandardMethodMetadata 方法元数据，存储一个方法对象Method，是否以map形式返回所有注解的元数据的boolean继承自类的元数据
+
+ConfigurationMethod 配置类的方法元数据，存储有方法的元数据对象和配置类的引用

@@ -79,8 +79,10 @@ public class AnnotationScopeMetadataResolver implements ScopeMetadataResolver {
 		ScopeMetadata metadata = new ScopeMetadata();
 		if (definition instanceof AnnotatedBeanDefinition) {
 			AnnotatedBeanDefinition annDef = (AnnotatedBeanDefinition) definition;
+			//将基本类的所有元注解，并以map<annotationType,AnnotationAttributes>存储
 			AnnotationAttributes attributes = AnnotationConfigUtils.attributesFor(
 					annDef.getMetadata(), this.scopeAnnotationType);
+			//
 			if (attributes != null) {
 				metadata.setScopeName(attributes.getString("value"));
 				ScopedProxyMode proxyMode = attributes.getEnum("proxyMode");

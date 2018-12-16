@@ -1,6 +1,7 @@
 package com.ma.supSubTest.allClass;
 
 public class Sun extends Parent {
+	private String str1;
 	public void testSun(){
 		System.out.println("++++++++++++testSun");
 		super.test();
