@@ -70,7 +70,7 @@ import org.springframework.util.StringUtils;
  */
 public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements SingletonBeanRegistry {
 
-	/**单例对象容器
+	/**单例对象容器,所有单例的创建和获取操作都会在该对象上加锁
 	 * Cache of singleton objects: bean name --> bean instance */
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
 
@@ -149,7 +149,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 			this.singletonObjects.put(beanName, singletonObject);
 			//从单例工厂容器移除，
 			this.singletonFactories.remove(beanName);
-			//从早期单例单例工厂移除
+			//从早期单例单例容器移除
 			this.earlySingletonObjects.remove(beanName);
 			//注册单例对象到registeredSingletons集合
 			this.registeredSingletons.add(beanName);
@@ -166,10 +166,15 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 */
 	protected void addSingletonFactory(String beanName, ObjectFactory<?> singletonFactory) {
 		Assert.notNull(singletonFactory, "Singleton factory must not be null");
+		//此处加锁是第二次加锁，是为了处理循环依赖？myh-question?
 		synchronized (this.singletonObjects) {
+			//此时实例化以后还没有初始化
 			if (!this.singletonObjects.containsKey(beanName)) {
+				//放进单例工厂容器
 				this.singletonFactories.put(beanName, singletonFactory);
+				//从早期单例容器已从
 				this.earlySingletonObjects.remove(beanName);
+				//添加进注册单例容器，一般情况是第二次添加，但是set集合可以去重，添加不进去
 				this.registeredSingletons.add(beanName);
 			}
 		}
@@ -195,9 +200,12 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		Object singletonObject = this.singletonObjects.get(beanName);
 		//对象为空，检查是否指定的单例bean是否当前处于创建状态
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
+			//当获得这个锁的时候，说明正在创建的实例已经实例化完成，至少已经放进singletonFactories集合里面了
 			synchronized (this.singletonObjects) {
-				//earlySingletonObjects集合map中获取singletonObject
+				//earlySingletonObjects集合map中获取singletonObject，
+				//获取得到，说明bn对应的实例已经从singletonFactories取出来了
 				singletonObject = this.earlySingletonObjects.get(beanName);
+				//如果没有取出来，且允许访问早期创建对象的引用
 				if (singletonObject == null && allowEarlyReference) {
 					//根据bn，从singletonFactories集合map中获取singletonFactory单例工程
 					ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
@@ -230,9 +238,8 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 			Object singletonObject = this.singletonObjects.get(beanName);
 			//获取不到，说明还没创建
 			if (singletonObject == null) {
-				//
+				//在销毁工厂的单例对象时不允许创建单例bean(不要在销毁方法实现中从bean工厂请求bean !)
 				if (this.singletonsCurrentlyInDestruction) {
-					//在销毁工厂的单例对象时不允许创建单例bean(不要在销毁方法实现中从bean工厂请求bean !)
 					throw new BeanCreationNotAllowedException(beanName,
 							"Singleton bean creation not allowed while singletons of this factory are in destruction " +
 							"(Do not request a bean from a BeanFactory in a destroy method implementation!)");

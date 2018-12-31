@@ -737,7 +737,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		List<String> beanNames = new ArrayList<>(this.beanDefinitionNames);
 
 		// Trigger initialization of all non-lazy singleton beans...
-		//遍历所有的beanName
+		//遍历所有的beanName，对他们进行实例化和初始化操作
 		for (String beanName : beanNames) {
 			//根据bdName获取bd，bd为子类父类合并后的bd
 			//在xml中配置一个bean最为父类bd，再配置一个子类bean继承父类bean
@@ -746,7 +746,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
 			//不是抽象类，不是懒加载类的单例对象
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
-				//是工厂bean
+				//是工厂bean myh-question？
 				if (isFactoryBean(beanName)) {
 					//根据&+beanName获取bena实例
 					Object bean = getBean(FACTORY_BEAN_PREFIX + beanName);
@@ -796,7 +796,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 				}
 				//不是安全管理
 				else {
-					//
+					//在单例预实例化阶段的末尾调用，保证已经创建了所有常规单例bean。
 					smartSingleton.afterSingletonsInstantiated();
 				}
 			}

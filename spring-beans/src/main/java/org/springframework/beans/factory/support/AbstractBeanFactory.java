@@ -243,7 +243,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	@SuppressWarnings("unchecked")
 	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
 			@Nullable final Object[] args, boolean typeCheckOnly) throws BeansException {
-		//转化名字
+		//去掉工厂名字前缀，转换别名为规范名字
 		final String beanName = transformedBeanName(name);
 		Object bean;
 
@@ -253,7 +253,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		// 其他bean依赖本bean时，初始化依赖bean时都会
 		//或者获取此bean对象时
 		//都会调用getBean方法
-		//bean首先从beanFactory中尝试获取单例对象，
+		//bean=从单例容器/早期单例容器/单例工厂容器中尝试获取单例对象，
 		Object sharedInstance = getSingleton(beanName);
 		//如果sharedInstance不为null，且没有参数
 		if (sharedInstance != null && args == null) {
@@ -266,12 +266,15 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					logger.debug("Returning cached instance of singleton bean '" + beanName + "'");
 				}
 			}
-			//sharedInstance类型和beanName种类（工厂类和普通类）获取实例
+			//根据sharedInstance类型和beanName种类（工厂类和普通类）获取实例
+			//name：传入的参数，可能有工厂前缀，也可能是别名
+			//beanName：标准名称
+			//sharedInstance：可能是工厂实例，也可能是普通实例
 			bean = getObjectForBeanInstance(sharedInstance, name, beanName, null);
 		}
 
 		else {
-			// ：如果当前线程正在创建指定的原型bean
+			//如果我们已经创建了这个bean实例，则失败:我们假设在一个循环引用中。
 			// Fail if we're already creating this bean instance:
 			// We're assumably within a circular reference.
 			if (isPrototypeCurrentlyInCreation(beanName)) {
@@ -281,7 +284,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			// Check if bean definition exists in this factory.
 			//获取父类beanFactory
 			BeanFactory parentBeanFactory = getParentBeanFactory();
-			//如果由父类beanfactory，且当前beanFactory不包含该名字的bd
+			//如果有父类beanfactory，且当前beanFactory不包含该名字的bd，myh-question？
 			if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
 				// Not found -> check parent.
 				String nameToLookup = originalBeanName(name);
@@ -362,13 +365,14 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					// It's a prototype -> create a new instance.
 					Object prototypeInstance = null;
 					try {
-						//原型实例化之前处理
+						//原型实例化之前处理，把bn加入到prototypesCurrentlyInCreation，表明
+						//bn在创建
 						beforePrototypeCreation(beanName);
 						//实例化原型
 						prototypeInstance = createBean(beanName, mbd, args);
 					}
 					finally {
-						//原型实例化之后处理
+						//原型实例化之后处理，把bn从prototypesCurrentlyInCreation移除
 						afterPrototypeCreation(beanName);
 					}
 					//判断是不是fb，是想获取fb实例还是fb产品实例，根据情况处理
@@ -385,13 +389,14 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					}
 					try {
 						Object scopedInstance = scope.get(beanName, () -> {
-							//原型实例化之前处理
+							//原型实例化之前处理，把bn加入到prototypesCurrentlyInCreation，表明
+							//bn在创建
 							beforePrototypeCreation(beanName);
 							try {
 								return createBean(beanName, mbd, args);
 							}
 							finally {
-								//原型实例化之后处理
+								//原型实例化之后处理，把bn从prototypesCurrentlyInCreation移除
 								afterPrototypeCreation(beanName);
 							}
 						});
@@ -1174,6 +1179,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * @return the transformed bean name
 	 */
 	protected String transformedBeanName(String name) {
+		//先去掉工厂名字前缀，
+		//如果是别名，转换为规范名字
 		return canonicalName(BeanFactoryUtils.transformedBeanName(name));
 	}
 
@@ -1669,13 +1676,15 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
+	 * 根据sharedInstance类型和beanName种类（工厂类和普通类）获取实例
 	 * Get the object for the given bean instance, either the bean
 	 * instance itself or its created object in case of a FactoryBean.
-	 * 获取给定bean实例的对象，如果是FactoryBean，则获取bean实例本身或其创建的对象。
-	 * @param beanInstance the shared bean instance
-	 * @param name name that may include factory dereference prefix
-	 * @param beanName the canonical bean name
-	 * @param mbd the merged bean definition
+	 * 根据sharedInstance类型和beanName种类（工厂类和普通类）获取实例，
+	 * 如果是FactoryBean，则获取bean实例本身或其创建的对象。
+	 * @param beanInstance the shared bean instance 可能是工厂实例，也可能是普通实例
+	 * @param name name that may include factory dereference prefix 传入的参数，可能有工厂前缀，也可能是别名
+	 * @param beanName the canonical bean name 转换后的标准名称
+	 * @param mbd the merged bean definition 合并的bd
 	 * @return the object to expose for the bean
 	 */
 	protected Object getObjectForBeanInstance(
@@ -1792,6 +1801,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	//---------------------------------------------------------------------
 
 	/**
+	 * 检查此bean工厂是否包含具有给定名称的bean定义。不考虑该工厂可能参与的任何层次结构。
+	 * 当没有找到缓存的单例实例时，由{@code containsBean}调用。<p>取决于具体bean工厂实现的性质，
+	 * 此操作可能代价高昂(例如，由于外部注册中心中的目录查找)。然而，对于可列表bean工厂，
+	 * 这通常只相当于本地散列查找:因此操作是那里的公共接口的一部分。在这种情况下，
+	 * 相同的实现可以为这个模板方法和公共接口方法提供服务。
 	 * Check if this bean factory contains a bean definition with the given name.
 	 * Does not consider any hierarchy this factory may participate in.
 	 * Invoked by {@code containsBean} when no cached singleton instance is found.

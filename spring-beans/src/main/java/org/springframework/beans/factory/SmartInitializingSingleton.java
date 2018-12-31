@@ -44,6 +44,11 @@ package org.springframework.beans.factory;
 public interface SmartInitializingSingleton {
 
 	/**
+	 * 在单例预实例化阶段的末尾调用，保证已经创建了所有常规单例bean。
+	 * 这个方法中的调用不会在引导过程中触发意外的副作用。
+	 * 注意:对于{@link BeanFactory}引导后按需惰性初始化的单例bean，
+	 * 这个回调不会被触发，对于任何其他bean作用域也不会。
+	 * 仅对具有预期引导语义的bean小心地使用它。
 	 * Invoked right at the end of the singleton pre-instantiation phase,
 	 * with a guarantee that all regular singleton beans have been created
 	 * already. {@link ListableBeanFactory#getBeansOfType} calls within
