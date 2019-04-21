@@ -78,6 +78,7 @@ public class WebDataBinder extends DataBinder {
 	@Nullable
 	private String fieldMarkerPrefix = DEFAULT_FIELD_MARKER_PREFIX;
 
+	/** 标记默认字段的参数的前缀"!"。 by mayh*/
 	@Nullable
 	private String fieldDefaultPrefix = DEFAULT_FIELD_DEFAULT_PREFIX;
 

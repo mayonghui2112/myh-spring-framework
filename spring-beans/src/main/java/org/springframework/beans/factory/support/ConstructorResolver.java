@@ -118,6 +118,7 @@ class ConstructorResolver {
 		ArgumentsHolder argsHolderToUse = null;
 		Object[] argsToUse = null;
 
+		//传过来的explicitArgs参数不为空，用传过来的参数，为空，则用解析完成的参数，解析万称的参数也为空，则用部分解析完成的参数，并将解析完成
 		if (explicitArgs != null) {
 			argsToUse = explicitArgs;
 		}
@@ -138,15 +139,18 @@ class ConstructorResolver {
 			}
 		}
 
+		//传过来的参数不为空，那么不能使用解析过的构造函数和参数，或者构造函数为解析过，需要重新解析构造函数
 		if (constructorToUse == null) {
 			// Need to resolve the constructor.
+//			是否需要自动装配，传过来的构造函数不为空，或者是构造器自动装配的时候，子懂装配
 			boolean autowiring = (chosenCtors != null ||
 					mbd.getResolvedAutowireMode() == AutowireCapableBeanFactory.AUTOWIRE_CONSTRUCTOR);
 			ConstructorArgumentValues resolvedValues = null;
 
+			//需要构造函数最少有的参数个数
 			int minNrOfArgs;
 			if (explicitArgs != null) {
-				minNrOfArgs = explicitArgs.length;
+				minNrOfArgs = explicitArgs.length;//如果传过来参数数组，则用其长度
 			}
 			else {
 				ConstructorArgumentValues cargs = mbd.getConstructorArgumentValues();
@@ -168,6 +172,7 @@ class ConstructorResolver {
 							"] from ClassLoader [" + beanClass.getClassLoader() + "] failed", ex);
 				}
 			}
+			//构造参数排序
 			AutowireUtils.sortConstructors(candidates);
 			int minTypeDiffWeight = Integer.MAX_VALUE;
 			Set<Constructor<?>> ambiguousConstructors = null;

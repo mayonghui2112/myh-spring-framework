@@ -360,6 +360,10 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * further configure the internal application context prior to refresh().
 	 * @see #DispatcherServlet(WebApplicationContext)
 	 */
+	/**
+	 * 	 * 创建一个dispatcherServlet对象，根据servlet初始化参数值，该对象将创建自己的内部应用上下文,
+	 * 	 * 在 servlet2.5或更早版本中，servlet只能通过web.xml，调用无参构造函数注册。
+	 */
 	public DispatcherServlet() {
 		super();
 		setDispatchOptionsRequest(true);
@@ -491,6 +495,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+	 * 刷新springmvc要用到的组件
+	 * 刷新组件用spring容器的getBean方法创建相应额bean对象
 	 * Initialize the strategy objects that this servlet uses.
 	 * <p>May be overridden in subclasses in order to initialize further strategy objects.
 	 */

@@ -288,14 +288,15 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 				if (candidate instanceof AbstractBeanDefinition) {
 					postProcessBeanDefinition((AbstractBeanDefinition) candidate, beanName);
 				}
-				//如果是AnnotatedBeanDefinition，把配置在appconfig上面的bd属性注解值设置进bd
+				//如果是AnnotatedBeanDefinition，把bd的Metadata中的属性设置进bd中
 				if (candidate instanceof AnnotatedBeanDefinition) {
 					AnnotationConfigUtils.processCommonDefinitionAnnotations((AnnotatedBeanDefinition) candidate);
 				}
-				//检查给定候选bean的名称，确定是否需要注册相应的bean定义，或者是否与现有定义冲突。
+				//检查给定候选bean的名称，确定注册器是否已经注册了改bd，如果没有，可以注册，如果有，检查否与现有bd定义兼容，兼容，返回false，不兼容，抛出异常
 				if (checkCandidate(beanName, candidate)) {
-					//条件为true，根据beanName和bd建立一个BeanDefinitionHolder
+					//条件为true，可以注册，则直接注册，根据beanName和bd建立一个BeanDefinitionHolder
 					BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName);
+					//根据scope代理模式，决定是否给bd设置代理，no不代理，defalut==no，jdk代理， cglib代理几种
 					definitionHolder =
 							AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
 					//添加进beanDefinitions
@@ -315,7 +316,9 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 * @param beanName the generated bean name for the given bean
 	 */
 	protected void postProcessBeanDefinition(AbstractBeanDefinition beanDefinition, String beanName) {
+		//设置bd的默认值
 		beanDefinition.applyDefaults(this.beanDefinitionDefaults);
+		//如果设置了autowireCandidatePatterns，则会校验beanName是不是符合CandidatePatterns，不符合不能作为Candidate
 		if (this.autowireCandidatePatterns != null) {
 			beanDefinition.setAutowireCandidate(PatternMatchUtils.simpleMatch(this.autowireCandidatePatterns, beanName));
 		}

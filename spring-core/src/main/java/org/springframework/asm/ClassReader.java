@@ -187,6 +187,7 @@ public class ClassReader {
         }
 		*/
         // parses the constant pool
+		// 解析常量池
         items = new int[readUnsignedShort(off + 8)];
         int n = items.length;
         strings = new String[n];
@@ -231,7 +232,8 @@ public class ClassReader {
             index += size;
         }
         maxStringLength = max;
-        // the class header information starts just after the constant pool
+        // 类头信息就在常量池之后启动
+		// the class header information starts just after the constant pool
         header = index;
     }
 
@@ -648,29 +650,34 @@ public class ClassReader {
             u += 6 + readInt(u + 4);
         }
 
-        // visits the class declaration
+        // 访问类声明
+		// visits the class declaration
         classVisitor.visit(readInt(items[1] - 7), access, name, signature,
                 superClass, interfaces);
 
-        // visits the source and debug info
+        // 访问源代码和调试信息
+		// visits the source and debug info
         if ((flags & SKIP_DEBUG) == 0
                 && (sourceFile != null || sourceDebug != null)) {
             classVisitor.visitSource(sourceFile, sourceDebug);
         }
 
-        // visits the module info and associated attributes
+        // 访问模块信息和相关属性
+		// visits the module info and associated attributes
         if (module != 0) {
             readModule(classVisitor, context, module,
                     moduleMainClass, packages);
         }
 
-        // visits the outer class
+        // 访问外部类
+		// visits the outer class
         if (enclosingOwner != null) {
             classVisitor.visitOuterClass(enclosingOwner, enclosingName,
                     enclosingDesc);
         }
 
-        // visits the class annotations and type annotations
+        // 访问类注释和类型注释
+		// visits the class annotations and type annotations
         if (ANNOTATIONS && anns != 0) {
             for (int i = readUnsignedShort(anns), v = anns + 2; i > 0; --i) {
                 v = readAnnotationValues(v + 2, c, true,
@@ -700,7 +707,8 @@ public class ClassReader {
             }
         }
 
-        // visits the attributes
+        // 访问属性
+		// visits the attributes
         while (attributes != null) {
             Attribute attr = attributes.next;
             attributes.next = null;
@@ -708,7 +716,8 @@ public class ClassReader {
             attributes = attr;
         }
 
-        // visits the inner classes
+        // 访问内部类
+		// visits the inner classes
         if (innerClasses != 0) {
             int v = innerClasses + 2;
             for (int i = readUnsignedShort(innerClasses); i > 0; --i) {
@@ -719,7 +728,8 @@ public class ClassReader {
             }
         }
 
-        // visits the fields and methods
+        // 访问字段和方法
+		// visits the fields and methods
         u = header + 10 + 2 * interfaces.length;
         for (int i = readUnsignedShort(u - 2); i > 0; --i) {
             u = readField(classVisitor, context, u);

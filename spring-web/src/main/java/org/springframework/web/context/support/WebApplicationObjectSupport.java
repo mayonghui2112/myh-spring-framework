@@ -28,6 +28,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.WebUtils;
 
 /**
+ * 希望访问WebApplicationContext即servletContext的方便父类
  * Convenient superclass for application objects running in a {@link WebApplicationContext}.
  * Provides {@code getWebApplicationContext()}, {@code getServletContext()}, and
  * {@code getTempDir()} accessors.

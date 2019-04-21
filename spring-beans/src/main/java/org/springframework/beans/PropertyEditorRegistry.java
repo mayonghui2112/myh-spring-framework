@@ -37,6 +37,7 @@ import org.springframework.lang.Nullable;
 public interface PropertyEditorRegistry {
 
 	/**
+	 * 为给定类型的所有属性注册给定的自定义属性编辑器。
 	 * Register the given custom property editor for all properties of the given type.
 	 * @param requiredType the type of the property
 	 * @param propertyEditor the editor to register

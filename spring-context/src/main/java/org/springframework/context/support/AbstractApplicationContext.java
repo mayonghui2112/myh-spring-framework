@@ -521,6 +521,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			prepareRefresh();
 
 			// 刷新，获取内部维护的bean工厂
+			//同时对工厂内部通过register注册的类进行刷新
+			//web容器中register注册的类只是暂存到annotatedClasses里面，通过这次刷新动作调用loadBeanDefinitions方法加载到reader里面
+			//注解容器只是获取以下容器，注册直接是用reader读取成了bd
 			// Tell the subclass to refresh the internal bean factory.
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
@@ -559,7 +562,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				//spring事件处理
 				initApplicationEventMulticaster();
 
-				// 初始化特定上下文子类中的其他特殊bean。
+				// 初始化特定上下文子类中的其他特殊bean。比如web容器
 				// Initialize other special beans in specific context subclasses.
 				//此版本为空方法
 				onRefresh();
@@ -642,6 +645,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @see #getBeanFactory()
 	 */
 	protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
+		//刷新工厂
 		refreshBeanFactory();
 		ConfigurableListableBeanFactory beanFactory = getBeanFactory();
 		if (logger.isDebugEnabled()) {
@@ -869,6 +873,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
+	 * 注册时间监听器
 	 * Add beans that implement ApplicationListener as listeners.
 	 * Doesn't affect other listeners, which can be added without being beans.
 	 */
@@ -901,12 +906,14 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 */
 	protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) {
 		// Initialize conversion service for this context.
+		//实例话转化服务实例
 		if (beanFactory.containsBean(CONVERSION_SERVICE_BEAN_NAME) &&
 				beanFactory.isTypeMatch(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class)) {
 			beanFactory.setConversionService(
 					beanFactory.getBean(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class));
 		}
 
+		// 注册一个内置的值解析器，主要用于注解属性值解析
 		// Register a default embedded value resolver if no bean post-processor
 		// (such as a PropertyPlaceholderConfigurer bean) registered any before:
 		// at this point, primarily for resolution in annotation attribute values.
@@ -924,11 +931,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.setTempClassLoader(null);
 
 		// Allow for caching all bean definition metadata, not expecting further changes.
+		//冻结所有的bd，不再改变bd
 		beanFactory.freezeConfiguration();
 
 		// Instantiate all remaining (non-lazy-init) singletons.
 		//实例化所有的单例类
-		//实例话单例之前的准备工作
 		beanFactory.preInstantiateSingletons();
 	}
 

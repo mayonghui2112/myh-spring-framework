@@ -259,6 +259,7 @@ public class AnnotationConfigUtils {
 		if (lazy != null) {
 			abd.setLazyInit(lazy.getBoolean("value"));
 		}
+		//metadata不是abd.getMetadata,指配置类？myh-question-todo?
 		else if (abd.getMetadata() != metadata) {
 			lazy = attributesFor(abd.getMetadata(), Lazy.class);
 			if (lazy != null) {

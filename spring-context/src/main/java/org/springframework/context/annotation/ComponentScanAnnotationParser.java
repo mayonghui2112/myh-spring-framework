@@ -73,10 +73,10 @@ class ComponentScanAnnotationParser {
 	}
 	/**
 	 * @param componentScan component注解属性
-	 * @param declaringClass 要过滤掉的报名
+	 * @param declaringClass 要过滤掉的类的全路径
 	 */
 	public Set<BeanDefinitionHolder> parse(AnnotationAttributes componentScan, final String declaringClass) {
-		//new一个扫描器
+		//new一个扫描器，useDefaultFilters是否使用默认的过滤器，默认为true，所以设置类三个默认的includeFilter过滤器
 		ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(this.registry,
 				componentScan.getBoolean("useDefaultFilters"), this.environment, this.resourceLoader);
 
@@ -86,7 +86,7 @@ class ComponentScanAnnotationParser {
 		//把beanName生成器设置进扫描器
 		scanner.setBeanNameGenerator(useInheritedGenerator ? this.beanNameGenerator :
 				BeanUtils.instantiateClass(generatorClass));
-		//
+		//获得扫描注解的代理方式
 		ScopedProxyMode scopedProxyMode = componentScan.getEnum("scopedProxy");
 		if (scopedProxyMode != ScopedProxyMode.DEFAULT) {
 			scanner.setScopedProxyMode(scopedProxyMode);
@@ -96,6 +96,7 @@ class ComponentScanAnnotationParser {
 			scanner.setScopeMetadataResolver(BeanUtils.instantiateClass(resolverClass));
 		}
 
+		//resourcePattern的值将附加到每个基本包名。
 		scanner.setResourcePattern(componentScan.getString("resourcePattern"));
 
 		//在扫描器中添加IncludeFilter

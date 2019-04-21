@@ -144,6 +144,7 @@ public class BeanDefinitionBuilder {
 	}
 
 	/**
+	 * 以原始(未经验证的)形式返回当前BeanDefinition对象
 	 * Return the current BeanDefinition object in its raw (unvalidated) form.
 	 * @see #getBeanDefinition()
 	 */

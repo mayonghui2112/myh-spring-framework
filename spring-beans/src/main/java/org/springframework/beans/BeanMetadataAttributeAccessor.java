@@ -31,6 +31,7 @@ import org.springframework.lang.Nullable;
 @SuppressWarnings("serial")
 public class BeanMetadataAttributeAccessor extends AttributeAccessorSupport implements BeanMetadataElement {
 
+	/** @componentScan 注解扫描得到class文件，封装为一个resource放到bd中 by mayh*/
 	@Nullable
 	private Object source;
 

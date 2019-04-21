@@ -59,7 +59,9 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
+		//先调用父类的onStartup,进行父容器的创建初始化
 		super.onStartup(servletContext);
+		//注册DispatcherServlet
 		registerDispatcherServlet(servletContext);
 	}
 
@@ -75,26 +77,31 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 	 * @param servletContext the context to register the servlet against
 	 */
 	protected void registerDispatcherServlet(ServletContext servletContext) {
+		//为DispatcherServlet起一个名字
 		String servletName = getServletName();
 		Assert.hasLength(servletName, "getServletName() must not return null or empty");
-
+		//创建一个ServletApplicationContext
 		WebApplicationContext servletAppContext = createServletApplicationContext();
 		Assert.notNull(servletAppContext, "createServletApplicationContext() must not return null");
 
+		//根据ServletApplicationContext创建dispatcherServlet
 		FrameworkServlet dispatcherServlet = createDispatcherServlet(servletAppContext);
 		Assert.notNull(dispatcherServlet, "createDispatcherServlet(WebApplicationContext) must not return null");
 		dispatcherServlet.setContextInitializers(getServletApplicationContextInitializers());
 
+		//将创建的dispatcherServlet添加到servletContext
 		ServletRegistration.Dynamic registration = servletContext.addServlet(servletName, dispatcherServlet);
 		if (registration == null) {
 			throw new IllegalStateException("Failed to register servlet with name '" + servletName + "'. " +
 					"Check if there is another servlet registered under the same name.");
 		}
 
+		//配置servletContext的一些参数，比如拦截url，启动顺序，支不支持异步
 		registration.setLoadOnStartup(1);
 		registration.addMapping(getServletMappings());
 		registration.setAsyncSupported(isAsyncSupported());
 
+		//获取并注册过滤器
 		Filter[] filters = getServletFilters();
 		if (!ObjectUtils.isEmpty(filters)) {
 			for (Filter filter : filters) {
@@ -102,6 +109,7 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 			}
 		}
 
+		//自定义dispatchServlet属性
 		customizeRegistration(registration);
 	}
 

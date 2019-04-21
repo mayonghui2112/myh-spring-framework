@@ -38,6 +38,7 @@ import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.context.support.WebApplicationObjectSupport;
 
 /**
+ * 任何http请求相应内容生成器的方便父类
  * Convenient superclass for any kind of web content generator,
  * like {@link org.springframework.web.servlet.mvc.AbstractController}
  * and {@link org.springframework.web.servlet.mvc.WebContentInterceptor}.

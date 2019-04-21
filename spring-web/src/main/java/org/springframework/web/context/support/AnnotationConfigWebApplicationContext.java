@@ -90,6 +90,7 @@ public class AnnotationConfigWebApplicationContext extends AbstractRefreshableWe
 	@Nullable
 	private ScopeMetadataResolver scopeMetadataResolver;
 
+	//注册的class类
 	private final Set<Class<?>> annotatedClasses = new LinkedHashSet<>();
 
 	private final Set<String> basePackages = new LinkedHashSet<>();

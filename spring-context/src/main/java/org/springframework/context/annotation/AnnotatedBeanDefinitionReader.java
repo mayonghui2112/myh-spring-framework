@@ -225,8 +225,10 @@ public class AnnotatedBeanDefinitionReader {
 		}
 		//处理scope注解，并设置进abd中
 		abd.setInstanceSupplier(instanceSupplier);
+		//解析类中scope注解
 		ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(abd);
 		abd.setScope(scopeMetadata.getScopeName());
+		//传入了名字就用名字作为bd的key，没传入就用bn生成器生成一个，注解没有设置，默认类名
 		String beanName = (name != null ? name : this.beanNameGenerator.generateBeanName(abd, this.registry));
 		//处理基本类上的普通注解，lazy/Primary/DependsOn/Role/Description
 		AnnotationConfigUtils.processCommonDefinitionAnnotations(abd);
@@ -245,11 +247,13 @@ public class AnnotatedBeanDefinitionReader {
 				}
 			}
 		}
+		//用lamda表达式传入注解处理器customizer，用来解析自定义注解
 		for (BeanDefinitionCustomizer customizer : definitionCustomizers) {
 			customizer.customize(abd);
 		}
 
 		BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(abd, beanName);
+		//处理代理
 		definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
 		//把db设置进dbMap
 		BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, this.registry);

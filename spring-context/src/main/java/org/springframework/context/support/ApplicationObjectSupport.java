@@ -27,6 +27,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
+ * 希望获取the application context的方便父类，提供了常用方法
  * Convenient superclass for application objects that want to be aware of
  * the application context, e.g. for custom lookup of collaborating beans
  * or for context-specific resource access. It saves the application

@@ -43,6 +43,7 @@ public class BeanDefinitionHolder implements BeanMetadataElement {
 
 	private final String beanName;
 
+	/** 所有的别名 by mayh*/
 	@Nullable
 	private final String[] aliases;
 

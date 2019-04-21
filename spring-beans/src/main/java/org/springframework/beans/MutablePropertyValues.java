@@ -39,6 +39,9 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("serial")
 public class MutablePropertyValues implements PropertyValues, Serializable {
 
+	/**
+	 * 	在web.xml中设置的所有属性值
+	 */
 	private final List<PropertyValue> propertyValueList;
 
 	@Nullable

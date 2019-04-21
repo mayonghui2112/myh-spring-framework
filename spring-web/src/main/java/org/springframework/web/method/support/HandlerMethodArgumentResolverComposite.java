@@ -42,8 +42,10 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
+	/** //存springMVC提供的所有的26个参数解析器（24种） by mayh*/
 	private final List<HandlerMethodArgumentResolver> argumentResolvers = new LinkedList<>();
 
+	/** 用于缓存已经查找过的参数解析器 by mayh*/
 	private final Map<MethodParameter, HandlerMethodArgumentResolver> argumentResolverCache =
 			new ConcurrentHashMap<>(256);
 
@@ -57,6 +59,7 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
 	}
 
 	/**
+	 * 增加参数解析器
 	 * Add the given {@link HandlerMethodArgumentResolver}s.
 	 * @since 4.3
 	 */
@@ -70,6 +73,7 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
 	}
 
 	/**
+	 * 增加参数解析器
 	 * Add the given {@link HandlerMethodArgumentResolver}s.
 	 */
 	public HandlerMethodArgumentResolverComposite addResolvers(
@@ -91,6 +95,7 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
 	}
 
 	/**
+	 * 清空参数解析器
 	 * Clear the list of configured resolvers.
 	 * @since 4.3
 	 */
@@ -100,6 +105,7 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
 
 
 	/**
+	 * 判断参数解析器是否支持参数解析
 	 * Whether the given {@linkplain MethodParameter method parameter} is supported by any registered
 	 * {@link HandlerMethodArgumentResolver}.
 	 */
@@ -109,6 +115,7 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
 	}
 
 	/**
+	 * 解析器解析参数获取数据
 	 * Iterate over registered {@link HandlerMethodArgumentResolver}s and invoke the one that supports it.
 	 * @throws IllegalStateException if no suitable {@link HandlerMethodArgumentResolver} is found.
 	 */
@@ -117,6 +124,8 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
 	public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
 
+		//首先获取参数解析器，这里获取的逻辑是首先从argumentResolverCache缓存中获取该MethodParameter匹配的HandlerMethodArgumentResolver。
+		// 如果为空，遍历初始化定义的那24个。查找匹配的HandlerMethodArgumentResolver，然后添加至argumentResolverCache缓存中
 		HandlerMethodArgumentResolver resolver = getArgumentResolver(parameter);
 		if (resolver == null) {
 			throw new IllegalArgumentException("Unknown parameter type [" + parameter.getParameterType().getName() + "]");
@@ -125,6 +134,10 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
 	}
 
 	/**
+	 * 获取参数解析器，这里获取的逻辑是
+	 * 首先从argumentResolverCache缓存中获取该MethodParameter匹配的HandlerMethodArgumentResolver。
+	 * 如果为空，遍历初始化定义的那24个。
+	 * 查找匹配的HandlerMethodArgumentResolver，然后添加至argumentResolverCache缓存中
 	 * Find a registered {@link HandlerMethodArgumentResolver} that supports the given method parameter.
 	 */
 	@Nullable

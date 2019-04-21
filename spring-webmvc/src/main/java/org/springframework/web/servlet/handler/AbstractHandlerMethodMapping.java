@@ -86,11 +86,13 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	}
 
 
+	/** 是否从父容器获取HandlerMethod*/
 	private boolean detectHandlerMethodsInAncestorContexts = false;
 
 	@Nullable
 	private HandlerMethodMappingNamingStrategy<T> namingStrategy;
 
+	//
 	private final MappingRegistry mappingRegistry = new MappingRegistry();
 
 
@@ -199,14 +201,22 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		if (logger.isDebugEnabled()) {
 			logger.debug("Looking for request mappings in application context: " + getApplicationContext());
 		}
+		//是否从容器获取HandlerMethods,
+		// 是BeanFactoryUtils.beanNamesForTypeIncludingAncestors(obtainApplicationContext(), Object.class)，
+		// 否obtainApplicationContext().getBeanNamesForType(Object.class)
+		//默认false
+		//获取容器内所有的bn
 		String[] beanNames = (this.detectHandlerMethodsInAncestorContexts ?
 				BeanFactoryUtils.beanNamesForTypeIncludingAncestors(obtainApplicationContext(), Object.class) :
 				obtainApplicationContext().getBeanNamesForType(Object.class));
 
+		//遍历所有的额bn
 		for (String beanName : beanNames) {
+			//不检查自动代理目标对象
 			if (!beanName.startsWith(SCOPED_TARGET_NAME_PREFIX)) {
 				Class<?> beanType = null;
 				try {
+					//获取bn的类型
 					beanType = obtainApplicationContext().getType(beanName);
 				}
 				catch (Throwable ex) {
@@ -215,7 +225,9 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 						logger.debug("Could not resolve target class for bean with name '" + beanName + "'", ex);
 					}
 				}
+				//bean是否是Handler，isHandler(beanType)：含有Controller或者RequestMapping注解
 				if (beanType != null && isHandler(beanType)) {
+					//获取类里面的所有方法
 					detectHandlerMethods(beanName);
 				}
 			}
@@ -224,15 +236,18 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	}
 
 	/**
+	 * 获取controller类的所有方法
 	 * Look for handler methods in the specified handler bean.
 	 * @param handler either a bean name or an actual handler instance
 	 * @see #getMappingForMethod
 	 */
 	protected void detectHandlerMethods(Object handler) {
+		//获取handler的class对象，
 		Class<?> handlerType = (handler instanceof String ?
 				obtainApplicationContext().getType((String) handler) : handler.getClass());
 
 		if (handlerType != null) {
+			//如果是cglib代理类，去掉cglib代理，获取原对象类
 			Class<?> userType = ClassUtils.getUserClass(handlerType);
 			Map<Method, T> methods = MethodIntrospector.selectMethods(userType,
 					(MethodIntrospector.MetadataLookup<T>) method -> {
@@ -309,12 +324,15 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 */
 	@Override
 	protected HandlerMethod getHandlerInternal(HttpServletRequest request) throws Exception {
+		//获取url
 		String lookupPath = getUrlPathHelper().getLookupPathForRequest(request);
 		if (logger.isDebugEnabled()) {
 			logger.debug("Looking up handler method for path " + lookupPath);
 		}
+		//获取查询锁
 		this.mappingRegistry.acquireReadLock();
 		try {
+			//获取handler方法
 			HandlerMethod handlerMethod = lookupHandlerMethod(lookupPath, request);
 			if (logger.isDebugEnabled()) {
 				if (handlerMethod != null) {
@@ -483,6 +501,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 
 		private final Map<T, MappingRegistration<T>> registry = new HashMap<>();
 
+		//存放从容器扫描到的HandMethod
 		private final Map<T, HandlerMethod> mappingLookup = new LinkedHashMap<>();
 
 		private final MultiValueMap<String, T> urlLookup = new LinkedMultiValueMap<>();

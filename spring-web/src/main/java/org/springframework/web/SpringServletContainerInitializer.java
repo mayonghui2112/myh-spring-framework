@@ -142,6 +142,9 @@ public class SpringServletContainerInitializer implements ServletContainerInitia
 	public void onStartup(@Nullable Set<Class<?>> webAppInitializerClasses, ServletContext servletContext)
 			throws ServletException {
 
+		//根据servlet3.0配置，servlet容器已启动就加载并调用本类的onStartup方法，
+		//该方法加载springmvc的所有实现WebApplicationInitializer的具体类，
+		//并遍历调用onStartup方法
 		List<WebApplicationInitializer> initializers = new LinkedList<>();
 
 		if (webAppInitializerClasses != null) {

@@ -32,6 +32,8 @@ import org.springframework.beans.factory.FactoryBeanNotInitializedException;
 import org.springframework.lang.Nullable;
 
 /**
+ * 主要是对fb的处理
+ * 支持单例注册中心的基类，这些注册中心需要处理FactoryBean实例，与DefaultSingletonBeanRegistry的单例管理集成
  * Support base class for singleton registries which need to handle
  * {@link org.springframework.beans.factory.FactoryBean} instances,
  * integrated with {@link DefaultSingletonBeanRegistry}'s singleton management.
@@ -48,6 +50,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 
 
 	/**
+	 * 确定fb的类型
 	 * Determine the type for the given FactoryBean.
 	 * @param factoryBean the FactoryBean instance to check
 	 * @return the FactoryBean's object type,
@@ -73,6 +76,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 	}
 
 	/**
+	 * 从缓存中根据bn获取fb
 	 * Obtain an object to expose from the given FactoryBean, if available
 	 * in cached form. Quick check for minimal synchronization.
 	 * @param beanName the name of the bean
@@ -85,6 +89,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 	}
 
 	/**
+	 * 从fb中获取指定bn的实例
 	 * Obtain an object to expose from the given FactoryBean.
 	 * @param factory the FactoryBean instance
 	 * @param beanName the name of the bean
@@ -99,6 +104,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 				Object object = this.factoryBeanObjectCache.get(beanName);
 				if (object == null) {
 					object = doGetObjectFromFactoryBean(factory, beanName);
+					// 如果在上面的getObject()调用期间还没有存储，则只存储后处理和存储
 					// Only post-process and store if not put there already during getObject() call above
 					// (e.g. because of circular reference processing triggered by custom getBean calls)
 					Object alreadyThere = this.factoryBeanObjectCache.get(beanName);
@@ -146,6 +152,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 	}
 
 	/**
+	 * 获取要从给定FactoryBean公开的对象。
 	 * Obtain an object to expose from the given FactoryBean.
 	 * @param factory the FactoryBean instance
 	 * @param beanName the name of the bean

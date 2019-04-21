@@ -19,6 +19,7 @@ package org.springframework.beans.factory;
 import org.springframework.beans.BeansException;
 
 /**
+ * 函数时接口，用来传入创建bean的lamda表达式
  * Defines a factory which can return an Object instance
  * (possibly shared or independent) when invoked.
  *

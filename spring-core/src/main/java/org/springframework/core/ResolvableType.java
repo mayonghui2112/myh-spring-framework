@@ -95,12 +95,12 @@ public class ResolvableType implements Serializable {
 
 
 	/**
-	 * The underlying Java type being managed.
+	 * The underlying Java type being managed.正在管理的底层Java类型。
 	 */
 	private final Type type;
 
 	/**
-	 * Optional provider for the type.
+	 * Optional provider for the type.类型的可选提供程序。
 	 */
 	@Nullable
 	private final TypeProvider typeProvider;

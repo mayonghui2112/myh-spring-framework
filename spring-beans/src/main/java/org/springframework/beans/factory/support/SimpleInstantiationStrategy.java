@@ -32,8 +32,8 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * 用于BeanFactory的简单对象实例化策略。
  * Simple object instantiation strategy for use in a BeanFactory.
- *
  * <p>Does not support Method Injection, although it provides hooks for subclasses
  * to override to add Method Injection support, for example by overriding methods.
  *
@@ -59,6 +59,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 
 	@Override
 	public Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner) {
+		// 如果没有覆盖，不要使用CGLIB覆盖该类
 		// Don't override the class with CGLIB if no overrides.
 		if (!bd.hasMethodOverrides()) {
 			Constructor<?> constructorToUse;

@@ -108,10 +108,12 @@ public final class ModelFactory {
 
 		Map<String, ?> sessionAttributes = this.sessionAttributesHandler.retrieveAttributes(request);
 		container.mergeAttributes(sessionAttributes);
+		/**  调用模型属性方法来填充模型。只有在模型中还没有属性时才添加属性 by mayh*/
 		invokeModelAttributeMethods(request, container);
 
 		for (String name : findSessionAttributeArguments(handlerMethod)) {
 			if (!container.containsAttribute(name)) {
+				//从request获取session范围的name属性值
 				Object value = this.sessionAttributesHandler.retrieveAttribute(request, name);
 				if (value == null) {
 					throw new HttpSessionRequiredException("Expected session attribute '" + name + "'", name);
@@ -122,6 +124,7 @@ public final class ModelFactory {
 	}
 
 	/**
+	 * 调用模型属性方法来填充模型。只有在模型中还没有属性时才添加属性
 	 * Invoke model attribute methods to populate the model.
 	 * Attributes are added only if not already present in the model.
 	 */

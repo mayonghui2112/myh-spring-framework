@@ -61,8 +61,10 @@ public class MethodParameter {
 
 	private static final Annotation[] EMPTY_ANNOTATION_ARRAY = new Annotation[0];
 
+	//参数属于哪个方法，Executable是Method的父类
 	private final Executable executable;
 
+	/** 方法索引，0开始 by mayh*/
 	private final int parameterIndex;
 
 	@Nullable
@@ -74,21 +76,25 @@ public class MethodParameter {
 	@Nullable
 	Map<Integer, Integer> typeIndexesPerLevel;
 
+	/** 属于哪个类 by mayh*/
 	@Nullable
 	private volatile Class<?> containingClass;
 
 	@Nullable
 	private volatile Class<?> parameterType;
 
+	/** 方法类型 by mayh*/
 	@Nullable
 	private volatile Type genericParameterType;
 
+	/** 方法上的注解 by mayh*/
 	@Nullable
 	private volatile Annotation[] parameterAnnotations;
 
 	@Nullable
 	private volatile ParameterNameDiscoverer parameterNameDiscoverer;
 
+	/** 方法名 by mayh*/
 	@Nullable
 	private volatile String parameterName;
 
@@ -439,6 +445,7 @@ public class MethodParameter {
 	}
 
 	/**
+	 * 返回方法/构造函数参数的嵌套类型。
 	 * Return the nested type of the method/constructor parameter.
 	 * @return the parameter type (never {@code null})
 	 * @since 3.1

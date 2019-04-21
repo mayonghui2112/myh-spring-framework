@@ -68,6 +68,7 @@ public class AnnotationBeanNameGenerator implements BeanNameGenerator {
 
 	@Override
 	public String generateBeanName(BeanDefinition definition, BeanDefinitionRegistry registry) {
+		//遍历注解中是否有名字，有的化返回
 		if (definition instanceof AnnotatedBeanDefinition) {
 			String beanName = determineBeanNameFromAnnotation((AnnotatedBeanDefinition) definition);
 			if (StringUtils.hasText(beanName)) {
@@ -76,6 +77,7 @@ public class AnnotationBeanNameGenerator implements BeanNameGenerator {
 			}
 		}
 		// Fallback: generate a unique default bean name.
+		//没有的话返回类名
 		return buildDefaultBeanName(definition, registry);
 	}
 
@@ -149,6 +151,7 @@ public class AnnotationBeanNameGenerator implements BeanNameGenerator {
 	 * @return the default bean name (never {@code null})
 	 */
 	protected String buildDefaultBeanName(BeanDefinition definition) {
+		//注解BD 直接获取类名
 		String beanClassName = definition.getBeanClassName();
 		Assert.state(beanClassName != null, "No bean class name set");
 		String shortClassName = ClassUtils.getShortName(beanClassName);

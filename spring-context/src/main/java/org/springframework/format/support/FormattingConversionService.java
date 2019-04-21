@@ -72,6 +72,7 @@ public class FormattingConversionService extends GenericConversionService
 
 	@Override
 	public void addFormatterForFieldType(Class<?> fieldType, Formatter<?> formatter) {
+		/** 将formatter当成两个converter注册进ConverterService,一个是string到fieldType，一个是fieldType到string的转换 by mayh*/
 		addConverter(new PrinterConverter(fieldType, formatter, this));
 		addConverter(new ParserConverter(fieldType, formatter, this));
 	}

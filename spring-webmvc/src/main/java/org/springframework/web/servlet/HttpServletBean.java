@@ -139,6 +139,9 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 	}
 
 	/**
+	 * springmvc初始化大的模板方法，
+	 * 用来规定springmvc的初始化顺序
+	 * 在初始化方法之前，会执行之类的静态代码块，获取DispatcherServlet.properties的配置信息
 	 * Map config parameters onto bean properties of this servlet, and
 	 * invoke subclass initialization.
 	 * @throws ServletException if bean properties are invalid (or required
@@ -151,13 +154,24 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 		}
 
 		// Set bean properties from init parameters.
+		// getServletConfig()获取servletConfig，通过servletConfig获取配置在web.xml的initParam
+		// this.requiredProperties是包含必须在web.xml设置的key
+		// 如果this.requiredProperties中的key没有全部在web.xml设置，抛出异常
+		// 如果全部设置，将在web.xml的initParam与this.requiredProperties中的value合并（web.xml中值支持合并则合并，不支持，
+		// 则web.xml覆盖this.requiredProperties）,存放进入propertyValueList
+		// 根据上面的键值钩爪ServletConfigPropertyValues。
 		PropertyValues pvs = new ServletConfigPropertyValues(getServletConfig(), this.requiredProperties);
 		if (!pvs.isEmpty()) {
 			try {
+				// 将dispatcher Servlet包装成一个Wrapper对象
 				BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(this);
+				// 根据servletContext创建一个ServletContextResourceLoader
 				ResourceLoader resourceLoader = new ServletContextResourceLoader(getServletContext());
+				//为类型Resource.class的所有属性，在BeanWrapper中注册给定的自定义属性编辑器。
 				bw.registerCustomEditor(Resource.class, new ResourceEditor(resourceLoader, getEnvironment()));
+				//初始化bw，空实现
 				initBeanWrapper(bw);
+				//为bw设置所有在web.xml设置的属性，并可以忽略位置属性
 				bw.setPropertyValues(pvs, true);
 			}
 			catch (BeansException ex) {
@@ -169,6 +183,7 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 		}
 
 		// Let subclasses do whatever initialization they like.
+		// 子类初始化过程
 		initServletBean();
 
 		if (logger.isDebugEnabled()) {
@@ -216,6 +231,7 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 
 		/**
 		 * Create new ServletConfigPropertyValues.
+		 * 将web.xml里面的参数放入 propertyValueList 里面
 		 * @param config ServletConfig we'll use to take PropertyValues from
 		 * @param requiredProperties set of property names we need, where
 		 * we can't accept default values
@@ -223,21 +239,30 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 		 */
 		public ServletConfigPropertyValues(ServletConfig config, Set<String> requiredProperties)
 				throws ServletException {
-
+			//如果requiredProperties不为空，根据requiredProperties构造一个set集合，为空，则集合为null
 			Set<String> missingProps = (!CollectionUtils.isEmpty(requiredProperties) ?
 					new HashSet<>(requiredProperties) : null);
-
+			//获取servlet在web.xml中配置的key
 			Enumeration<String> paramNames = config.getInitParameterNames();
+			//遍历
 			while (paramNames.hasMoreElements()) {
+				//获取值
 				String property = paramNames.nextElement();
 				Object value = config.getInitParameter(property);
+				//将key value转为PropertyValue，
+				// 如果必须设置的属性集合里面包含key，则将requiredValue（要求设置的key对应的value）与setValue（web.xml设置的value）
+				// 合并，如果setValue不支持合并，则将setValue替换requiredValue。将新的key value添加进propertyValueList。
+				// 如果没有要求设置该key对应value，直接添加进propertyValueList
+				//如果requiredValue没有全部覆盖，则抛出异常
 				addPropertyValue(new PropertyValue(property, value));
+				//missingProps不为bull，从其中移除key value
 				if (missingProps != null) {
 					missingProps.remove(property);
 				}
 			}
 
 			// Fail if we are still missing properties.
+			//如果requiredValue没有全部覆盖，则抛出异常
 			if (!CollectionUtils.isEmpty(missingProps)) {
 				throw new ServletException(
 						"Initialization from ServletConfig for servlet '" + config.getServletName() +

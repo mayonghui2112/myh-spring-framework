@@ -105,6 +105,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	@Nullable
 	private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
 
+	//缓存metadataReader
 	private MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory();
 
 	private boolean setMetadataReaderFactoryCalled = false;
@@ -290,6 +291,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			}
 			//如果没有被处理过，判断是否加了@configuration/@Bean/@Component/@ComponentScan/@Import/@ImportResource注解，
 			// 是则加入configCandidates，否则继续循环，判断下一个bd
+			//beanDef如果未配置类，checkConfigurationClassCandidate方法解析beanDef的order属性，设置bd
 			else if (ConfigurationClassUtils.checkConfigurationClassCandidate(beanDef, this.metadataReaderFactory)) {
 				configCandidates.add(new BeanDefinitionHolder(beanDef, beanName));
 			}
@@ -314,6 +316,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		if (registry instanceof SingletonBeanRegistry) {
 			sbr = (SingletonBeanRegistry) registry;
 			if (!this.localBeanNameGeneratorSet) {
+				//可以获取早期bean
 				BeanNameGenerator generator = (BeanNameGenerator) sbr.getSingleton(CONFIGURATION_BEAN_NAME_GENERATOR);
 				if (generator != null) {
 					this.componentScanBeanNameGenerator = generator;
@@ -354,9 +357,8 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 						registry, this.sourceExtractor, this.resourceLoader, this.environment,
 						this.importBeanNameGenerator, parser.getImportRegistry());
 			}
-			//处理configClasses中imports注解导入的类，处理@bean，@importResource
-			//为什么不处理@component类，因为在此类执行之前能注册类的入口：register/注解/addBeanFactoryPostProcessor中，
-			//register入口直接放入bdmap中，其他都不会作为配置类处理，都是在处理配置类之前注册进入bdMap中的，
+			//此方法只是为了处理处理configClasses中imports注解导入的类，处理@bean，@importResource
+			//为什么不处理@componentScan类和配置类本身，因为在此方法执行之前，要么在注册配置类时，要么在scan的时候，就进行了注册操作
 			this.reader.loadBeanDefinitions(configClasses);
 			//把所有刚解析的配置类加入alreadyParsed集合
 			alreadyParsed.addAll(configClasses);

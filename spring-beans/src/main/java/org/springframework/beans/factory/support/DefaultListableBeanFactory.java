@@ -151,7 +151,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	/** Resolver to use for checking if a bean definition is an autowire candidate */
 	private AutowireCandidateResolver autowireCandidateResolver = new SimpleAutowireCandidateResolver();
 
-	/** Map from dependency type to corresponding autowired value */
+	/** 从依赖项类型映射到相应的自动获取值
+	 * Map from dependency type to corresponding autowired value */
 	private final Map<Class<?>, Object> resolvableDependencies = new ConcurrentHashMap<>(16);
 
 	/** Map of bean definition objects, keyed by bean name */
@@ -746,16 +747,16 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
 			//不是抽象类，不是懒加载类的单例对象
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
-				//是工厂bean myh-question？
+				//是工厂bea
 				if (isFactoryBean(beanName)) {
-					//根据&+beanName获取bena实例
+					//根据&+beanName获取/生成bena实例
 					Object bean = getBean(FACTORY_BEAN_PREFIX + beanName);
 					//如果bean是FactoryBean实例
 					if (bean instanceof FactoryBean) {
 						//强转
 						final FactoryBean<?> factory = (FactoryBean<?>) bean;
 						boolean isEagerInit;
-						//
+						//判断是不是要早实例话初始化工厂生成的bean，是的话生成bean
 						if (System.getSecurityManager() != null && factory instanceof SmartFactoryBean) {
 							isEagerInit = AccessController.doPrivileged((PrivilegedAction<Boolean>)
 											((SmartFactoryBean<?>) factory)::isEagerInit,
@@ -777,7 +778,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 		}
 
-		// 为所有适用的bean触发初始化后回调…
+		// 为所有SmartInitializingSingleton的子类bean触发初始化后回调…
 		// Trigger post-initialization callback for all applicable beans...
 		//第二次遍历
 		for (String beanName : beanNames) {
@@ -827,7 +828,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		}
 		//尝试从bdMap中根据beanName取bd
 		BeanDefinition existingDefinition = this.beanDefinitionMap.get(beanName);
-		//如果bd不为null
+		//如果bd不为null，覆盖，并打印日志
 		if (existingDefinition != null) {
 			if (!isAllowBeanDefinitionOverriding()) {
 				throw new BeanDefinitionStoreException(beanDefinition.getResourceDescription(), beanName,

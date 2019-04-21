@@ -42,8 +42,10 @@ final class SimpleMetadataReader implements MetadataReader {
 
 	private final Resource resource;
 
+	/** 类属性，或者扫描得到的AnnotationMetadataReadingVisitor对象 by mayh*/
 	private final ClassMetadata classMetadata;
 
+	/** 注解属性，或者扫描得到的AnnotationMetadataReadingVisitor对象 by mayh*/
 	private final AnnotationMetadata annotationMetadata;
 
 
@@ -51,6 +53,7 @@ final class SimpleMetadataReader implements MetadataReader {
 		InputStream is = new BufferedInputStream(resource.getInputStream());
 		ClassReader classReader;
 		try {
+			//持有资源文件的数组对象
 			classReader = new ClassReader(is);
 		}
 		catch (IllegalArgumentException ex) {
@@ -61,7 +64,9 @@ final class SimpleMetadataReader implements MetadataReader {
 			is.close();
 		}
 
+		//构建一个visitor对象，参观classReader持有的资源文件字节数组
 		AnnotationMetadataReadingVisitor visitor = new AnnotationMetadataReadingVisitor(classLoader);
+		//解析classReader持有的资源文件字节数组
 		classReader.accept(visitor, ClassReader.SKIP_DEBUG);
 
 		this.annotationMetadata = visitor;

@@ -152,6 +152,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 
 
 	/**
+	 * 此值将附加到每个基本包名。
 	 * Set the resource pattern to use when scanning the classpath.
 	 * This value will be appended to each base package name.
 	 * @see #findCandidateComponents(String)
@@ -204,9 +205,11 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	 */
 	@SuppressWarnings("unchecked")
 	protected void registerDefaultFilters() {
+		//第一个默认的过滤器，扫描带component注解
 		this.includeFilters.add(new AnnotationTypeFilter(Component.class));
 		ClassLoader cl = ClassPathScanningCandidateComponentProvider.class.getClassLoader();
 		try {
+			//第二个过滤器，带ManagedBean注解
 			this.includeFilters.add(new AnnotationTypeFilter(
 					((Class<? extends Annotation>) ClassUtils.forName("javax.annotation.ManagedBean", cl)), false));
 			logger.debug("JSR-250 'javax.annotation.ManagedBean' found and supported for component scanning");
@@ -215,6 +218,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 			// JSR-250 1.1 API (as included in Java EE 6) not available - simply skip.
 		}
 		try {
+			//第三个默认的过滤器，带Named注解的类
 			this.includeFilters.add(new AnnotationTypeFilter(
 					((Class<? extends Annotation>) ClassUtils.forName("javax.inject.Named", cl)), false));
 			logger.debug("JSR-330 'javax.inject.Named' annotation found and supported for component scanning");
@@ -420,6 +424,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 		try {
 			String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
 					resolveBasePackage(basePackage) + '/' + this.resourcePattern;
+			//获取路径下的所有资源文件
 			Resource[] resources = getResourcePatternResolver().getResources(packageSearchPath);
 			boolean traceEnabled = logger.isTraceEnabled();
 			boolean debugEnabled = logger.isDebugEnabled();
@@ -430,9 +435,10 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 				if (resource.isReadable()) {
 					try {
 						//根据resource获取metadataReader
+						//metadataReader有source文件的字节数组对象，用asm解析得到的注解对象
 						MetadataReader metadataReader = getMetadataReaderFactory().getMetadataReader(resource);
 						//isCandidateComponent(metadataReader)遍历excludeFilters和includeFilters，
-						// 根据过滤器过滤掉configuration类和不是Spring管理的类
+						// 根据过滤器过滤掉判断是否是候选类，excludeFilter匹配且includdeFilter匹配
 						if (isCandidateComponent(metadataReader)) {
 							ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
 							sbd.setResource(resource);

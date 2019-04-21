@@ -74,13 +74,16 @@ public class GenericConversionService implements ConfigurableConversionService {
 	private static final GenericConverter NO_MATCH = new NoOpConverter("NO_MATCH");
 
 
+	/** 管理在服务中注册的所有转换器。 */
 	private final Converters converters = new Converters();
 
+	/** GeneriConverter的缓存，原类型和目标类型组成ConverterCacheKey，用来定位GenericConverter by mayh*/
 	private final Map<ConverterCacheKey, GenericConverter> converterCache = new ConcurrentReferenceHashMap<>(64);
 
 
 	// ConverterRegistry implementation
 
+	/** 用converterAdapter包装converter，以便genericConversionSevice调用 by mayh*/
 	@Override
 	public void addConverter(Converter<?, ?> converter) {
 		ResolvableType[] typeInfo = getRequiredTypeInfo(converter.getClass(), Converter.class);
@@ -186,6 +189,7 @@ public class GenericConversionService implements ConfigurableConversionService {
 			throw new IllegalArgumentException("Source to convert from must be an instance of [" +
 					sourceType + "]; instead it was a [" + source.getClass().getName() + "]");
 		}
+		/** 根据原类型和目标类型获取转换器 by mayh*/
 		GenericConverter converter = getConverter(sourceType, targetType);
 		if (converter != null) {
 			Object result = ConversionUtils.invokeConverter(converter, source, sourceType, targetType);
@@ -259,6 +263,7 @@ public class GenericConversionService implements ConfigurableConversionService {
 
 		converter = this.converters.find(sourceType, targetType);
 		if (converter == null) {
+			/** 返回一个默认的转换器（空操作），或者为null，原类型不能指定为目标类型时返回null by mayh*/
 			converter = getDefaultConverter(sourceType, targetType);
 		}
 

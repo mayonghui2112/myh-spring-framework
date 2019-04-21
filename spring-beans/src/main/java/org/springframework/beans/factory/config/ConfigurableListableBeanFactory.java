@@ -81,8 +81,8 @@ public interface ConfigurableListableBeanFactory
 	void registerResolvableDependency(Class<?> dependencyType, @Nullable Object autowiredValue);
 
 	/**
-	 * Determine whether the specified bean qualifies as an autowire candidate,
 	 * to be injected into other beans which declare a dependency of matching type.
+	 * Determine whether the specified bean qualifies as an autowire candidate,
 	 * <p>This method checks ancestor factories as well.
 	 * @param beanName the name of the bean to check
 	 * @param descriptor the descriptor of the dependency to resolve

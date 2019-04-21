@@ -61,6 +61,7 @@ public abstract class AbstractUrlHandlerMapping extends AbstractHandlerMapping i
 
 	private boolean lazyInitHandlers = false;
 
+	//url到handler类的映射，在context刷新完成后完该map填充数据
 	private final Map<String, Object> handlerMap = new LinkedHashMap<>();
 
 
@@ -120,8 +121,11 @@ public abstract class AbstractUrlHandlerMapping extends AbstractHandlerMapping i
 	@Override
 	@Nullable
 	protected Object getHandlerInternal(HttpServletRequest request) throws Exception {
+		//获取请求中的url路径
 		String lookupPath = getUrlPathHelper().getLookupPathForRequest(request);
+		//寻找对应的handler
 		Object handler = lookupHandler(lookupPath, request);
+		//找不到，去获取根handler或者默认handler
 		if (handler == null) {
 			// We need to care for the default handler directly, since we need to
 			// expose the PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE for it as well.

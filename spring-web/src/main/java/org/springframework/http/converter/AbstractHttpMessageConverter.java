@@ -52,6 +52,7 @@ public abstract class AbstractHttpMessageConverter<T> implements HttpMessageConv
 	/** Logger available to subclasses */
 	protected final Log logger = LogFactory.getLog(getClass());
 
+	//该消息转换器支持转化的对象类型
 	private List<MediaType> supportedMediaTypes = Collections.emptyList();
 
 	@Nullable

@@ -182,6 +182,7 @@ public class DataBinder implements PropertyEditorRegistry, TypeConverter {
 
 
 	/**
+	 * 返回包装的目标对象。
 	 * Return the wrapped target object.
 	 */
 	@Nullable
@@ -302,6 +303,7 @@ public class DataBinder implements PropertyEditorRegistry, TypeConverter {
 	}
 
 	/**
+	 * 返回这个DataBinder保存的内部BindingResult，
 	 * Return the internal BindingResult held by this DataBinder,
 	 * as an AbstractPropertyBindingResult.
 	 */
@@ -345,6 +347,7 @@ public class DataBinder implements PropertyEditorRegistry, TypeConverter {
 	}
 
 	/**
+	 * 返回此绑定器的绑定结果的底层类型转换。
 	 * Return the underlying TypeConverter of this binder's BindingResult.
 	 */
 	protected TypeConverter getTypeConverter() {
@@ -352,6 +355,7 @@ public class DataBinder implements PropertyEditorRegistry, TypeConverter {
 			return getInternalBindingResult().getPropertyAccessor();
 		}
 		else {
+			/** 返回SimpleTypeConverter，如果conversionService不为空，则会在SimpleTypeConverter中设置conversionService by mayh*/
 			return getSimpleTypeConverter();
 		}
 	}
@@ -688,7 +692,7 @@ public class DataBinder implements PropertyEditorRegistry, TypeConverter {
 	@Nullable
 	public <T> T convertIfNecessary(@Nullable Object value, @Nullable Class<T> requiredType,
 			@Nullable MethodParameter methodParam) throws TypeMismatchException {
-
+		/** 获取类型转换器，进行类型转换 by mayh*/
 		return getTypeConverter().convertIfNecessary(value, requiredType, methodParam);
 	}
 

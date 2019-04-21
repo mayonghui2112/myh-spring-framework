@@ -30,6 +30,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.util.StringValueResolver;
 
 /**
+ * 别名注册器，用一个map注册别名-正式名的注册
  * Simple implementation of the {@link AliasRegistry} interface.
  * Serves as base class for
  * {@link org.springframework.beans.factory.support.BeanDefinitionRegistry}
@@ -208,7 +209,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	}
 
 	/**
-	 * 确定原始名称，将别名解析为规范名称。
+	 * 将别名解析为规范名称。
 	 * Determine the raw name, resolving aliases to canonical names.
 	 * @param name the user-specified name
 	 * @return the transformed name

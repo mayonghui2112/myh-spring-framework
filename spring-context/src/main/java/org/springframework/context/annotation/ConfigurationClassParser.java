@@ -115,6 +115,7 @@ class ConfigurationClassParser {
 
 	private final Log logger = LogFactory.getLog(getClass());
 
+	//读取到的Metadata工厂
 	private final MetadataReaderFactory metadataReaderFactory;
 
 	private final ProblemReporter problemReporter;
@@ -129,6 +130,7 @@ class ConfigurationClassParser {
 
 	private final ConditionEvaluator conditionEvaluator;
 
+	//被解析过的类集合
 	private final Map<ConfigurationClass, ConfigurationClass> configurationClasses = new LinkedHashMap<>();
 
 	private final Map<String, ConfigurationClass> knownSuperclasses = new HashMap<>();
@@ -265,7 +267,7 @@ class ConfigurationClassParser {
 		}
 		while (sourceClass != null);
 
-		//把配置类放入解析器的configurationClasses中，标识该类已经被扫描过，但是此时还没有注册，在稍后注册进bdMap中
+		//把配置类放入解析器的configurationClasses中，标识该类已经被扫描过
 		this.configurationClasses.put(configClass, configClass);
 	}
 
@@ -302,7 +304,7 @@ class ConfigurationClassParser {
 		// Process any @ComponentScan annotations
 		//处理 @ComponentScan 注解
 		//获取componentScan的set集合
-		Set<AnnotationAttributes> componentScans = AnnotationConfigUtils.attributesForRepeatable(
+			Set<AnnotationAttributes> componentScans = AnnotationConfigUtils.attributesForRepeatable(
 				sourceClass.getMetadata(), ComponentScans.class, ComponentScan.class);
 		//如果有@componentScan注解，且不用跳过，则解析@componentScan注解
 		if (!componentScans.isEmpty() &&
@@ -310,12 +312,14 @@ class ConfigurationClassParser {
 			//循环解析@componentScan注解
 			for (AnnotationAttributes componentScan : componentScans) {
 				// The config class is annotated with @ComponentScan -> perform the scan immediately
-				//解析@componentScan注解，返回扫描到的bd（会派出sourceClass类，非Spring管理类）
+				//解析@componentScan注解，返回扫描到的bd（会派出sourceClass类，非Spring管理类），并过滤掉sourceClass类
+				//此时已经在注册器注册了bd
 				Set<BeanDefinitionHolder> scannedBeanDefinitions =
 						this.componentScanParser.parse(componentScan, sourceClass.getMetadata().getClassName());
 				// Check the set of scanned definitions for any further config classes and parse recursively if needed
 				//遍历扫描得到的bd的set集合scannedBeanDefinitions中是否有配置类，如果有，则递归解析
 				for (BeanDefinitionHolder holder : scannedBeanDefinitions) {
+					//获取resource的bd
 					BeanDefinition bdCand = holder.getBeanDefinition().getOriginatingBeanDefinition();
 					if (bdCand == null) {
 						bdCand = holder.getBeanDefinition();
@@ -364,7 +368,7 @@ class ConfigurationClassParser {
 		}
 
 		// Process individual @Bean methods
-		//处理 单个@Bean 注解方法
+		//处理@Bean 注解方法
 		//根据注解类的sourceClass（标准注解处理对象）对象获取配置类中所有的@bean注解方法元数据
 		Set<MethodMetadata> beanMethods = retrieveBeanMethodMetadata(sourceClass);
 		for (MethodMetadata methodMetadata : beanMethods) {
@@ -373,7 +377,7 @@ class ConfigurationClassParser {
 		}
 
 		// Process default methods on interfaces
-		//把configClass基本类直接和间接继承的所有接口的方法注册进入configclass的 beanMethods集合set中
+		//把configClass基本类直接和间接继承的所有接口的@bean方法，注册进入configclass的 beanMethods集合set中
 		processInterfaces(configClass, sourceClass);
 
 		// Process superclass, if any
@@ -450,7 +454,7 @@ class ConfigurationClassParser {
 	private Set<MethodMetadata> retrieveBeanMethodMetadata(SourceClass sourceClass) {
 		//获取配置类的注解元数据
 		AnnotationMetadata original = sourceClass.getMetadata();
-		//获取配置类中带有@bean的注解方法
+		//获取配置类中带有@bean的注解方法吧（不包含父类）
 		Set<MethodMetadata> beanMethods = original.getAnnotatedMethods(Bean.class.getName());
 		if (beanMethods.size() > 1 && original instanceof StandardAnnotationMetadata) {
 			// Try reading the class file via ASM for deterministic declaration order...
@@ -459,19 +463,23 @@ class ConfigurationClassParser {
 			////尝试通过ASM读取类文件，以确定声明顺序…不幸的是，
 			// JVM的标准反射以任意顺序返回方法，甚至在相同JVM上相同应用程序的不同运行之间也是如此。
 			try {
+				//通过asm读取全带有@Bean注解的类方法
 				AnnotationMetadata asm =
 						this.metadataReaderFactory.getMetadataReader(original.getClassName()).getAnnotationMetadata();
 				Set<MethodMetadata> asmMethods = asm.getAnnotatedMethods(Bean.class.getName());
+				//如果asmMethods.size() >= beanMethods.size()，说明父类有被重写的被@Bean注解的类
 				if (asmMethods.size() >= beanMethods.size()) {
 					Set<MethodMetadata> selectedMethods = new LinkedHashSet<>(asmMethods.size());
 					for (MethodMetadata asmMethod : asmMethods) {
 						for (MethodMetadata beanMethod : beanMethods) {
 							if (beanMethod.getMethodName().equals(asmMethod.getMethodName())) {
+								//由于MethodMetadata的子类没有重写equals方法，所以每一个beanMethod都是唯一的
 								selectedMethods.add(beanMethod);
 								break;
 							}
 						}
 					}
+					/** 相等说明没有方法被重写，为啥要把ASM发现的方法赋予beanMethods并返回 myh-question-todo？ by mayh*/
 					if (selectedMethods.size() == beanMethods.size()) {
 						// All reflection-detected methods found in ASM method set -> proceed
 						beanMethods = selectedMethods;
@@ -870,6 +878,7 @@ class ConfigurationClassParser {
 	//import解析器，同时也是一个数组对列，用于解析维护import的类
 	private static class ImportStack extends ArrayDeque<ConfigurationClass> implements ImportRegistry {
 
+		/** 由import导入的类 by mayh*/
 		private final MultiValueMap<String, AnnotationMetadata> imports = new LinkedMultiValueMap<>();
 
 		public void registerImport(AnnotationMetadata importingClass, String importedClass) {

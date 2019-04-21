@@ -125,7 +125,7 @@ class ConfigurationClassBeanDefinitionReader {
 	 */
 	private void loadBeanDefinitionsForConfigurationClass(
 			ConfigurationClass configClass, TrackedConditionEvaluator trackedConditionEvaluator) {
-		//判断是否跳过 myh-question？
+		//判断是否跳过？
 		if (trackedConditionEvaluator.shouldSkip(configClass)) {
 			//获取bd名字
 			String beanName = configClass.getBeanName();
@@ -146,6 +146,7 @@ class ConfigurationClassBeanDefinitionReader {
 		//处理存储在配置类中方法的元数据对象（@bean注解的和所有接口的非抽象方法）
 		for (BeanMethod beanMethod : configClass.getBeanMethods()) {
 			//将beanMethod转化为一个ConfigurationClassBeanDefinition类型的bd注册进bdmap
+			//对应@bean注解
 			loadBeanDefinitionsForBeanMethod(beanMethod);
 		}
 		//处理用imortResourced导入的资源类
@@ -220,6 +221,7 @@ class ConfigurationClassBeanDefinitionReader {
 		beanDef.setResource(configClass.getResource());
 		beanDef.setSource(this.sourceExtractor.extractSource(metadata, configClass.getResource()));
 
+		/** 将@bean当作xml的factory-baen处理 by mayh*/
 		if (metadata.isStatic()) {
 			// static @Bean method
 			beanDef.setBeanClassName(configClass.getMetadata().getClassName());

@@ -162,19 +162,6 @@ public abstract class AbstractRefreshableWebApplicationContext extends AbstractR
 	}
 
 	/**
-	 * Register request/session scopes, a {@link ServletContextAwareProcessor}, etc.
-	 */
-	@Override
-	protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
-		beanFactory.addBeanPostProcessor(new ServletContextAwareProcessor(this.servletContext, this.servletConfig));
-		beanFactory.ignoreDependencyInterface(ServletContextAware.class);
-		beanFactory.ignoreDependencyInterface(ServletConfigAware.class);
-
-		WebApplicationContextUtils.registerWebApplicationScopes(beanFactory, this.servletContext);
-		WebApplicationContextUtils.registerEnvironmentBeans(beanFactory, this.servletContext, this.servletConfig);
-	}
-
-	/**
 	 * This implementation supports file paths beneath the root of the ServletContext.
 	 * @see ServletContextResource
 	 */
@@ -182,6 +169,21 @@ public abstract class AbstractRefreshableWebApplicationContext extends AbstractR
 	protected Resource getResourceByPath(String path) {
 		Assert.state(this.servletContext != null, "No ServletContext available");
 		return new ServletContextResource(this.servletContext, path);
+	}
+
+	/**
+	 * Register request/session scopes, a {@link ServletContextAwareProcessor}, etc.
+	 */
+	@Override
+	protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+		//增加一个后置处理器ServletContextAwareProcessor
+		beanFactory.addBeanPostProcessor(new ServletContextAwareProcessor(this.servletContext, this.servletConfig));
+		//忽略接口
+		beanFactory.ignoreDependencyInterface(ServletContextAware.class);
+		beanFactory.ignoreDependencyInterface(ServletConfigAware.class);
+		//
+		WebApplicationContextUtils.registerWebApplicationScopes(beanFactory, this.servletContext);
+		WebApplicationContextUtils.registerEnvironmentBeans(beanFactory, this.servletContext, this.servletConfig);
 	}
 
 	/**

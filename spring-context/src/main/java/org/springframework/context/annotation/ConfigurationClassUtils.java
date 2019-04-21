@@ -82,6 +82,7 @@ abstract class ConfigurationClassUtils {
 	public static boolean checkConfigurationClassCandidate(BeanDefinition beanDef, MetadataReaderFactory metadataReaderFactory) {
 		//根据bd获取className
 		String className = beanDef.getBeanClassName();
+		//className为空，说明不是配置类，FactoryMethodName不为空，说明是工厂类，不是配置类
 		if (className == null || beanDef.getFactoryMethodName() != null) {
 			return false;
 		}
@@ -101,6 +102,7 @@ abstract class ConfigurationClassUtils {
 		else {
 			try {
 				MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(className);
+				//读取底层类的完整注释元数据，包括带注释方法的元数据。
 				metadata = metadataReader.getAnnotationMetadata();
 			}
 			catch (IOException ex) {
@@ -165,7 +167,7 @@ abstract class ConfigurationClassUtils {
 	 * @return {@code true} if the given class is to be processed as a lite
 	 * configuration class, just registering it and scanning it for {@code @Bean} methods
 	 */
-	public static boolean isLiteConfigurationCandidate(AnnotationMetadata metadata) {
+	public static boolean 	isLiteConfigurationCandidate(AnnotationMetadata metadata) {
 		// Do not consider an interface or an annotation...
 		if (metadata.isInterface()) {
 			return false;

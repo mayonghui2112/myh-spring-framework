@@ -51,8 +51,10 @@ public class InvocableHandlerMethod extends HandlerMethod {
 	@Nullable
 	private WebDataBinderFactory dataBinderFactory;
 
+	//缓存了24个默认的参数解析器
 	private HandlerMethodArgumentResolverComposite argumentResolvers = new HandlerMethodArgumentResolverComposite();
 
+	//参数名字解析类，利用java8的反射和ASM-based 从class文件中解析出参数名字
 	private ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
 
 
@@ -128,11 +130,13 @@ public class InvocableHandlerMethod extends HandlerMethod {
 	public Object invokeForRequest(NativeWebRequest request, @Nullable ModelAndViewContainer mavContainer,
 			Object... providedArgs) throws Exception {
 
+		//从request中解析出HandlerMethod方法所需要的参数值，并返回Object[]
 		Object[] args = getMethodArgumentValues(request, mavContainer, providedArgs);
 		if (logger.isTraceEnabled()) {
 			logger.trace("Invoking '" + ClassUtils.getQualifiedMethodName(getMethod(), getBeanType()) +
 					"' with arguments " + Arrays.toString(args));
 		}
+		//使用给定的参数值调用处理程序方法。
 		Object returnValue = doInvoke(args);
 		if (logger.isTraceEnabled()) {
 			logger.trace("Method [" + ClassUtils.getQualifiedMethodName(getMethod(), getBeanType()) +
@@ -147,20 +151,26 @@ public class InvocableHandlerMethod extends HandlerMethod {
 	private Object[] getMethodArgumentValues(NativeWebRequest request, @Nullable ModelAndViewContainer mavContainer,
 			Object... providedArgs) throws Exception {
 
+		//获取参数对象
 		MethodParameter[] parameters = getMethodParameters();
 		Object[] args = new Object[parameters.length];
+		//遍历参数
 		for (int i = 0; i < parameters.length; i++) {
 			MethodParameter parameter = parameters[i];
+			//设置参数名字解析类
 			parameter.initParameterNameDiscovery(this.parameterNameDiscoverer);
+			//尝试从提供的参数值列表中解析方法参数。
 			args[i] = resolveProvidedArgument(parameter, providedArgs);
 			if (args[i] != null) {
 				continue;
 			}
+			//判断之前RequestMappingHandlerAdapter初始化的那24个HandlerMethodArgumentResolver（参数解析器），是否存在支持该参数解析的解析器
 			if (this.argumentResolvers.supportsParameter(parameter)) {
 				try {
+					//解析参数
 					args[i] = this.argumentResolvers.resolveArgument(
 							parameter, mavContainer, request, this.dataBinderFactory);
-					continue;
+						continue;
 				}
 				catch (Exception ex) {
 					if (logger.isDebugEnabled()) {
@@ -184,6 +194,7 @@ public class InvocableHandlerMethod extends HandlerMethod {
 	}
 
 	/**
+	 * 尝试从提供的参数值列表中解析方法参数。
 	 * Attempt to resolve a method parameter from the list of provided argument values.
 	 */
 	@Nullable
@@ -201,6 +212,7 @@ public class InvocableHandlerMethod extends HandlerMethod {
 
 
 	/**
+	 * 使用给定的参数值调用处理程序方法。
 	 * Invoke the handler method with the given argument values.
 	 */
 	protected Object doInvoke(Object... args) throws Exception {

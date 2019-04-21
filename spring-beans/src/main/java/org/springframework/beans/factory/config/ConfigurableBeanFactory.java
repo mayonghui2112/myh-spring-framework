@@ -361,7 +361,7 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	 * @param dependentBeanName the name of the dependent bean
 	 * @since 2.5
 	 */
-	void registerDependentBean(String beanName, String dependentBeanName);
+	void  registerDependentBean(String beanName, String dependentBeanName);
 
 	/**
 	 * Return the names of all beans which depend on the specified bean, if any.

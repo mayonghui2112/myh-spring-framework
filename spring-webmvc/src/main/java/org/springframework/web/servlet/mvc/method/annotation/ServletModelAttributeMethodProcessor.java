@@ -62,6 +62,7 @@ public class ServletModelAttributeMethodProcessor extends ModelAttributeMethodPr
 
 
 	/**
+	 * 扩展点创建模型属性(如果在模型中没有找到)，然后通过bean属性进行参数绑定(除非被抑制)。
 	 * Instantiate the model attribute from a URI template variable or from a
 	 * request parameter if the name matches to the model attribute name and
 	 * if there is an appropriate type conversion strategy. If none of these
@@ -72,7 +73,9 @@ public class ServletModelAttributeMethodProcessor extends ModelAttributeMethodPr
 	protected final Object createAttribute(String attributeName, MethodParameter parameter,
 			WebDataBinderFactory binderFactory, NativeWebRequest request) throws Exception {
 
+		/** 从url或者request的paramter中获取属性值 by mayh*/
 		String value = getRequestValueForAttribute(attributeName, request);
+		/** 如果value不为空，则尝试用DataBinder将value转换为参数类型 by mayh*/
 		if (value != null) {
 			Object attribute = createAttributeFromRequestValue(
 					value, attributeName, parameter, binderFactory, request);
@@ -80,7 +83,7 @@ public class ServletModelAttributeMethodProcessor extends ModelAttributeMethodPr
 				return attribute;
 			}
 		}
-
+		/** 转换不成功，则交给父类处理 by mayh*/
 		return super.createAttribute(attributeName, parameter, binderFactory, request);
 	}
 

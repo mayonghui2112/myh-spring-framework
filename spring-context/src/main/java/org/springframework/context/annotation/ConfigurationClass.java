@@ -60,7 +60,7 @@ final class ConfigurationClass {
 	//一个数组，表明该类是由那些类通过@import注解导入的
 	private final Set<ConfigurationClass> importedBy = new LinkedHashSet<>(1);
 
-	//存储配置类中方法的元数据对象（@bean注解的和所有接口的非抽象方法）
+	//存储配置类及其直接实现的所有接口（不是父类，也不是间接实现的接口）的@bean注解方法
 	private final Set<BeanMethod> beanMethods = new LinkedHashSet<>();
 
 	//用imortResourced导入的资源类

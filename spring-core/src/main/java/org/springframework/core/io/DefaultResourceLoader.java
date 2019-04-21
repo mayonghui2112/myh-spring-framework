@@ -47,11 +47,20 @@ import org.springframework.util.StringUtils;
  */
 public class DefaultResourceLoader implements ResourceLoader {
 
+	/**
+	 * 类加载器
+	 */
 	@Nullable
 	private ClassLoader classLoader;
 
+	/**
+	 * 自定义协议解析器集合
+	 */
 	private final Set<ProtocolResolver> protocolResolvers = new LinkedHashSet<>(4);
 
+	/**
+	 * 资源缓存
+	 */
 	private final Map<Class<?>, Map<Resource, ?>> resourceCaches = new ConcurrentHashMap<>(4);
 
 
@@ -140,6 +149,12 @@ public class DefaultResourceLoader implements ResourceLoader {
 	}
 
 
+	/**
+	 * 根据location解析资源，先用自定义解析器解析资源，解析不到，
+	 * 就用基本加载器解析
+	 * @param location the resource location
+	 * @return
+	 */
 	@Override
 	public Resource getResource(String location) {
 		Assert.notNull(location, "Location must not be null");
@@ -152,13 +167,16 @@ public class DefaultResourceLoader implements ResourceLoader {
 		}
 
 		if (location.startsWith("/")) {
+			//ClassPathContextResource解析，ClassPathResource的子类，解析逻辑还是ClassPathResource逻辑
 			return getResourceByPath(location);
 		}
 		else if (location.startsWith(CLASSPATH_URL_PREFIX)) {
+			//ClassPathResource解析
 			return new ClassPathResource(location.substring(CLASSPATH_URL_PREFIX.length()), getClassLoader());
 		}
 		else {
 			try {
+				//当作File或Url对象解析
 				// Try to parse the location as a URL...
 				URL url = new URL(location);
 				return (ResourceUtils.isFileURL(url) ? new FileUrlResource(url) : new UrlResource(url));

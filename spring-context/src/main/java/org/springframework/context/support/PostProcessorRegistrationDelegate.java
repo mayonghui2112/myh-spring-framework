@@ -47,7 +47,7 @@ import org.springframework.lang.Nullable;
  * @since 4.0
  */
 final class PostProcessorRegistrationDelegate {
-	/*
+	/**
 	 注意：Ordered接口是PriorityOrdered接口的父接口
 	 以下的所有操作，都利用processedBeans列表排除已经执行过的BeanDefinitionRegistryPostProcessor
 	 在beanfactory是BeanDefinitionRegistry时
@@ -55,7 +55,7 @@ final class PostProcessorRegistrationDelegate {
 		 1、通过addBeanFactoryPostProcessor添加的BeanDefinitionRegistryPostProcessor，按添加顺序执行
 		 2、Spring本身和通过register添加进bdMap中的（即refresh方法调用之前加入bdMap中的），并实现了PriorityOrdered接口的BeanDefinitionRegistryPostProcessor，并排序/执行，此时ConfigurationClassPostProcessor会解析@configuration注解的类，
 		 会把所有的BeanDefinitionRegistryPostProcessor扫描进bdmap中,
-		 该BeanDefinitionRegistryPostProcessor子类中会有一个ConfigurationClassPostProcessor用来解析配置类，扫描所有@component添加到db，目前只有这一个类（重点）
+		 该BeanDefinitionRegistryPostProcessor子类中会有一个 ConfigurationClassPostProcessor 用来解析配置类，扫描所有@component添加到db，目前只有这一个类（重点）
 		 3、执行以上操作后，bdMap中,未执行的，并实现了PriorityOrdered接口或实现了Ordered接口的的BeanDefinitionRegistryPostProcessor，排序，执行，此处执行0个
 		 4、执行以上操作后，bdMap中,未执行的，并且PriorityOrdered和Ordered接口都没实现的BeanDefinitionRegistryPostProcessor,排序，执行，此处执行0个
 		 5、调用以上所有的BeanDefinitionRegistryPostProcessor的postProcessBeanFactory方法
