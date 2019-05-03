@@ -262,14 +262,17 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		}
 
 		// Quick check on the concurrent map first, with minimal locking.
+		//双重检查锁确定构造方法
 		Constructor<?>[] candidateConstructors = this.candidateConstructorsCache.get(beanClass);
 		if (candidateConstructors == null) {
 			// Fully synchronized resolution now...
 			synchronized (this.candidateConstructorsCache) {
 				candidateConstructors = this.candidateConstructorsCache.get(beanClass);
 				if (candidateConstructors == null) {
+					//所有的声明构造方法
 					Constructor<?>[] rawCandidates;
 					try {
+						//获取所有的声明构造方法
 						rawCandidates = beanClass.getDeclaredConstructors();
 					}
 					catch (Throwable ex) {
@@ -277,19 +280,26 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 								"Resolution of declared constructors on bean Class [" + beanClass.getName() +
 								"] from ClassLoader [" + beanClass.getClassLoader() + "] failed", ex);
 					}
+					//候选构造方法
 					List<Constructor<?>> candidates = new ArrayList<>(rawCandidates.length);
+					//required为true的构造方法
 					Constructor<?> requiredConstructor = null;
+					//默认构造方法
 					Constructor<?> defaultConstructor = null;
+					//KOTLIN主要构造方法，java忽略
 					Constructor<?> primaryConstructor = BeanUtils.findPrimaryConstructor(beanClass);
 					int nonSyntheticConstructors = 0;
 					for (Constructor<?> candidate : rawCandidates) {
+						//非内部景泰
 						if (!candidate.isSynthetic()) {
 							nonSyntheticConstructors++;
 						}
 						else if (primaryConstructor != null) {
 							continue;
 						}
+						//返回@antuowire或@value注解属性
 						AnnotationAttributes ann = findAutowiredAnnotation(candidate);
+						//注解为空，再次尝试解析父类注解
 						if (ann == null) {
 							Class<?> userClass = ClassUtils.getUserClass(beanClass);
 							if (userClass != beanClass) {
@@ -303,14 +313,20 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 								}
 							}
 						}
+						//注解不为空
 						if (ann != null) {
+							//不能由两个@Autowire/@Value的注解构造方法
 							if (requiredConstructor != null) {
 								throw new BeanCreationException(beanName,
 										"Invalid autowire-marked constructor: " + candidate +
 										". Found constructor with 'required' Autowired annotation already: " +
 										requiredConstructor);
 							}
+							//获取required属性
 							boolean required = determineRequiredStatus(ann);
+							//先把所有带required注解的构造方法放入candidates数组，
+							// 如果required为true，把构造方法赋值给requiredConstructor
+							// required为true，需要参数，参数不能为null
 							if (required) {
 								if (!candidates.isEmpty()) {
 									throw new BeanCreationException(beanName,
@@ -320,14 +336,17 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 								}
 								requiredConstructor = candidate;
 							}
+							//不需要参数
 							candidates.add(candidate);
 						}
+						//注解还是为空
 						else if (candidate.getParameterCount() == 0) {
 							defaultConstructor = candidate;
 						}
 					}
 					if (!candidates.isEmpty()) {
 						// Add default constructor to list of optional constructors, as fallback.
+						//没有requiredConstructor但有defaultConstructor，就讲defaultConstructor加入到candidates
 						if (requiredConstructor == null) {
 							if (defaultConstructor != null) {
 								candidates.add(defaultConstructor);
@@ -339,21 +358,26 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 										"default constructor to fall back to: " + candidates.get(0));
 							}
 						}
+						//转换为数组
 						candidateConstructors = candidates.toArray(new Constructor<?>[0]);
 					}
+					//candidates为空，只有一个构造方法
 					else if (rawCandidates.length == 1 && rawCandidates[0].getParameterCount() > 0) {
 						candidateConstructors = new Constructor<?>[] {rawCandidates[0]};
 					}
+					//两个可用的构造方法，处理primaryConstructor
 					else if (nonSyntheticConstructors == 2 && primaryConstructor != null &&
 							defaultConstructor != null && !primaryConstructor.equals(defaultConstructor)) {
 						candidateConstructors = new Constructor<?>[] {primaryConstructor, defaultConstructor};
 					}
+					//1个可用的构造方法，，处理primaryConstructor
 					else if (nonSyntheticConstructors == 1 && primaryConstructor != null) {
 						candidateConstructors = new Constructor<?>[] {primaryConstructor};
 					}
 					else {
 						candidateConstructors = new Constructor<?>[0];
 					}
+					//缓存
 					this.candidateConstructorsCache.put(beanClass, candidateConstructors);
 				}
 			}

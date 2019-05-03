@@ -37,6 +37,16 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 /**
+ * 抽象基类，用于从指定值解析方法参数。消息头和路径变量是命名值的示例。
+ * 每一个都可能有一个名称、一个必需的标志和一个默认值。
+ * 类定义了如何做以下事情:
+ * 获取方法参数的命名值信息
+ * 将名称解析为参数值
+ * 当需要参数值时处理丢失的参数值
+ * 可选地处理已解析值
+ * 默认值字符串可以包含${…}占位符和Spring表达式语言#{…}表达式。
+ * 要实现这一点，必须向类构造函数提供 ConfigurableBeanFactory
+ * 如果转换服务与方法参数类型不匹配，则可以使用转 ConversionService 将类型转换应用于已解析的参数值。
  * Abstract base class for resolving method arguments from a named value.
  * Request parameters, request headers, and path variables are examples of named
  * values. Each may have a name, a required flag, and a default value.
@@ -98,7 +108,7 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 		NamedValueInfo namedValueInfo = getNamedValueInfo(parameter);
 		MethodParameter nestedParameter = parameter.nestedIfOptional();
 
-		//解析name里面的表达式
+		//解析name里面的${}和#{}表达式
 		Object resolvedName = resolveStringValue(namedValueInfo.name);
 		if (resolvedName == null) {
 			throw new IllegalArgumentException(
@@ -107,6 +117,7 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 
 		//将给定的参数类型和值名称解析为参数值。
 		Object arg = resolveName(resolvedName.toString(), nestedParameter, webRequest);
+		/** 没解析出来，用默认值/处理丢失的值/处理空值 by mayh*/
 		if (arg == null) {
 			if (namedValueInfo.defaultValue != null) {
 				arg = resolveStringValue(namedValueInfo.defaultValue);
@@ -116,11 +127,13 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 			}
 			arg = handleNullValue(namedValueInfo.name, arg, nestedParameter.getNestedParameterType());
 		}
+		/** arg是空字符串且默认值不为空，则用默认值 by mayh*/
 		else if ("".equals(arg) && namedValueInfo.defaultValue != null) {
 			arg = resolveStringValue(namedValueInfo.defaultValue);
 		}
 
 		if (binderFactory != null) {
+			/** 根据webRequest和参数名创建一个webDataBindler对象，并根据参数名绑定队形的initMethod by mayh*/
 			WebDataBinder binder = binderFactory.createBinder(webRequest, null, namedValueInfo.name);
 			try {
 				arg = binder.convertIfNecessary(arg, parameter.getParameterType(), parameter);

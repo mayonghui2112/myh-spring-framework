@@ -501,14 +501,22 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * <p>May be overridden in subclasses in order to initialize further strategy objects.
 	 */
 	protected void initStrategies(ApplicationContext context) {
+		//初始化文件上传解析
 		initMultipartResolver(context);
+		//本地和主题解析器，暂未用到，忽略
 		initLocaleResolver(context);
 		initThemeResolver(context);
+		//处理器映射器初始化
 		initHandlerMappings(context);
+		//处理器适配器初始化
 		initHandlerAdapters(context);
+		//处理器异常解析器初始化
 		initHandlerExceptionResolvers(context);
+		//请求到视图名转换器初始化
 		initRequestToViewNameTranslator(context);
+		//视图解析器初始化
 		initViewResolvers(context);
+		//FlashMap管理器初始化，用于重定向时数据的共享
 		initFlashMapManager(context);
 	}
 
@@ -519,6 +527,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 */
 	private void initMultipartResolver(ApplicationContext context) {
 		try {
+			//从bean容器获取名为multipartResolver的多部件解析器
 			this.multipartResolver = context.getBean(MULTIPART_RESOLVER_BEAN_NAME, MultipartResolver.class);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Using MultipartResolver [" + this.multipartResolver + "]");
@@ -900,6 +909,7 @@ public class DispatcherServlet extends FrameworkServlet {
 
 		// Keep a snapshot of the request attributes in case of an include,
 		// to be able to restore the original attributes after the include.
+		//处理JSP对应的include标签及其serlet对应的RequestDispatch.include()方法
 		Map<String, Object> attributesSnapshot = null;
 		if (WebUtils.isIncludeRequest(request)) {
 			attributesSnapshot = new HashMap<>();
@@ -913,16 +923,20 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 
 		// Make framework objects available to handlers and view objects.
+		//向request中设置几个属性
 		request.setAttribute(WEB_APPLICATION_CONTEXT_ATTRIBUTE, getWebApplicationContext());
 		request.setAttribute(LOCALE_RESOLVER_ATTRIBUTE, this.localeResolver);
 		request.setAttribute(THEME_RESOLVER_ATTRIBUTE, this.themeResolver);
 		request.setAttribute(THEME_SOURCE_ATTRIBUTE, getThemeSource());
 
+		//
 		if (this.flashMapManager != null) {
+			//从flashMapManager中获取关于此请求的flashmap，移除过期的flashmap
 			FlashMap inputFlashMap = this.flashMapManager.retrieveAndUpdate(request, response);
 			if (inputFlashMap != null) {
 				request.setAttribute(INPUT_FLASH_MAP_ATTRIBUTE, Collections.unmodifiableMap(inputFlashMap));
 			}
+			//没有就设置一个新的对象
 			request.setAttribute(OUTPUT_FLASH_MAP_ATTRIBUTE, new FlashMap());
 			request.setAttribute(FLASH_MAP_MANAGER_ATTRIBUTE, this.flashMapManager);
 		}
@@ -956,6 +970,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		HandlerExecutionChain mappedHandler = null;
 		boolean multipartRequestParsed = false;
 
+		/** 异步管理器 by mayh*/
 		WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
 
 		try {
@@ -963,10 +978,12 @@ public class DispatcherServlet extends FrameworkServlet {
 			Exception dispatchException = null;
 
 			try {
+				/** 将请求转换为多部分请求，并使多部分解析器可用。 by mayh*/
 				processedRequest = checkMultipart(request);
 				multipartRequestParsed = (processedRequest != request);
 
 				// Determine handler for the current request.
+				/** 获取请求的处理器 by mayh*/
 				mappedHandler = getHandler(processedRequest);
 				if (mappedHandler == null) {
 					noHandlerFound(processedRequest, response);
@@ -974,6 +991,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				}
 
 				// Determine handler adapter for the current request.
+				/** 获取适配器，哪个适配器大support方法返回true by mayh*/
 				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
 
 				// Process last-modified header, if supported by the handler.
@@ -989,6 +1007,7 @@ public class DispatcherServlet extends FrameworkServlet {
 					}
 				}
 
+				/** 应用已注册拦截器的预处理方法。 by mayh*/
 				if (!mappedHandler.applyPreHandle(processedRequest, response)) {
 					return;
 				}
@@ -1000,7 +1019,9 @@ public class DispatcherServlet extends FrameworkServlet {
 					return;
 				}
 
+				/** 我们需要视图名称翻译吗? by mayh*/
 				applyDefaultViewName(processedRequest, mv);
+				/** 应用已注册拦截器的后处理方法。 by mayh*/
 				mappedHandler.applyPostHandle(processedRequest, response, mv);
 			}
 			catch (Exception ex) {
@@ -1011,6 +1032,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				// making them available for @ExceptionHandler methods and other scenarios.
 				dispatchException = new NestedServletException("Handler dispatch failed", err);
 			}
+
 			processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);
 		}
 		catch (Exception ex) {
@@ -1049,8 +1071,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Handle the result of handler selection and handler invocation, which is
-	 * either a ModelAndView or an Exception to be resolved to a ModelAndView.
+	 * 处理处理程序选择和处理程序调用的结果，该结果要么是要解析为ModelAndView或ModelAndView的异常。
+	 * Handle the result of handler selection and handler invocation, which is either a ModelAndView or an Exception to be resolved to a ModelAndView.
 	 */
 	private void processDispatchResult(HttpServletRequest request, HttpServletResponse response,
 			@Nullable HandlerExecutionChain mappedHandler, @Nullable ModelAndView mv,
@@ -1058,6 +1080,7 @@ public class DispatcherServlet extends FrameworkServlet {
 
 		boolean errorView = false;
 
+		/** 处理异常 by mayh*/
 		if (exception != null) {
 			if (exception instanceof ModelAndViewDefiningException) {
 				logger.debug("ModelAndViewDefiningException encountered", exception);
@@ -1071,7 +1094,9 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 
 		// Did the handler return a view to render?
+		/** 处理视图 by mayh*/
 		if (mv != null && !mv.wasCleared()) {
+			/** 视图渲染 by mayh*/
 			render(mv, request, response);
 			if (errorView) {
 				WebUtils.clearErrorRequestAttributes(request);
@@ -1089,6 +1114,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			return;
 		}
 
+		/** 触发completion方法完成回调 by mayh*/
 		if (mappedHandler != null) {
 			mappedHandler.triggerAfterCompletion(request, response, null);
 		}

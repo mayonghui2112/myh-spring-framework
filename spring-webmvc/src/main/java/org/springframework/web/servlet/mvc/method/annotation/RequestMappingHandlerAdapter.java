@@ -152,6 +152,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 
 	private List<Object> requestResponseBodyAdvice = new ArrayList<>();
 
+	/** web绑定初始化器，用于参数解析式，初始化数据绑定工厂，以及工厂初始化绑定器的时候用 by mayh*/
 	@Nullable
 	private WebBindingInitializer webBindingInitializer;
 
@@ -649,20 +650,33 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 
 		// 基于注解的解析器
 		// Annotation-based argument resolution
+		/** RequestParam注解参数解析器，解析带@RequestParam注解的参数 不带注解的简单对象不做为注解解析 by mayh*/
 		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));
+		/** 无名map解析器 by mayh*/
 		resolvers.add(new RequestParamMapMethodArgumentResolver());
+		/** 路径遍历解析器 by mayh*/
 		resolvers.add(new PathVariableMethodArgumentResolver());
+		/** 路径遍历Map解析器 by mayh*/
 		resolvers.add(new PathVariableMapMethodArgumentResolver());
+		/** MatrixVariable注解解析器 by mayh*/
 		resolvers.add(new MatrixVariableMethodArgumentResolver());
 		resolvers.add(new MatrixVariableMapMethodArgumentResolver());
+		/** ModelAttribute注解解析器，没有注解的非简单对象不作为ModelAttribute注解解析 by mayh*/
 		resolvers.add(new ServletModelAttributeMethodProcessor(false));
+		/** RequestBody注解解析器 by mayh*/
 		resolvers.add(new RequestResponseBodyMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice));
+		/** RequestPart注解解析器 by mayh*/
 		resolvers.add(new RequestPartMethodArgumentResolver(getMessageConverters(), this.requestResponseBodyAdvice));
+		/** RequestHeader注解解析器 by mayh*/
 		resolvers.add(new RequestHeaderMethodArgumentResolver(getBeanFactory()));
 		resolvers.add(new RequestHeaderMapMethodArgumentResolver());
+		/** CookieValue 注解解析器 by mayh*/
 		resolvers.add(new ServletCookieValueMethodArgumentResolver(getBeanFactory()));
+		/** Value 注解解析器 by mayh*/
 		resolvers.add(new ExpressionValueMethodArgumentResolver(getBeanFactory()));
+		/** SessionAttribute 注解解析器 by mayh*/
 		resolvers.add(new SessionAttributeMethodArgumentResolver());
+		/** RequestAttribute 注解解析器 by mayh*/
 		resolvers.add(new RequestAttributeMethodArgumentResolver());
 
 		// 基于类型的解析器
@@ -683,14 +697,16 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		}
 
 		// Catch-all 兜底参数解析器
+		/** RequestParam注解参数解析器，解析带@RequestParam注解的参数 不带注解的简单对象做为注解解析 by mayh*/
 		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), true));
+		/** ModelAttribute注解解析器，没有注解的非简单对象作为ModelAttribute注解解析 by mayh*/
 		resolvers.add(new ServletModelAttributeMethodProcessor(true));
 
 		return resolvers;
 	}
 
 	/**
-	 * 获取绑定参数解析器
+	 * 获取绑定参数解析器 11个
 	 * Return the list of argument resolvers to use for {@code @InitBinder}
 	 * methods including built-in and custom resolvers.
 	 */
@@ -726,6 +742,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	}
 
 	/**
+	 * 14个或15个
 	 * 饭handler列表，包括内置的和自定义的（自定义通过setReturnValueHandlers方法设置）
 	 * Return the list of return value handlers to use including built-in and
 	 * custom handlers provided via {@link #setReturnValueHandlers}.
@@ -787,6 +804,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	}
 
 	/**
+	 * 调用invokeHandlerMethod方法并返回ModelAndView
 	 * 子类实现的自定义调用handler方法，返回ModelAndView，handlerMethod为包装Controller方法生成的HandlerMethod对象
 	 * @param request current HTTP request
 	 * @param response current HTTP response
@@ -821,6 +839,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			mav = invokeHandlerMethod(request, response, handlerMethod);
 		}
 
+		/** 处理缓存 by mayh*/
 		if (!response.containsHeader(HEADER_CACHE_CONTROL)) {
 			if (getSessionAttributesHandler(handlerMethod).hasSessionAttributes()) {
 				applyCacheSeconds(response, this.cacheSecondsForSessionAttributeHandlers);
@@ -922,12 +941,13 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 				invocableMethod = invocableMethod.wrapConcurrentResult(result);
 			}
 
-			//前置处理完成，调用方法，获取返回值
+			//前置处理完成，调用方法
 			invocableMethod.invokeAndHandle(webRequest, mavContainer);
 			if (asyncManager.isConcurrentHandlingStarted()) {
 				return null;
 			}
 
+			/** 获取ModelAndView by mayh*/
 			return getModelAndView(mavContainer, modelFactory, webRequest);
 		}
 		finally {

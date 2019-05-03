@@ -124,7 +124,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 		String name = ModelFactory.getNameForParameter(parameter);
 		/** 获取参数的ModelAttribute注解 by mayh*/
 		ModelAttribute ann = parameter.getParameterAnnotation(ModelAttribute.class);
-		/** 注解不为空，这进行绑定 by mayh*/
+		/** 注解不为空，进行绑定 by mayh*/
 		if (ann != null) {
 			mavContainer.setBinding(name, ann.binding());
 		}
@@ -162,7 +162,9 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 			// skipped in case of binding failure on construction.
 			WebDataBinder binder = binderFactory.createBinder(webRequest, attribute, name);
 			if (binder.getTarget() != null) {
+				/** name是不是被禁用绑定 by mayh*/
 				if (!mavContainer.isBindingDisabled(name)) {
+					/** 从请求绑定参数到对象 by mayh*/
 					bindRequestParameters(binder, webRequest);
 				}
 				validateIfApplicable(binder, parameter);
@@ -238,7 +240,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 				}
 			}
 		}
-
+		/** 从request解析出构造方法所需的所有参数，并初始化对象 by mayh*/
 		Object attribute = constructAttribute(ctor, attributeName, binderFactory, webRequest);
 		if (parameter != nestedParameter) {
 			attribute = Optional.of(attribute);
@@ -327,6 +329,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 	}
 
 	/**
+	 * 将请求绑定到目标对象的扩展点。
 	 * Extension point to bind the request to the target object.
 	 * @param binder the data binder instance to use for the binding
 	 * @param request the current request

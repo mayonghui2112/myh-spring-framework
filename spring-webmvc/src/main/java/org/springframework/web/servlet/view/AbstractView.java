@@ -296,8 +296,8 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 
 
 	/**
-	 * Prepares the view given the specified model, merging it with static
-	 * attributes and a RequestContext attribute, if necessary.
+	 * 准备给定指定模型的视图，如果需要，将其与静态属性和RequestContext属性合并。
+	 * Prepares the view given the specified model, merging it with static attributes and a RequestContext attribute, if necessary.
 	 * Delegates to renderMergedOutputModel for the actual rendering.
 	 * @see #renderMergedOutputModel
 	 */
@@ -311,6 +311,7 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 		}
 
 		Map<String, Object> mergedModel = createMergedOutputModel(model, request, response);
+		/** 处理response by mayh*/
 		prepareResponse(request, response);
 		renderMergedOutputModel(mergedModel, getRequestToExpose(request), response);
 	}
@@ -373,6 +374,7 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	 * @param response current HTTP response
 	 */
 	protected void prepareResponse(HttpServletRequest request, HttpServletResponse response) {
+		/** 返回此视图是否生成下载内容 by mayh*/
 		if (generatesDownloadContent()) {
 			response.setHeader("Pragma", "private");
 			response.setHeader("Cache-Control", "private, must-revalidate");
@@ -380,6 +382,7 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	}
 
 	/**
+	 * 返回此视图是否生成下载内容
 	 * Return whether this view generates download content
 	 * (typically binary content like PDF or Excel files).
 	 * <p>The default implementation returns {@code false}. Subclasses are

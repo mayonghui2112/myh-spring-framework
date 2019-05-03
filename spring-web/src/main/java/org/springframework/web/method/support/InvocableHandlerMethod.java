@@ -151,15 +151,16 @@ public class InvocableHandlerMethod extends HandlerMethod {
 	private Object[] getMethodArgumentValues(NativeWebRequest request, @Nullable ModelAndViewContainer mavContainer,
 			Object... providedArgs) throws Exception {
 
-		//获取参数对象
+		//获取参数对象 MethodParameter
 		MethodParameter[] parameters = getMethodParameters();
+		/** 参数值组合 by mayh*/
 		Object[] args = new Object[parameters.length];
 		//遍历参数
 		for (int i = 0; i < parameters.length; i++) {
 			MethodParameter parameter = parameters[i];
 			//设置参数名字解析类
 			parameter.initParameterNameDiscovery(this.parameterNameDiscoverer);
-			//尝试从提供的参数值列表中解析方法参数。
+			//尝试从提供的参数值列表中解析方法参数。正常providedArgs为null
 			args[i] = resolveProvidedArgument(parameter, providedArgs);
 			if (args[i] != null) {
 				continue;

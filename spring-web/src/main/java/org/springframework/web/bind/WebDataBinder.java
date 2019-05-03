@@ -186,8 +186,8 @@ public class WebDataBinder extends DataBinder {
 
 
 	/**
-	 * This implementation performs a field default and marker check
-	 * before delegating to the superclass binding process.
+	 * 此实现在委托给超类绑定过程之前执行字段默认值和标记检查。
+	 * This implementation performs a field default and marker check before delegating to the superclass binding process.
 	 * @see #checkFieldDefaults
 	 * @see #checkFieldMarkers
 	 */
@@ -199,6 +199,8 @@ public class WebDataBinder extends DataBinder {
 	}
 
 	/**
+	 * 检查字段默认值的给定属性值，即以字段默认前缀开头的字段。
+	 * 字段默认值的存在表明，如果字段不存在，则应使用指定的值。
 	 * Check the given property values for field defaults,
 	 * i.e. for fields that start with the field default prefix.
 	 * <p>The existence of a field defaults indicates that the specified
@@ -223,6 +225,8 @@ public class WebDataBinder extends DataBinder {
 	}
 
 	/**
+	 * 检查字段标记的给定属性值，即以字段标记前缀开头的字段。
+	 * 字段标记的存在表明指定的字段存在于表单中。如果属性值不包含相应的字段值，则该字段将被视为空，并将被适当重置。
 	 * Check the given property values for field markers,
 	 * i.e. for fields that start with the field marker prefix.
 	 * <p>The existence of a field marker indicates that the specified

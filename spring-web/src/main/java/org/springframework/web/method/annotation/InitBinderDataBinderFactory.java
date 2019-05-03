@@ -75,9 +75,11 @@ public class InitBinderDataBinderFactory extends DefaultDataBinderFactory {
 	}
 
 	/**
-	 * Determine whether the given {@code @InitBinder} method should be used
-	 * to initialize the given {@link WebDataBinder} instance. By default we
-	 * check the specified attribute names in the annotation value, if any.
+	 * 确定是否应该使用给定的{@code @InitBinder}方法初始化给定的{@link WebDataBinder}实例。
+	 * 默认情况下，我们检查注释值中指定的属性名(如果有的话)。
+	 * 如果initbinder注解指定了参数名，则只解析特定参数，否则解析该类型的所有参数
+	 * Determine whether the given {@code @InitBinder} method should be used to initialize the given {@link WebDataBinder} instance.
+	 * By default we check the specified attribute names in the annotation value, if any.
 	 */
 	protected boolean isBinderMethodApplicable(HandlerMethod initBinderMethod, WebDataBinder dataBinder) {
 		InitBinder ann = initBinderMethod.getMethodAnnotation(InitBinder.class);

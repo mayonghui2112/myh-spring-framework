@@ -94,13 +94,14 @@ public class ServletInvocableHandlerMethod extends InvocableHandlerMethod {
 	 * configured {@link HandlerMethodReturnValueHandler}s.
 	 * @param webRequest the current request
 	 * @param mavContainer the ModelAndViewContainer for this request
-	 * @param providedArgs "given" arguments matched by type (not resolved)
+	 * @param providedArgs "given" arguments matched by type (not resolved) “给定”参数与类型匹配(未解析)
 	 */
 	public void invokeAndHandle(ServletWebRequest webRequest, ModelAndViewContainer mavContainer,
 			Object... providedArgs) throws Exception {
 
 		//方法调用获取返回值
 		Object returnValue = invokeForRequest(webRequest, mavContainer, providedArgs);
+		/** 设置相应状态 by mayh*/
 		setResponseStatus(webRequest);
 
 		if (returnValue == null) {
@@ -116,6 +117,7 @@ public class ServletInvocableHandlerMethod extends InvocableHandlerMethod {
 
 		mavContainer.setRequestHandled(false);
 		Assert.state(this.returnValueHandlers != null, "No return value handlers");
+		/** 处理返回值 by mayh*/
 		try {
 			this.returnValueHandlers.handleReturnValue(
 					returnValue, getReturnValueType(returnValue), mavContainer, webRequest);

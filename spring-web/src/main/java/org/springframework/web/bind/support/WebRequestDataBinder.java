@@ -90,6 +90,12 @@ public class WebRequestDataBinder extends WebDataBinder {
 
 
 	/**
+	 * 将给定请求的参数绑定到此绑定器的目标，在出现多部分请求时也绑定多部分文件。
+	 * 这个调用可以创建字段错误，表示基本的绑定错误，比如必需字段(代码“required”)，
+	 * 或者值和bean属性之间的类型不匹配(代码“typeMismatch”)。
+	 * 多部分文件是通过它们的参数名绑定的，就像普通的HTTP参数一样:
+	 * 将“uploadedFile”转换为“uploadedFile”bean属性，调用“setuploadfile”setter方法。
+	 * 多部分文件的目标属性类型可以是Part、MultipartFile、byte[]或String
 	 * Bind the parameters of the given request to this binder's target,
 	 * also binding multipart files in case of a multipart request.
 	 * <p>This call can create field errors, representing basic binding
@@ -108,7 +114,9 @@ public class WebRequestDataBinder extends WebDataBinder {
 	 * @see #bind(org.springframework.beans.PropertyValues)
 	 */
 	public void bind(WebRequest request) {
+		/** 根据Parameter参数创建MutablePropertyValues对象 by mayh*/
 		MutablePropertyValues mpvs = new MutablePropertyValues(request.getParameterMap());
+		/** 根据请求的不同，讲Multipart/Parts绑定到目标对象 by mayh*/
 		if (isMultipartRequest(request) && request instanceof NativeWebRequest) {
 			MultipartRequest multipartRequest = ((NativeWebRequest) request).getNativeRequest(MultipartRequest.class);
 			if (multipartRequest != null) {
@@ -121,6 +129,7 @@ public class WebRequestDataBinder extends WebDataBinder {
 				}
 			}
 		}
+		/** 讲parmeter绑定到目标对象 by mayh*/
 		doBind(mpvs);
 	}
 

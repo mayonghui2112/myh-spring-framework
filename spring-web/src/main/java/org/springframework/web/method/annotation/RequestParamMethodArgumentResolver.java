@@ -48,6 +48,13 @@ import org.springframework.web.multipart.support.MultipartResolutionDelegate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
+ * 解析用@RequestParam注释的方法参数、类型为MultipartFile的参数以及Spring的MultipartResolver抽象，
+ * 以及类型为javax.servlet.http.Part的参数。与Servlet 3.0多部分请求结合使用。
+ * 这个解析器还可以在默认解析模式下创建，
+ * 在这种模式中，没有@RequestParam注释的简单类型(int、long等)也被视为请求参数，请求参数名取方法参数名。
+ * 如果方法参数类型为Map，则使用注释中指定的名称解析请求参数字符串值。
+ * 然后，假设已经注册了合适的转换器或PropertyEditor，然后通过类型转换将值转换为映射。
+ * 或者，如果没有指定请求参数名，则使用RequestParamMapMethodArgumentResolver以映射的形式提供对所有请求参数的访问。
  * Resolves method arguments annotated with @{@link RequestParam}, arguments of
  * type {@link MultipartFile} in conjunction with Spring's {@link MultipartResolver}
  * abstraction, and arguments of type {@code javax.servlet.http.Part} in conjunction
@@ -111,6 +118,11 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 
 
 	/**
+	 * 支持：
+	 * @RequestParam 方法参数 排除不带名字的Map参数，不带名字的map由RequestParamMapMethodArgumentResolver解析
+	 * MultipartFile 类型，如果带@RequestPart注解，则不支持
+	 * Part类型参数，如果带@RequestPart注解，则不支持
+	 * 不带注解的简单类型
 	 * Supports the following:
 	 * <ul>
 	 * <li>@RequestParam-annotated method arguments.

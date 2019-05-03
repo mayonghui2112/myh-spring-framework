@@ -470,7 +470,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		if (logger.isDebugEnabled()) {
 			logger.debug("Creating instance of bean '" + beanName + "'");
 		}
-		//why？
+		//解析得到的bd并不一定处于可用状态，会将其转换为可用状态。
+		//比如解析设置class，处理method overrides.
 		RootBeanDefinition mbdToUse = mbd;
 
 		// Make sure bean class is actually resolved at this point, and
@@ -557,7 +558,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 		//如果fb中没有该对象
 		if (instanceWrapper == null) {
-			//用构造函数创建该对象的bean实例
+			//用构造函数创建该对象的bean实例，
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
 		//返回由该对象包装的bean实例。
@@ -1076,6 +1077,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					//执行InstantiationAwareBeanPostProcessor的befor方法
 					//第一个后置处理器
 //					执行后置处理器InstantiationAwareBeanPostProcessor的postProcessBeforeInstantiation方法，创建对象
+					//典型的应用 AbstractAutoProxyCreator，是否用代理创建对象
 					bean = applyBeanPostProcessorsBeforeInstantiation(targetType, beanName);
 					if (bean != null) {
 						//执行后置处理器InstantiationAwareBeanPostProcessor的after方法
@@ -1187,13 +1189,16 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		// Candidate constructors for autowiring?
 		//由后置处理器决定调用那个的构造方法
-		//第二个后置处理器执行 SmartInstantiationAwareBeanPostProcessor#determineCandidateConstructors
+		//第二个后置处理器
+		//执行 SmartInstantiationAwareBeanPostProcessor#determineCandidateConstructors
+		//获取所有可用的构造方法
 		Constructor<?>[] ctors = determineConstructorsFromBeanPostProcessors(beanClass, beanName);
 		//决定构造方法后，根据条件对构造方法自动装配，如果需要
+		//构造参数不为空，或者，构造函数自动装配，桌子
 		if (ctors != null || mbd.getResolvedAutowireMode() == AUTOWIRE_CONSTRUCTOR ||
 				mbd.hasConstructorArgumentValues() || !ObjectUtils.isEmpty(args))  {
 			//用构造方法实力话bean，并自动装配
-			return autowireConstructor(beanName, mbd, ctors, args);
+				return autowireConstructor(beanName, mbd, ctors, args);
 		}
 
 		// No special handling: simply use no-arg constructor.

@@ -1142,7 +1142,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 			//返回该对象包含的所有重写的方法。
 			Set<MethodOverride> overrides = getMethodOverrides().getOverrides();
 			synchronized (overrides) {
-				//遍历重写方法
+				//遍历重写方法，讲重写方法，设置Overloaded为true
 				for (MethodOverride mo : overrides) {
 					prepareMethodOverride(mo);
 				}
