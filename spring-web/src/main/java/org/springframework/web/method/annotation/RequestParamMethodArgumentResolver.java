@@ -161,21 +161,27 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 		HttpServletRequest servletRequest = request.getNativeRequest(HttpServletRequest.class);
 
 		if (servletRequest != null) {
+			//尝试根据名字从request获取multipart、part对象或其相关对象（数组，集合等），解析成功返回，不成功返回MultipartResolutionDelegate.UNRESOLVABLE
 			Object mpArg = MultipartResolutionDelegate.resolveMultipartArgument(name, parameter, servletRequest);
+			//不是MultipartResolutionDelegate.UNRESOLVABLE,说明解析成功，直接返回
 			if (mpArg != MultipartResolutionDelegate.UNRESOLVABLE) {
 				return mpArg;
 			}
 		}
 
+		//不是multipart、part对象，继续解析
 		Object arg = null;
 		MultipartRequest multipartRequest = request.getNativeRequest(MultipartRequest.class);
+		//尝试从request中请求得到MultipartFile对象或其数组
 		if (multipartRequest != null) {
 			List<MultipartFile> files = multipartRequest.getFiles(name);
 			if (!files.isEmpty()) {
 				arg = (files.size() == 1 ? files.get(0) : files);
 			}
 		}
+		//不是MultipartFile对象，继续解析
 		if (arg == null) {
+			//从request对parameter中获取对象，即为url？para=value；形式的参数
 			String[] paramValues = request.getParameterValues(name);
 			if (paramValues != null) {
 				arg = (paramValues.length == 1 ? paramValues[0] : paramValues);

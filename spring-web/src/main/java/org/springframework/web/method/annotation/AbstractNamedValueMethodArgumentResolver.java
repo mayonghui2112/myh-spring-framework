@@ -95,29 +95,41 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 	public final Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
 
+		//获取参数的注解，如果有，根据注解获取nameAndValue实例，没有，就直接构建一个nameAndValue实例，该动作由子类实现
+		// 根据ParameterNameDiscoverer的 parameterNameDiscoverer获取参数名称，有注解获取注解名字，没有获取参数的名字，获取不到报错
+		// 获取注解获取参数默认值，required，
+		// 根据获取的参数名字，默认值，required更新进入nameAndValue实例
 		NamedValueInfo namedValueInfo = getNamedValueInfo(parameter);
+		//获取参数类型
 		MethodParameter nestedParameter = parameter.nestedIfOptional();
 
+		//解析参数的名字，解析里面的占位符
 		Object resolvedName = resolveStringValue(namedValueInfo.name);
 		if (resolvedName == null) {
 			throw new IllegalArgumentException(
 					"Specified name must not resolve to null: [" + namedValueInfo.name + "]");
 		}
 
+		//获取得到参数的值，由子类实现
 		Object arg = resolveName(resolvedName.toString(), nestedParameter, webRequest);
+		//解析不到对象，
 		if (arg == null) {
+			//尝试用默认值
 			if (namedValueInfo.defaultValue != null) {
 				arg = resolveStringValue(namedValueInfo.defaultValue);
 			}
+			//没有默认值，required为true，且不是optional，调用子类的handleMissingValue，抛出对应的异常。
 			else if (namedValueInfo.required && !nestedParameter.isOptional()) {
 				handleMissingValue(namedValueInfo.name, nestedParameter, webRequest);
 			}
+			//其他情况，返回一个空值，如果是基本数据类型，抛出异常，否则返回null，boolean类型返回false
 			arg = handleNullValue(namedValueInfo.name, arg, nestedParameter.getNestedParameterType());
 		}
+		//如果是“”，使用defaultValue，解析里面的占位符
 		else if ("".equals(arg) && namedValueInfo.defaultValue != null) {
 			arg = resolveStringValue(namedValueInfo.defaultValue);
 		}
-
+		//用WebDataBinder对象，将对象解析为参数对应的类型
 		if (binderFactory != null) {
 			WebDataBinder binder = binderFactory.createBinder(webRequest, null, namedValueInfo.name);
 			try {
