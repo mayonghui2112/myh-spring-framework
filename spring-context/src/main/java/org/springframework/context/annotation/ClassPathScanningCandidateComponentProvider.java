@@ -422,6 +422,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	private Set<BeanDefinition> scanCandidateComponents(String basePackage) {
 		Set<BeanDefinition> candidates = new LinkedHashSet<>();
 		try {
+			//初始化扫描路径为：classpath:/cn/net/may/**/*.class
 			String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
 					resolveBasePackage(basePackage) + '/' + this.resourcePattern;
 			//获取路径下的所有资源文件
@@ -435,14 +436,19 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 				if (resource.isReadable()) {
 					try {
 						//根据resource获取metadataReader
-						//metadataReader有source文件的字节数组对象，用asm解析得到的注解对象
+						//metadataReader有source文件的字节数组对象，用asm解析得到的注解对象，用于访问类元数据的简单外观，如ASM类阅读器所读取的内容。
 						MetadataReader metadataReader = getMetadataReaderFactory().getMetadataReader(resource);
 						//isCandidateComponent(metadataReader)遍历excludeFilters和includeFilters，
 						// 根据过滤器过滤掉判断是否是候选类，excludeFilter匹配且includdeFilter匹配
 						if (isCandidateComponent(metadataReader)) {
+							//根据metadataReader初始化一个ScannedGenericBeanDefinition，
+							// metadataReader会获取类的所有注解的元数据，包括类和方法的注解元数据
+							//metadataReader会获取类名（不确定是不是全限定名），
+							//然后根据注解元数据和类名构造一个ScannedGenericBeanDefinition对象
 							ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
 							sbd.setResource(resource);
 							sbd.setSource(resource);
+							//mayh-question？
 							if (isCandidateComponent(sbd)) {
 								if (debugEnabled) {
 									logger.debug("Identified candidate component class: " + resource);
