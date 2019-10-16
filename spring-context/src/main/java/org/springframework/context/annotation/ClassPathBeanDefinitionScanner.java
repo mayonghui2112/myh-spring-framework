@@ -270,13 +270,16 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 */
 	protected Set<BeanDefinitionHolder> doScan(String... basePackages) {
 		Assert.notEmpty(basePackages, "At least one base package must be specified");
-		//bdh集合Set
+		//bd集合Set
 		Set<BeanDefinitionHolder> beanDefinitions = new LinkedHashSet<>();
 		//遍历路径
 		for (String basePackage : basePackages) {
 			//扫描一个路径下的所有类，过滤掉config类和不交给spring管理的类后，返回其他类的bd的set集合
+			//此次扫描的到bd只是一个ScannedGenericBeanDefinition，值存储由所有注解信息，类名，resource和source。
+			//其中resource和source都指向根据class文件得到的resource对象。还没有具体解析
 			Set<BeanDefinition> candidates = findCandidateComponents(basePackage);
 			//遍历每一个BeanDefinition，设置相应属性后，添加到beanDefinitions，注册进入bdMap
+			//解析每个读取的bd
 			for (BeanDefinition candidate : candidates) {
 				//设置Scope
 				ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate);

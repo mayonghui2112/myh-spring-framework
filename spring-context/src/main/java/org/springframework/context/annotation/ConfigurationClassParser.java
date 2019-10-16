@@ -326,6 +326,7 @@ class ConfigurationClassParser {
 					}
 					//ConfigurationClassUtils.checkConfigurationClassCandidate(bdCand, this.metadataReaderFactory)方法
 					//判断是否加了@configuration/@Bean/@Component/@ComponentScan/@Import/@ImportResource注解，如果有，则递归解析
+					//为什么还要扫描@Component注解类，个人理解，是为了扫描其父类
 					if (ConfigurationClassUtils.checkConfigurationClassCandidate(bdCand, this.metadataReaderFactory)) {
 						parse(bdCand.getBeanClassName(), holder.getBeanName());
 					}
@@ -339,17 +340,18 @@ class ConfigurationClassParser {
 		具体参看EnableLoadTimeWeaving注解
 		例如configClass有两个注解，@import(a)和@test
 
-		@import(a)
+		@import(b)
 		@test
 		public class configClass{}
 
 		其中@test在定义的时候被@import(b)注解，
 
 		@import(a)
-		public @interface teest{}
+		public @interface test{}
 
 		那么getImports(configClass)会返回{a,b}集合
-		processImports处理configClass上的所有被import注解导入的类（a，b）*/
+		processImports处理configClass上的所有被import注解导入的类（a，b）
+		此时import导入的类还没有被注册进入bd容器*/
 		processImports(configClass, sourceClass, getImports(sourceClass), true);
 
 
@@ -358,9 +360,12 @@ class ConfigurationClassParser {
 		AnnotationAttributes importResource =
 				AnnotationConfigUtils.attributesFor(sourceClass.getMetadata(), ImportResource.class);
 		if (importResource != null) {
+			//获取所有的资源定位
 			String[] resources = importResource.getStringArray("locations");
+			//获取自定义的bd读取器
 			Class<? extends BeanDefinitionReader> readerClass = importResource.getClass("reader");
 			for (String resource : resources) {
+				//解析其中的占位符
 				String resolvedResource = this.environment.resolveRequiredPlaceholders(resource);
 				//把reader配置的class添加进configurationClass的importedResources
 				configClass.addImportedResource(resolvedResource, readerClass);

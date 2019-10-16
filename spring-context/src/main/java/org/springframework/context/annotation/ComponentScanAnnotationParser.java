@@ -76,7 +76,8 @@ class ComponentScanAnnotationParser {
 	 * @param declaringClass 要过滤掉的类的全路径
 	 */
 	public Set<BeanDefinitionHolder> parse(AnnotationAttributes componentScan, final String declaringClass) {
-		//new一个扫描器，useDefaultFilters是否使用默认的过滤器，默认为true，所以设置类三个默认的includeFilter过滤器
+		//根据componentScan注解和注册器创建一个扫描器
+		// new一个扫描器，useDefaultFilters是否使用默认的过滤器，默认为true，所以设置类三个默认的includeFilter过滤器
 		ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(this.registry,
 				componentScan.getBoolean("useDefaultFilters"), this.environment, this.resourceLoader);
 
@@ -86,20 +87,23 @@ class ComponentScanAnnotationParser {
 		//把beanName生成器设置进扫描器
 		scanner.setBeanNameGenerator(useInheritedGenerator ? this.beanNameGenerator :
 				BeanUtils.instantiateClass(generatorClass));
-		//获得扫描注解的代理方式
+		//获得componentScan注解的代理方式
 		ScopedProxyMode scopedProxyMode = componentScan.getEnum("scopedProxy");
+		//如果扫描注解不是默认代理，则将代理方式设置进入扫描器
 		if (scopedProxyMode != ScopedProxyMode.DEFAULT) {
 			scanner.setScopedProxyMode(scopedProxyMode);
 		}
+		//如果是默认的代理模式，则在扫描器内设置用于解决bean定义范围的策略接口ScopeMetadataResolver。
+		//注解扫描默认的是AnnotationScopeMetadataResolver。
 		else {
 			Class<? extends ScopeMetadataResolver> resolverClass = componentScan.getClass("scopeResolver");
 			scanner.setScopeMetadataResolver(BeanUtils.instantiateClass(resolverClass));
 		}
 
-		//resourcePattern的值将附加到每个基本包名。
+		//resourcePattern的值将附加到每个基本包名。默认是**/*.class。
 		scanner.setResourcePattern(componentScan.getString("resourcePattern"));
 
-		//在扫描器中添加IncludeFilter
+		//在扫描器中添加 IncludeFilter
 		//componentScan.getAnnotationArray("includeFilters")获取@componentScan注解中的includeFilters属性过滤器
 		for (AnnotationAttributes filter : componentScan.getAnnotationArray("includeFilters")) {
 			for (TypeFilter typeFilter : typeFiltersFor(filter)) {
@@ -113,7 +117,7 @@ class ComponentScanAnnotationParser {
 				scanner.addExcludeFilter(typeFilter);
 			}
 		}
-		//获取@ComponentScan的lazy值，得到扫描得到的类需不需要懒加载，默认false，如果为true，则更新扫描器的默认bd属性值，在扫描得到bd是进行设置
+		//获取@ComponentScan的lazy值，得到扫描得到的类需不需要懒加载，默认false，如果为true，则更新扫描器的默认bd属性值，在扫描得到bd里进行设置
 		boolean lazyInit = componentScan.getBoolean("lazyInit");
 		if (lazyInit) {
 			scanner.getBeanDefinitionDefaults().setLazyInit(true);
@@ -122,17 +126,20 @@ class ComponentScanAnnotationParser {
 		Set<String> basePackages = new LinkedHashSet<>();
 		String[] basePackagesArray = componentScan.getStringArray("basePackages");
 		for (String pkg : basePackagesArray) {
+			//将每个pkg里面的字符串根据",; \t\n"进行分割，得到设置的所有包名
 			String[] tokenized = StringUtils.tokenizeToStringArray(this.environment.resolvePlaceholders(pkg),
 					ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
 			Collections.addAll(basePackages, tokenized);
 		}
+		//获取componentScan设置的basePackageClasses类全限定名，将它的所在包作为basePackages加入待扫描路径
 		for (Class<?> clazz : componentScan.getClassArray("basePackageClasses")) {
 			basePackages.add(ClassUtils.getPackageName(clazz));
 		}
+		//如果没有设置待扫描路径，经配置类所在包作为扫描路径
 		if (basePackages.isEmpty()) {
 			basePackages.add(ClassUtils.getPackageName(declaringClass));
 		}
-		//设置一个路径过滤器，用来过滤declaringClass传过来的路径，declaringClass为此次解析的@component注解的类，即appconfig
+		//设置一个路径过滤器，用来过滤declaringClass类，declaringClass为此次解析的@componentScan的配置类，即appconfig
 		scanner.addExcludeFilter(new AbstractTypeHierarchyTraversingFilter(false, false) {
 			@Override
 			protected boolean matchClassName(String className) {

@@ -124,12 +124,19 @@ public class SimpleApplicationEventMulticaster extends AbstractApplicationEventM
 
 	@Override
 	public void multicastEvent(ApplicationEvent event) {
+		//根据event的类型获取一个ResolvableType对象作为参数传递过去
+		//ResolvableType封装了{@link java.lang.reflect.Type}对象，用于反射。
 		multicastEvent(event, resolveDefaultEventType(event));
 	}
 
 	@Override
 	public void multicastEvent(final ApplicationEvent event, @Nullable ResolvableType eventType) {
+		//解析event类型
 		ResolvableType type = (eventType != null ? eventType : resolveDefaultEventType(event));
+		//获取所有的默认的该事件按对应的监听器，遍历调用
+		//默认的有
+		// ConfigFileApplicationListener
+
 		for (final ApplicationListener<?> listener : getApplicationListeners(event, type)) {
 			Executor executor = getTaskExecutor();
 			if (executor != null) {

@@ -48,7 +48,7 @@ import org.springframework.util.Assert;
 @SuppressWarnings("serial")
 public class ScannedGenericBeanDefinition extends GenericBeanDefinition implements AnnotatedBeanDefinition {
 
-	/** 注解属性，或者扫描得到的AnnotationMetadataReadingVisitor对象 by mayh*/
+	/** 类的完整注释元数据，包括带注释的方法的元数据。 by mayh*/
 	private final AnnotationMetadata metadata;
 
 
