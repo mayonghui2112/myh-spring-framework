@@ -1,0 +1,11 @@
+2020-05-20 18:03:18.125 [main] INFO  o.s.context.support.ClassPathXmlApplicationContext - Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@6b26e945: startup date [Wed May 20 18:03:18 CST 2020]; root of context hierarchy
+2020-05-20 18:07:38.584 [main] INFO  o.s.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [services.xml]
+2020-05-20 18:47:17.547 [main] INFO  o.s.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [daos.xml]
+2020-05-20 19:12:49.307 [main] INFO  o.s.c.a.AnnotationConfigApplicationContext - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@25d250c6: startup date [Wed May 20 19:12:49 CST 2020]; root of context hierarchy
+2020-05-20 19:12:50.322 [main] DEBUG o.s.c.support.PostProcessorRegistrationDelegate - ConfigurationClassPostProcessor
+2020-05-20 19:12:51.096 [main] DEBUG o.s.c.support.PostProcessorRegistrationDelegate - ConfigurationClassPostProcessor
+2020-05-20 19:43:26.431 [main] INFO  o.s.c.a.AnnotationConfigApplicationContext - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@25d250c6: startup date [Wed May 20 19:43:26 CST 2020]; root of context hierarchy
+2020-05-20 19:44:21.240 [main] DEBUG o.s.c.support.PostProcessorRegistrationDelegate - ConfigurationClassPostProcessor
+2020-05-20 19:44:21.426 [main] DEBUG o.s.c.support.PostProcessorRegistrationDelegate - ConfigurationClassPostProcessor
+2020-05-20 19:47:41.840 [main] INFO  o.s.c.a.AnnotationConfigApplicationContext - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@25d250c6: startup date [Wed May 20 19:47:40 CST 2020]; root of context hierarchy
+2020-05-20 19:54:09.467 [main] DEBUG o.s.c.support.PostProcessorRegistrationDelegate - ConfigurationClassPostProcessor

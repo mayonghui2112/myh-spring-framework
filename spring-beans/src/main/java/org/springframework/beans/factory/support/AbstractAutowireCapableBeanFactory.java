@@ -935,6 +935,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			for (BeanPostProcessor bp : getBeanPostProcessors()) {
 				if (bp instanceof SmartInstantiationAwareBeanPostProcessor) {
 					//第四次执行后置处理器 当需要把bean从singletonFactories中取出是，用SmartInstantiationAwareBeanPostProcessor的getEarlyBeanReference方法对齐进行处理
+					//aop代理处理在这里实现
 					SmartInstantiationAwareBeanPostProcessor ibp = (SmartInstantiationAwareBeanPostProcessor) bp;
 					exposedObject = ibp.getEarlyBeanReference(exposedObject, beanName);
 				}

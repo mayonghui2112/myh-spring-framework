@@ -896,6 +896,7 @@ public class GenericConversionServiceTests {
 
 	private static class StringToMyEnumInterfaceConverterFactory implements ConverterFactory<String, MyEnumInterface> {
 
+		@Override
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		public <T extends MyEnumInterface> Converter<String, T> getConverter(Class<T> targetType) {
 			return new StringToMyEnumInterfaceConverter(targetType);
@@ -923,6 +924,7 @@ public class GenericConversionServiceTests {
 
 	private static class StringToMyEnumBaseInterfaceConverterFactory implements ConverterFactory<String, MyEnumBaseInterface> {
 
+		@Override
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		public <T extends MyEnumBaseInterface> Converter<String, T> getConverter(Class<T> targetType) {
 			return new StringToMyEnumBaseInterfaceConverter(targetType);

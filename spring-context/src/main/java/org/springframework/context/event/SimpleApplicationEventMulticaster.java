@@ -133,7 +133,7 @@ public class SimpleApplicationEventMulticaster extends AbstractApplicationEventM
 	public void multicastEvent(final ApplicationEvent event, @Nullable ResolvableType eventType) {
 		//解析event类型
 		ResolvableType type = (eventType != null ? eventType : resolveDefaultEventType(event));
-		//获取所有的默认的该事件按对应的监听器，遍历调用
+		//获取所有的默认的该事件按对应的监听器，遍历Arrays调用
 		//默认的有
 		// ConfigFileApplicationListener
 

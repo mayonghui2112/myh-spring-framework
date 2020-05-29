@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>java.nio</OriginalElement>
+  <nodes>
+    <node x="553.0" y="182.0">java.nio.ByteBufferAsCharBufferL</node>
+    <node x="3493.0" y="263.0">java.nio.ByteBufferAsIntBufferRL</node>
+    <node x="2114.0" y="263.0">java.nio.ByteBufferAsDoubleBufferRB</node>
+    <node x="4620.0" y="263.0">java.nio.ByteBufferAsLongBufferRB</node>
+    <node x="6134.0" y="182.0">java.nio.ByteBufferAsFloatBufferL</node>
+    <node x="5753.5" y="91.0">java.nio.FloatBuffer</node>
+    <node x="2533.0" y="263.0">java.nio.ByteBufferAsDoubleBufferRL</node>
+    <node x="5206.0" y="263.0">java.nio.HeapLongBufferR</node>
+    <node x="3160.0" y="263.0">java.nio.DirectByteBuffer</node>
+    <node x="938.0" y="420.0">java.nio.CharBufferSpliterator</node>
+    <node x="1659.0" y="420.0">java.nio.file</node>
+    <node x="3263.7403153153164" y="91.0">java.nio.ByteBuffer</node>
+    <node x="1757.9999999999998" y="263.0">java.nio.DirectShortBufferRS</node>
+    <node x="1572.9999999999998" y="263.0">java.nio.DirectShortBufferRU</node>
+    <node x="5913.0" y="182.0">java.nio.ByteBufferAsFloatBufferB</node>
+    <node x="767.0" y="263.0">java.nio.DirectCharBufferRS</node>
+    <node x="3892.5" y="91.0">java.nio.IntBuffer</node>
+    <node x="1944.9999999999998" y="182.0">java.nio.HeapShortBuffer</node>
+    <node x="333.0" y="182.0">java.nio.ByteBufferAsCharBufferB</node>
+    <node x="946.0" y="263.0">java.nio.DirectCharBufferRU</node>
+    <node x="4400.0" y="263.0">java.nio.ByteBufferAsLongBufferRL</node>
+    <node x="720.0" y="420.0">java.nio.InvalidMarkException</node>
+    <node x="5909.0" y="263.0">java.nio.ByteBufferAsFloatBufferRB</node>
+    <node x="1131.0" y="182.0">java.nio.ByteBufferAsShortBufferL</node>
+    <node x="483.5" y="91.0">java.nio.CharBuffer</node>
+    <node x="2960.0" y="263.0">java.nio.DirectDoubleBufferRU</node>
+    <node x="2766.0" y="263.0">java.nio.DirectDoubleBufferRS</node>
+    <node x="4247.0" y="182.0">java.nio.HeapIntBuffer</node>
+    <node x="2349.0" y="263.0">java.nio.HeapDoubleBufferR</node>
+    <node x="1506.0" y="420.0">java.nio.ByteOrder</node>
+    <node x="1352.9999999999998" y="182.0">java.nio.ByteBufferAsShortBufferB</node>
+    <node x="4035.0" y="263.0">java.nio.ByteBufferAsIntBufferRB</node>
+    <node x="6130.0" y="263.0">java.nio.ByteBufferAsFloatBufferRL</node>
+    <node x="5551.0" y="182.0">java.nio.DirectFloatBufferU</node>
+    <node x="160.0" y="263.0">java.nio.HeapCharBufferR</node>
+    <node x="484.0" y="420.0">java.nio.BufferOverflowException</node>
+    <node x="1127.0" y="263.0">java.nio.ByteBufferAsShortBufferRL</node>
+    <node x="5377.0" y="263.0">java.nio.HeapFloatBufferR</node>
+    <node x="1598.4999999999998" y="91.0">java.nio.ShortBuffer</node>
+    <node x="5733.0" y="182.0">java.nio.DirectFloatBufferS</node>
+    <node x="1154.0" y="420.0">java.nio.channels</node>
+    <node x="4624.0" y="182.0">java.nio.ByteBufferAsLongBufferB</node>
+    <node x="549.0" y="263.0">java.nio.ByteBufferAsCharBufferRL</node>
+    <node x="1334.0" y="420.0">java.nio.charset</node>
+    <node x="5547.0" y="263.0">java.nio.DirectFloatBufferRU</node>
+    <node x="5729.0" y="263.0">java.nio.DirectFloatBufferRS</node>
+    <node x="3497.0" y="182.0">java.nio.ByteBufferAsIntBufferL</node>
+    <node x="0.0" y="182.0">java.nio.StringCharBuffer</node>
+    <node x="2118.0" y="182.0">java.nio.ByteBufferAsDoubleBufferB</node>
+    <node x="5210.0" y="182.0">java.nio.HeapLongBuffer</node>
+    <node x="3156.0" y="344.0">java.nio.DirectByteBufferR</node>
+    <node x="1806.0" y="420.0">java.nio.Bits</node>
+    <node x="3273.75" y="0.0">java.nio.Buffer</node>
+    <node x="329.0" y="263.0">java.nio.ByteBufferAsCharBufferRB</node>
+    <node x="5381.0" y="182.0">java.nio.HeapFloatBuffer</node>
+    <node x="1348.9999999999998" y="263.0">java.nio.ByteBufferAsShortBufferRB</node>
+    <node x="4039.0" y="182.0">java.nio.ByteBufferAsIntBufferB</node>
+    <node x="4404.0" y="182.0">java.nio.ByteBufferAsLongBufferL</node>
+    <node x="2537.0" y="182.0">java.nio.ByteBufferAsDoubleBufferL</node>
+    <node x="3699.0" y="263.0">java.nio.DirectIntBufferRU</node>
+    <node x="2964.0" y="182.0">java.nio.DirectDoubleBufferU</node>
+    <node x="1576.9999999999998" y="182.0">java.nio.DirectShortBufferU</node>
+    <node x="3868.0" y="263.0">java.nio.DirectIntBufferRS</node>
+    <node x="771.0" y="182.0">java.nio.DirectCharBufferS</node>
+    <node x="1940.9999999999998" y="263.0">java.nio.HeapShortBufferR</node>
+    <node x="2770.0" y="182.0">java.nio.DirectDoubleBufferS</node>
+    <node x="2577.0" y="91.0">java.nio.DoubleBuffer</node>
+    <node x="3326.0" y="263.0">java.nio.HeapByteBufferR</node>
+    <node x="4846.0" y="182.0">java.nio.DirectLongBufferU</node>
+    <node x="1761.9999999999998" y="182.0">java.nio.DirectShortBufferS</node>
+    <node x="5029.0" y="182.0">java.nio.DirectLongBufferS</node>
+    <node x="0.0" y="420.0">java.nio.BufferUnderflowException</node>
+    <node x="2353.0" y="182.0">java.nio.HeapDoubleBuffer</node>
+    <node x="4842.0" y="263.0">java.nio.DirectLongBufferRU</node>
+    <node x="5025.0" y="263.0">java.nio.DirectLongBufferRS</node>
+    <node x="3703.0" y="182.0">java.nio.DirectIntBufferU</node>
+    <node x="164.0" y="182.0">java.nio.HeapCharBuffer</node>
+    <node x="3872.0" y="182.0">java.nio.DirectIntBufferS</node>
+    <node x="3330.0" y="182.0">java.nio.HeapByteBuffer</node>
+    <node x="4867.5" y="91.0">java.nio.LongBuffer</node>
+    <node x="4243.0" y="263.0">java.nio.HeapIntBufferR</node>
+    <node x="950.0" y="182.0">java.nio.DirectCharBufferU</node>
+    <node x="244.0" y="420.0">java.nio.ReadOnlyBufferException</node>
+    <node x="3152.0" y="182.0">java.nio.MappedByteBuffer</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="java.nio.HeapShortBuffer" target="java.nio.ShortBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="2017.4999999999998" y="152.0" />
+      <point x="1701.1000000000001" y="152.0" />
+      <point x="45.600000000000364" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectFloatBufferS" target="java.nio.FloatBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectByteBuffer" target="java.nio.MappedByteBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.HeapIntBuffer" target="java.nio.IntBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="4311.5" y="152.0" />
+      <point x="3980.7" y="152.0" />
+      <point x="39.19999999999982" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsShortBufferL" target="java.nio.ShortBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="1228.0" y="152.0" />
+      <point x="1609.8999999999994" y="152.0" />
+      <point x="-45.600000000000364" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsCharBufferRL" target="java.nio.ByteBufferAsCharBufferL">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.FloatBuffer" target="java.nio.Buffer">
+      <point x="0.0" y="-15.5" />
+      <point x="5809.0" y="51.0" />
+      <point x="3350.8214285714284" y="51.0" />
+      <point x="35.57142857142844" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectShortBufferS" target="java.nio.ShortBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="1839.4999999999998" y="162.0" />
+      <point x="1678.3" y="162.0" />
+      <point x="22.800000000000182" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectDoubleBufferRS" target="java.nio.DirectDoubleBufferS">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectFloatBufferRU" target="java.nio.DirectFloatBufferU">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectCharBufferRS" target="java.nio.DirectCharBufferS">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsLongBufferB" target="java.nio.LongBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="4721.0" y="162.0" />
+      <point x="4901.099999999999" y="162.0" />
+      <point x="-22.40000000000009" y="15.5" />
+    </edge>
+    <edge source="java.nio.HeapCharBuffer" target="java.nio.CharBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="234.5" y="152.0" />
+      <point x="511.0" y="152.0" />
+      <point x="-27.5" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsShortBufferRB" target="java.nio.ByteBufferAsShortBufferB">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.IntBuffer" target="java.nio.Buffer">
+      <point x="0.0" y="-15.5" />
+      <point x="3941.5" y="71.0" />
+      <point x="3327.107142857142" y="71.0" />
+      <point x="11.857142857142662" y="15.5" />
+    </edge>
+    <edge source="java.nio.DoubleBuffer" target="java.nio.Buffer">
+      <point x="0.0" y="-15.5" />
+      <point x="2639.5" y="71.0" />
+      <point x="3303.392857142857" y="71.0" />
+      <point x="-11.857142857142662" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectCharBufferS" target="java.nio.CharBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="846.5" y="152.0" />
+      <point x="566.0" y="152.0" />
+      <point x="27.5" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectIntBufferRU" target="java.nio.DirectIntBufferU">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsFloatBufferL" target="java.nio.FloatBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="6229.5" y="152.0" />
+      <point x="5853.4" y="152.0" />
+      <point x="44.39999999999998" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectLongBufferRS" target="java.nio.DirectLongBufferS">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectIntBufferS" target="java.nio.IntBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.HeapCharBufferR" target="java.nio.HeapCharBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectLongBufferS" target="java.nio.LongBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="5105.5" y="162.0" />
+      <point x="4945.9" y="162.0" />
+      <point x="22.40000000000009" y="15.5" />
+    </edge>
+    <edge source="java.nio.CharBuffer" target="java.nio.Buffer">
+      <point x="0.0" y="-15.5" />
+      <point x="538.5" y="51.0" />
+      <point x="3279.6785714285716" y="51.0" />
+      <point x="-35.57142857142844" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsDoubleBufferRB" target="java.nio.ByteBufferAsDoubleBufferB">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.HeapFloatBuffer" target="java.nio.FloatBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="5452.0" y="152.0" />
+      <point x="5764.6" y="152.0" />
+      <point x="-44.39999999999998" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsIntBufferB" target="java.nio.IntBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="4129.0" y="162.0" />
+      <point x="3961.0999999999995" y="162.0" />
+      <point x="19.59999999999991" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsIntBufferRL" target="java.nio.ByteBufferAsIntBufferL">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsLongBufferRL" target="java.nio.ByteBufferAsLongBufferL">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.HeapDoubleBufferR" target="java.nio.HeapDoubleBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsFloatBufferRL" target="java.nio.ByteBufferAsFloatBufferL">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectDoubleBufferU" target="java.nio.DoubleBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="3048.0" y="152.0" />
+      <point x="2689.5" y="152.0" />
+      <point x="50.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.MappedByteBuffer" target="java.nio.ByteBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="3231.0" y="162.0" />
+      <point x="3290.7403153153164" y="162.0" />
+      <point x="-27.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectShortBufferRU" target="java.nio.DirectShortBufferU">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsCharBufferL" target="java.nio.CharBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="648.0" y="162.0" />
+      <point x="547.666666666667" y="162.0" />
+      <point x="9.16666666666697" y="15.5" />
+    </edge>
+    <edge source="java.nio.HeapIntBufferR" target="java.nio.HeapIntBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.HeapDoubleBuffer" target="java.nio.DoubleBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="2431.0" y="162.0" />
+      <point x="2614.5" y="162.0" />
+      <point x="-25.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.HeapShortBufferR" target="java.nio.HeapShortBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsCharBufferRB" target="java.nio.ByteBufferAsCharBufferB">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectShortBufferU" target="java.nio.ShortBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsLongBufferL" target="java.nio.LongBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="4500.0" y="152.0" />
+      <point x="4878.7" y="152.0" />
+      <point x="-44.799999999999955" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectByteBufferR" target="java.nio.DirectByteBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsDoubleBufferB" target="java.nio.DoubleBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="2221.5" y="152.0" />
+      <point x="2589.5" y="152.0" />
+      <point x="-50.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.HeapLongBufferR" target="java.nio.HeapLongBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectDoubleBufferRU" target="java.nio.DirectDoubleBufferU">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectFloatBufferRS" target="java.nio.DirectFloatBufferS">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.LongBuffer" target="java.nio.Buffer">
+      <point x="0.0" y="-15.5" />
+      <point x="4923.5" y="61.0" />
+      <point x="3338.9642857142853" y="61.0" />
+      <point x="23.71428571428578" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectCharBufferRU" target="java.nio.DirectCharBufferU">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBuffer" target="java.nio.Buffer">
+      <point x="0.0" y="-15.5" />
+      <point x="3317.7403153153164" y="71.0" />
+      <point x="3315.25" y="71.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsShortBufferRL" target="java.nio.ByteBufferAsShortBufferL">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectFloatBufferU" target="java.nio.FloatBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="5628.0" y="162.0" />
+      <point x="5786.8" y="162.0" />
+      <point x="-22.19999999999999" y="15.5" />
+    </edge>
+    <edge source="java.nio.StringCharBuffer" target="java.nio.CharBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="72.0" y="142.0" />
+      <point x="492.66666666666697" y="142.0" />
+      <point x="-45.83333333333303" y="15.5" />
+    </edge>
+    <edge source="java.nio.HeapFloatBufferR" target="java.nio.HeapFloatBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsShortBufferB" target="java.nio.ShortBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="1450.9999999999998" y="162.0" />
+      <point x="1632.6999999999996" y="162.0" />
+      <point x="-22.800000000000182" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectCharBufferU" target="java.nio.CharBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="1026.5" y="142.0" />
+      <point x="584.333333333333" y="142.0" />
+      <point x="45.83333333333303" y="15.5" />
+    </edge>
+    <edge source="java.nio.HeapByteBuffer" target="java.nio.ByteBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="3399.5" y="162.0" />
+      <point x="3344.7403153153164" y="162.0" />
+      <point x="27.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectIntBufferRS" target="java.nio.DirectIntBufferS">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectLongBufferRU" target="java.nio.DirectLongBufferU">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsCharBufferB" target="java.nio.CharBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="429.0" y="162.0" />
+      <point x="529.333333333333" y="162.0" />
+      <point x="-9.16666666666697" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectIntBufferU" target="java.nio.IntBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="3773.5" y="162.0" />
+      <point x="3921.8999999999996" y="162.0" />
+      <point x="-19.59999999999991" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsIntBufferL" target="java.nio.IntBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="3586.0" y="152.0" />
+      <point x="3902.3" y="152.0" />
+      <point x="-39.19999999999982" y="15.5" />
+    </edge>
+    <edge source="java.nio.ShortBuffer" target="java.nio.Buffer">
+      <point x="0.0" y="-15.5" />
+      <point x="1655.4999999999998" y="61.0" />
+      <point x="3291.5357142857138" y="61.0" />
+      <point x="-23.71428571428578" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsDoubleBufferRL" target="java.nio.ByteBufferAsDoubleBufferL">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsDoubleBufferL" target="java.nio.DoubleBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectLongBufferU" target="java.nio.LongBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.HeapByteBufferR" target="java.nio.HeapByteBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsFloatBufferB" target="java.nio.FloatBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="6009.5" y="162.0" />
+      <point x="5831.2" y="162.0" />
+      <point x="22.200000000000045" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsIntBufferRB" target="java.nio.ByteBufferAsIntBufferB">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.HeapLongBuffer" target="java.nio.LongBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="5281.5" y="152.0" />
+      <point x="4968.299999999999" y="152.0" />
+      <point x="44.799999999999955" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsLongBufferRB" target="java.nio.ByteBufferAsLongBufferB">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.ByteBufferAsFloatBufferRB" target="java.nio.ByteBufferAsFloatBufferB">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectShortBufferRS" target="java.nio.DirectShortBufferS">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="java.nio.DirectDoubleBufferS" target="java.nio.DoubleBuffer">
+      <point x="0.0" y="-15.5" />
+      <point x="2853.0" y="162.0" />
+      <point x="2664.5" y="162.0" />
+      <point x="25.0" y="15.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0050716648291067" x="3001.2667836770515" y="130.144428158575" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>Non-Project Files</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

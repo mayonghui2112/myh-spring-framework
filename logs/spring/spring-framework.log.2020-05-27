@@ -1,0 +1,21 @@
+2020-05-27 02:13:59.248 [main] INFO  o.s.context.support.ClassPathXmlApplicationContext - Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@6b26e945: startup date [Wed May 27 02:13:59 CST 2020]; root of context hierarchy
+2020-05-27 02:14:07.356 [main] INFO  o.s.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [services.xml]
+2020-05-27 02:14:08.347 [main] INFO  o.s.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [daos.xml]
+2020-05-27 22:42:01.835 [main] INFO  o.s.context.support.ClassPathXmlApplicationContext - Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@6b26e945: startup date [Wed May 27 22:42:01 CST 2020]; root of context hierarchy
+2020-05-27 22:42:02.726 [main] INFO  o.s.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [services.xml]
+2020-05-27 22:42:03.087 [main] INFO  o.s.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [daos.xml]
+2020-05-27 22:42:52.416 [main] INFO  o.s.context.support.ClassPathXmlApplicationContext - Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@6b26e945: startup date [Wed May 27 22:42:52 CST 2020]; root of context hierarchy
+2020-05-27 22:42:52.555 [main] INFO  o.s.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [services.xml]
+2020-05-27 22:42:52.696 [main] INFO  o.s.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [daos.xml]
+2020-05-27 22:43:19.395 [main] INFO  o.s.context.support.ClassPathXmlApplicationContext - Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@6b26e945: startup date [Wed May 27 22:43:19 CST 2020]; root of context hierarchy
+2020-05-27 22:43:59.868 [main] INFO  o.s.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [services.xml]
+2020-05-27 22:44:00.496 [main] INFO  o.s.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [daos.xml]
+2020-05-27 23:00:40.735 [main] INFO  o.s.context.support.ClassPathXmlApplicationContext - Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@6b26e945: startup date [Wed May 27 23:00:40 CST 2020]; root of context hierarchy
+2020-05-27 23:02:18.823 [main] INFO  o.s.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [services.xml]
+2020-05-27 23:02:18.927 [main] INFO  o.s.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [daos.xml]
+2020-05-27 23:28:12.759 [main] INFO  o.s.context.support.ClassPathXmlApplicationContext - Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@6b26e945: startup date [Wed May 27 23:28:12 CST 2020]; root of context hierarchy
+2020-05-27 23:28:52.921 [main] INFO  o.s.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [services.xml]
+2020-05-27 23:28:53.039 [main] INFO  o.s.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [daos.xml]
+2020-05-27 23:45:00.912 [main] INFO  o.s.context.support.ClassPathXmlApplicationContext - Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@6b26e945: startup date [Wed May 27 23:45:00 CST 2020]; root of context hierarchy
+2020-05-27 23:50:43.451 [main] INFO  o.s.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [services.xml]
+2020-05-27 23:50:43.560 [main] INFO  o.s.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [daos.xml]

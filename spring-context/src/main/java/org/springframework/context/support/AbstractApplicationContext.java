@@ -645,7 +645,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @see #getBeanFactory()
 	 */
 	protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
-		//刷新工厂
+		//创建并刷新工厂
 		refreshBeanFactory();
 		ConfigurableListableBeanFactory beanFactory = getBeanFactory();
 		if (logger.isDebugEnabled()) {
@@ -680,6 +680,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// 如果bean实现了MessageSourceAware接口，调用bean.setMessageSource
 		// 如果bean实现了ApplicationContextAware接口，调用bean.setApplicationContext
 		// Configure the bean factory with context callbacks.
+		//加入BeanPostProcessor--ApplicationContextAwareProcessor
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
 		//忽略下列接口列表的自动注入，即一个bean如果在属性中自动注入这些接口的实现类时，注入不进来，属性为null
 		//这些接口只能实现
@@ -707,6 +708,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// 是则加入当前的applicationContext的applicationListeners列表
 		//即将实现了ApplicationListener接口的Bean添加到容器的监听器列表。
 		// Register early post-processor for detecting inner beans as ApplicationListeners.
+		//加入BeanPostProcessor -- ApplicationListenerDetector
 		beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(this));
 
 		// 检查容器中是否包含名称为loadTimeWeaver的bean，实际上是增加Aspectj的支持
@@ -717,6 +719,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			// 添加BEAN后置处理器：LoadTimeWeaverAwareProcessor
 			// LoadTimeWeaverAwareProcessor在BEAN初始化之前检查BEAN是否实现了LoadTimeWeaverAware接口，
 			// 如果是，则进行加载时织入，即静态代理。
+			//加入BeanPostProcessor--LoadTimeWeaverAwareProcessor
 			beanFactory.addBeanPostProcessor(new LoadTimeWeaverAwareProcessor(beanFactory));
 			// Set a temporary ClassLoader for type matching.
 			beanFactory.setTempClassLoader(new ContextTypeMatchClassLoader(beanFactory.getBeanClassLoader()));
@@ -761,6 +764,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Detect a LoadTimeWeaver and prepare for weaving, if found in the meantime
 		// (e.g. through an @Bean method registered by ConfigurationClassPostProcessor)
 		if (beanFactory.getTempClassLoader() == null && beanFactory.containsBean(LOAD_TIME_WEAVER_BEAN_NAME)) {
+			//加入BeanPostProcessor--LoadTimeWeaverAwareProcessor
 			beanFactory.addBeanPostProcessor(new LoadTimeWeaverAwareProcessor(beanFactory));
 			beanFactory.setTempClassLoader(new ContextTypeMatchClassLoader(beanFactory.getBeanClassLoader()));
 		}

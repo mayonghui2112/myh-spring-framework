@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>org.springframework.core.io</OriginalElement>
+  <nodes>
+    <node x="1041.382619047619" y="253.0">org.springframework.core.io.DescriptiveResource</node>
+    <node x="267.0" y="896.0">org.springframework.core.io.support.ResourceArrayPropertyEditor</node>
+    <node x="1007.0" y="1048.0">org.springframework.core.io.ResourceEditor</node>
+    <node x="172.00000000000006" y="253.0">org.springframework.core.io.ByteArrayResource</node>
+    <node x="0.0" y="253.0">org.springframework.core.io.WritableResource</node>
+    <node x="1189.0" y="1048.0">org.springframework.core.io.ResourceTests</node>
+    <node x="461.0" y="663.0">org.springframework.core.io.support.PathMatchingResourcePatternResolver</node>
+    <node x="911.0" y="972.0">org.springframework.core.io.support.PropertiesLoaderUtils</node>
+    <node x="1085.75" y="334.0">org.springframework.core.io.ContextResource</node>
+    <node x="880.0" y="501.0">org.springframework.core.io.support.DummyFactory</node>
+    <node x="350.00000000000006" y="253.0">org.springframework.core.io.InputStreamResource</node>
+    <node x="213.0" y="1048.0">org.springframework.core.io.ResourceEditorTests</node>
+    <node x="53.84095238095233" y="425.0">org.springframework.core.io.FileUrlResource</node>
+    <node x="232.0" y="972.0">org.springframework.core.io.support.EncodedResourceTests</node>
+    <node x="687.0" y="972.0">org.springframework.core.io.support.SpringFactoriesLoader</node>
+    <node x="784.0" y="896.0">org.springframework.core.io.support.PropertiesLoaderSupport</node>
+    <node x="552.0" y="81.0">org.springframework.core.io.Resource</node>
+    <node x="1025.0" y="896.0">org.springframework.core.io.support.LocalizedResourceHelper</node>
+    <node x="0.0" y="663.0">org.springframework.core.io.ClassRelativeResourceLoader</node>
+    <node x="304.5" y="501.0">org.springframework.core.io.ResourceLoader</node>
+    <node x="1108.5" y="425.0">org.springframework.core.io.DefaultResourceLoader.ClassPathContextResource</node>
+    <node x="177.0" y="739.0">org.springframework.core.io.support.PathMatchingResourcePatternResolverTests</node>
+    <node x="1265.0" y="896.0">org.springframework.core.io.support.ResourcePropertySource</node>
+    <node x="552.0" y="334.0">org.springframework.core.io.FileSystemResource</node>
+    <node x="425.0" y="1048.0">org.springframework.core.io.PathResourceTests</node>
+    <node x="460.0" y="972.0">org.springframework.core.io.support.PathMatchingResourcePatternResolver.PatternVirtualFileVisitor</node>
+    <node x="627.0" y="1048.0">org.springframework.core.io.ProtocolResolver</node>
+    <node x="449.75000000000006" y="0.0">org.springframework.core.io.InputStreamSource</node>
+    <node x="957.0" y="582.0">org.springframework.core.io.support.MyDummyFactory2</node>
+    <node x="778.0" y="582.0">org.springframework.core.io.support.MyDummyFactory1</node>
+    <node x="530.0" y="896.0">org.springframework.core.io.support.SpringFactoriesLoaderTests</node>
+    <node x="0.0" y="972.0">org.springframework.core.io.ClassPathResourceTests</node>
+    <node x="817.0" y="739.0">org.springframework.core.io.support.PathMatchingResourcePatternResolver.VfsResourceMatchingDelegate</node>
+    <node x="0.0" y="1048.0">org.springframework.core.io.support.ResourcePatternUtils</node>
+    <node x="1088.0" y="739.0">org.springframework.core.io.support.DummyPackagePrivateFactory</node>
+    <node x="734.0" y="334.0">org.springframework.core.io.UrlResource</node>
+    <node x="1377.5" y="334.0">org.springframework.core.io.ClassPathResource</node>
+    <node x="640.6326190476191" y="425.0">org.springframework.core.io.FileSystemResourceLoader.FileSystemContextResource</node>
+    <node x="238.0" y="663.0">org.springframework.core.io.FileSystemResourceLoader</node>
+    <node x="819.0" y="1048.0">org.springframework.core.io.support.ResourceRegion</node>
+    <node x="796.3826190476191" y="253.0">org.springframework.core.io.AbstractFileResolvingResource</node>
+    <node x="132.25" y="582.0">org.springframework.core.io.DefaultResourceLoader</node>
+    <node x="379.00000000000006" y="81.0">org.springframework.core.io.support.EncodedResource</node>
+    <node x="524.0" y="739.0">org.springframework.core.io.support.ResourceArrayPropertyEditorTests</node>
+    <node x="543.0" y="253.0">org.springframework.core.io.VfsResource</node>
+    <node x="20.5" y="739.0">org.springframework.core.io.VfsUtils</node>
+    <node x="1329.5" y="425.0">org.springframework.core.io.ClassRelativeResourceLoader.ClassRelativeContextResource</node>
+    <node x="1366.0" y="1048.0">org.springframework.core.io.buffer</node>
+    <node x="55.0" y="334.0">org.springframework.core.io.PathResource</node>
+    <node x="528.0" y="162.0">org.springframework.core.io.AbstractResource</node>
+    <node x="1130.0" y="972.0">org.springframework.core.io.support.ResourceRegionTests</node>
+    <node x="1348.0" y="972.0">org.springframework.core.io.AbstractFileResolvingResource.VfsResourceDelegate</node>
+    <node x="0.0" y="896.0">org.springframework.core.io.support.ResourcePropertySourceTests</node>
+    <node x="0.0" y="820.0">org.springframework.core.io.support.VfsPatternUtils</node>
+    <node x="500.5" y="582.0">org.springframework.core.io.support.ResourcePatternResolver</node>
+    <node x="1181.5" y="501.0">org.springframework.core.io.support.PropertySourceFactory</node>
+    <node x="1161.0" y="582.0">org.springframework.core.io.support.DefaultPropertySourceFactory</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="org.springframework.core.io.ClassRelativeResourceLoader.ClassRelativeContextResource" target="org.springframework.core.io.ContextResource">
+      <point x="-55.25" y="-15.5" />
+      <point x="1384.75" y="395.0" />
+      <point x="1207.4166666666667" y="395.0" />
+      <point x="48.66666666666674" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.support.VfsPatternUtils" target="org.springframework.core.io.VfsUtils">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.support.MyDummyFactory1" target="org.springframework.core.io.support.DummyFactory">
+      <point x="0.0" y="-15.5" />
+      <point x="857.5" y="557.0" />
+      <point x="913.5" y="557.0" />
+      <point x="-33.5" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.FileSystemResourceLoader.FileSystemContextResource" target="org.springframework.core.io.FileSystemResource">
+      <point x="-51.5" y="-15.5" />
+      <point x="692.1326190476191" y="385.0" />
+      <point x="633.0" y="385.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.AbstractResource" target="org.springframework.core.io.Resource">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.UrlResource" target="org.springframework.core.io.AbstractFileResolvingResource">
+      <point x="0.0" y="-15.5" />
+      <point x="793.5" y="314.0" />
+      <point x="852.6326190476191" y="314.0" />
+      <point x="-56.25" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.FileSystemResource" target="org.springframework.core.io.AbstractResource">
+      <point x="40.50000000000006" y="-15.5" />
+      <point x="673.5" y="233.0" />
+      <point x="624.4285714285716" y="233.0" />
+      <point x="21.428571428571445" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.DefaultResourceLoader" target="org.springframework.core.io.ResourceLoader">
+      <point x="0.0" y="-15.5" />
+      <point x="224.25" y="557.0" />
+      <point x="340.25" y="557.0" />
+      <point x="-35.75" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.FileSystemResource" target="org.springframework.core.io.WritableResource">
+      <point x="-40.49999999999994" y="-15.5" />
+      <point x="592.5000000000001" y="304.0" />
+      <point x="125.83333333333337" y="304.0" />
+      <point x="50.33333333333334" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.FileSystemResourceLoader.FileSystemContextResource" target="org.springframework.core.io.ContextResource">
+      <point x="51.5" y="-15.5" />
+      <point x="795.1326190476191" y="405.0" />
+      <point x="1110.0833333333333" y="405.0" />
+      <point x="-48.66666666666674" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.WritableResource" target="org.springframework.core.io.Resource">
+      <point x="0.0" y="-15.5" />
+      <point x="75.5" y="137.0" />
+      <point x="569.0" y="137.0" />
+      <point x="-34.0" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.ClassRelativeResourceLoader" target="org.springframework.core.io.DefaultResourceLoader">
+      <point x="0.0" y="-15.5" />
+      <point x="109.0" y="638.0" />
+      <point x="178.25" y="638.0" />
+      <point x="-46.0" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.ClassRelativeResourceLoader.ClassRelativeContextResource" target="org.springframework.core.io.ClassPathResource">
+      <point x="55.25" y="-15.5" />
+      <point x="39.25" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.FileUrlResource" target="org.springframework.core.io.WritableResource">
+      <point x="-34.5" y="-15.5" />
+      <point x="88.34095238095233" y="405.0" />
+      <point x="44.5" y="405.0" />
+      <point x="44.5" y="314.0" />
+      <point x="25.16666666666663" y="314.0" />
+      <point x="-50.33333333333337" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.support.DefaultPropertySourceFactory" target="org.springframework.core.io.support.PropertySourceFactory">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.FileSystemResourceLoader" target="org.springframework.core.io.DefaultResourceLoader">
+      <point x="0.0" y="-15.5" />
+      <point x="339.5" y="638.0" />
+      <point x="270.25" y="638.0" />
+      <point x="46.0" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.ClassPathResource" target="org.springframework.core.io.AbstractFileResolvingResource">
+      <point x="0.0" y="-15.5" />
+      <point x="1456.0" y="304.0" />
+      <point x="965.1326190476191" y="304.0" />
+      <point x="56.25" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.DefaultResourceLoader.ClassPathContextResource" target="org.springframework.core.io.ClassPathResource">
+      <point x="50.25" y="-15.5" />
+      <point x="1259.25" y="405.0" />
+      <point x="1416.75" y="405.0" />
+      <point x="-39.25" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.Resource" target="org.springframework.core.io.InputStreamSource">
+      <point x="0.0" y="-15.5" />
+      <point x="603.0" y="56.0" />
+      <point x="569.0" y="56.0" />
+      <point x="39.75" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.PathResource" target="org.springframework.core.io.WritableResource">
+      <point x="-31.75" y="-15.5" />
+      <point x="86.75" y="314.0" />
+      <point x="75.5" y="314.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.support.ResourcePatternResolver" target="org.springframework.core.io.ResourceLoader">
+      <point x="0.0" y="-15.5" />
+      <point x="597.0" y="557.0" />
+      <point x="411.75" y="557.0" />
+      <point x="35.75" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.support.MyDummyFactory2" target="org.springframework.core.io.support.DummyFactory">
+      <point x="0.0" y="-15.5" />
+      <point x="1036.5" y="557.0" />
+      <point x="980.5" y="557.0" />
+      <point x="33.5" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.PathResource" target="org.springframework.core.io.AbstractResource">
+      <point x="31.75" y="-15.5" />
+      <point x="150.25" y="314.0" />
+      <point x="161.50000000000006" y="314.0" />
+      <point x="161.50000000000006" y="213.0" />
+      <point x="538.7142857142858" y="213.0" />
+      <point x="-64.28571428571428" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.support.EncodedResource" target="org.springframework.core.io.InputStreamSource">
+      <point x="0.0" y="-15.5" />
+      <point x="455.50000000000006" y="56.0" />
+      <point x="489.50000000000006" y="56.0" />
+      <point x="-39.75" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.DescriptiveResource" target="org.springframework.core.io.AbstractResource">
+      <point x="0.0" y="-15.5" />
+      <point x="1124.382619047619" y="213.0" />
+      <point x="667.2857142857144" y="213.0" />
+      <point x="64.28571428571433" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.InputStreamResource" target="org.springframework.core.io.AbstractResource">
+      <point x="0.0" y="-15.5" />
+      <point x="436.50000000000006" y="233.0" />
+      <point x="581.5714285714287" y="233.0" />
+      <point x="-21.428571428571445" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.ContextResource" target="org.springframework.core.io.Resource">
+      <point x="0.0" y="-15.5" />
+      <point x="1158.75" y="314.0" />
+      <point x="1217.882619047619" y="314.0" />
+      <point x="1217.882619047619" y="137.0" />
+      <point x="637.0" y="137.0" />
+      <point x="34.0" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.FileUrlResource" target="org.springframework.core.io.UrlResource">
+      <point x="34.5" y="-15.5" />
+      <point x="157.34095238095233" y="395.0" />
+      <point x="793.5" y="395.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.AbstractFileResolvingResource" target="org.springframework.core.io.AbstractResource">
+      <point x="0.0" y="-15.5" />
+      <point x="908.8826190476191" y="223.0" />
+      <point x="645.8571428571429" y="223.0" />
+      <point x="42.85714285714289" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.support.PathMatchingResourcePatternResolver" target="org.springframework.core.io.support.ResourcePatternResolver">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.DefaultResourceLoader.ClassPathContextResource" target="org.springframework.core.io.ContextResource">
+      <point x="-50.25" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.ByteArrayResource" target="org.springframework.core.io.AbstractResource">
+      <point x="0.0" y="-15.5" />
+      <point x="251.00000000000006" y="223.0" />
+      <point x="560.1428571428572" y="223.0" />
+      <point x="-42.85714285714283" y="15.5" />
+    </edge>
+    <edge source="org.springframework.core.io.VfsResource" target="org.springframework.core.io.AbstractResource">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.842224012892828" x="652.8039399806728" y="586.8315860995842" />
+  <SelectedNodes>
+    <node>org.springframework.core.io.DescriptiveResource</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

@@ -37,7 +37,7 @@ wiki page and also [CONTRIBUTING.md](CONTRIBUTING.md).
 ## Stay in Touch
 
 Follow [@SpringCentral](https://twitter.com/springcentral),
-[@SpringFramework](https://twitter.com/springframework), and its
+[@SpringFramework](https://twitter.com/sprcom.gradle.ingframework), and its
 [team members](https://twitter.com/springframework/lists/team/members) on Twitter.
 In-depth articles can be found at [The Spring Blog](http://spring.io/blog/),
 and releases are announced via our [news feed](http://spring.io/blog/category/news).
@@ -46,3 +46,22 @@ and releases are announced via our [news feed](http://spring.io/blog/category/ne
 
 The Spring Framework is released under version 2.0 of the
 [Apache License](http://www.apache.org/licenses/LICENSE-2.0).
+
+
+在build.gradle添加
+mavenCentral()
+testRuntime("org.apache.logging.log4j:log4j-jul:${log4jVersion}")
+
+spring-froamework 下执行:
+gradlew :spring-oxm:compileTestJava
+gradle objenesisRepackJar
+gradle cglibRepackJar
+
+web.gradle
+    oxm的optional改为compile
+spring-webmvc
+    ompile(project(":spring-context-support"))  // for FreeMarker support
+
+spring-context-support
+    compile(project(":spring-jdbc"))  // for Quartz support
+    compile(project(":spring-tx"))  // for Quartz support

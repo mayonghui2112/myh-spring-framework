@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Implementation-Title: MaTestSpring
+Automatic-Module-Name: MaTestSpring
+Implementation-Version: 5.0.12.BUILD-SNAPSHOT
+Created-By: 1.8.0_152 (Oracle Corporation)
+

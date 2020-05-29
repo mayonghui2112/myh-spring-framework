@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import groovy.util.logging.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -46,7 +47,10 @@ import org.springframework.lang.Nullable;
  * @author Juergen Hoeller
  * @since 4.0
  */
+
 final class PostProcessorRegistrationDelegate {
+	protected final static Log logger = LogFactory.getLog(PostProcessorRegistrationDelegate.class);
+
 	/**
 	 注意：Ordered接口是PriorityOrdered接口的父接口
 	 以下的所有操作，都利用processedBeans列表排除已经执行过的BeanDefinitionRegistryPostProcessor
@@ -259,6 +263,7 @@ final class PostProcessorRegistrationDelegate {
 		//把BeanPostProcessorChecker放到名为beanPostProcessors的list集合的尾部，如果已经存在，则remove，再存放
 		//BeanPostProcessorChecker作用为了检测是否执行了所有的postProcessor，如果一个bean执行了beanProcessorTargetCount个
 		//后置处理器，则说明执行完毕，否则，打印info信息
+		//加入BeanPostProcessor--BeanPostProcessorChecker
 		beanFactory.addBeanPostProcessor(new BeanPostProcessorChecker(beanFactory, beanProcessorTargetCount));
 
 		// Separate between BeanPostProcessors that implement PriorityOrdered,
@@ -334,6 +339,7 @@ final class PostProcessorRegistrationDelegate {
 		// moving it to the end of the processor chain (for picking up proxies etc).
 		//重新注册后处理器，用于检测内部为applicationlistener的bean，
 		//将它移动到处理器链的末端(用于获取代理等)。
+		//加入BeanPostProcessor--ApplicationListenerDetector
 		beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(applicationContext));
 	}
 
@@ -355,6 +361,7 @@ final class PostProcessorRegistrationDelegate {
 			Collection<? extends BeanDefinitionRegistryPostProcessor> postProcessors, BeanDefinitionRegistry registry) {
 
 		for (BeanDefinitionRegistryPostProcessor postProcessor : postProcessors) {
+			logger.debug (postProcessor.getClass().getSimpleName());
 			postProcessor.postProcessBeanDefinitionRegistry(registry);
 		}
 	}
@@ -366,6 +373,7 @@ final class PostProcessorRegistrationDelegate {
 			Collection<? extends BeanFactoryPostProcessor> postProcessors, ConfigurableListableBeanFactory beanFactory) {
 
 		for (BeanFactoryPostProcessor postProcessor : postProcessors) {
+			logger.debug (postProcessor.getClass().getSimpleName());
 			postProcessor.postProcessBeanFactory(beanFactory);
 		}
 	}
